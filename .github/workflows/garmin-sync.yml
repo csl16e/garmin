@@ -18,10 +18,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Sync Garmin data
+      - name: Login and sync Garmin data
         env:
-          GARMIN_TOKEN_B64: ${{ secrets.GARMIN_TOKEN_B64 }}
-        run: python sync_garmin.py --days 3 --sink files --out ./garmin
+          GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
+          GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
+        run: |
+          python sync_garmin.py --login
+          python sync_garmin.py --days 3 --sink files --out ./garmin
 
       - name: Commit and push data
         run: |

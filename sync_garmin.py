@@ -61,24 +61,50 @@ def do_login():
 
 
 def get_client():
-    # Try token file first
-    client = _client_from_token()
-    if client:
-        try:
-            client.garth.loads(TOKEN_FILE.read_bytes().decode())
-            return client
-        except Exception:
-            pass
-
     # Try base64 env var (GitHub Actions path)
     b64 = os.environ.get("GARMIN_TOKEN_B64", "").strip()
     if b64:
         token_bytes = base64.b64decode(b64)
-        client = garminconnect.Garmin()
-        client.garth.loads(token_bytes.decode())
-        return client
+        token_str = token_bytes.decode()
+        # Newer garminconnect uses garth
+        try:
+            client = garminconnect.Garmin()
+            client.garth.loads(token_str)
+            return client
+        except AttributeError:
+            pass
+        # Older garminconnect: decode the inner base64 and unpickle session
+        try:
+            inner = base64.b64decode(token_str)
+            session = pickle.loads(inner)
+            email = session.get("username", "")
+            client = garminconnect.Garmin(email=email, password="")
+            client.session_data = session
+            client.login(session)
+            return client
+        except Exception:
+            pass
+        # Last resort: re-login with email/password from env
+        return _login_with_env()
+
+    # Try token file
+    if TOKEN_FILE.exists():
+        token_str = TOKEN_FILE.read_bytes().decode()
+        try:
+            client = garminconnect.Garmin()
+            client.garth.loads(token_str)
+            return client
+        except AttributeError:
+            pass
 
     sys.exit("No saved token found. Run: python sync_garmin.py --login")
+
+
+def _login_with_env():
+    email, password = _client_from_env()
+    client = garminconnect.Garmin(email=email, password=password)
+    client.login()
+    return client
 
 
 # ---------------------------------------------------------------------------

@@ -5,8 +5,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link id="google-font-link" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <title>Chris · Training Dashboard</title>
+
+<!-- PWA / Add to Home Screen -->
+<link rel="manifest" href="manifest.json"/>
+<meta name="theme-color" content="#0d1117"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Garmin"/>
+<link rel="apple-touch-icon" href="apple-touch-icon.png"/>
+
+<style>
+/* PWA splash screen — shown while app loads */
+#pwa-splash{position:fixed;inset:0;background:#0d1117;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:99999;transition:opacity .4s ease}
+#pwa-splash.hidden{opacity:0;pointer-events:none}
+#pwa-splash svg{width:72px;height:72px;margin-bottom:16px;animation:pulse 1.2s ease-in-out infinite}
+#pwa-splash .splash-title{color:#00c4b0;font-family:-apple-system,sans-serif;font-size:1.3rem;font-weight:800;letter-spacing:.04em}
+#pwa-splash .splash-sub{color:#6b7280;font-family:-apple-system,sans-serif;font-size:.75rem;margin-top:6px}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.94)}}
+</style>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -649,6 +667,16 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 </style>
 </head>
 <body>
+
+<!-- PWA Splash Screen -->
+<div id="pwa-splash">
+  <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="36" cy="36" r="34" fill="#00c4b0"/>
+    <polygon points="40,10 28,38 42,38 32,62 50,30 36,30 44,10" fill="#0d1117"/>
+  </svg>
+  <div class="splash-title">GARMIN</div>
+  <div class="splash-sub">Loading your training data…</div>
+</div>
 
 <aside class="sidebar" id="sidebar">
   <div class="logo">
@@ -2315,6 +2343,17 @@ function initSettings() {
 document.addEventListener("DOMContentLoaded", initSettings);
 
 load();
+
+// Hide splash screen after load
+window.addEventListener('load', () => {
+  const splash = document.getElementById('pwa-splash');
+  if (splash) setTimeout(() => splash.classList.add('hidden'), 600);
+});
+
+// Register service worker for offline support
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js').catch(() => {});
+}
 
 // Keyboard back navigation
 document.addEventListener('keydown', e => {

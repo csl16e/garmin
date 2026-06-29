@@ -3,7 +3,7 @@ name: Garmin Sync
 on:
   schedule:
     - cron: '0 11 * * *'  # 6am Central time (UTC-5)
-  workflow_dispatch:       # allows manual run from GitHub
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -18,13 +18,12 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Login and sync Garmin data
-        env:
-          GARMIN_EMAIL: ${{ secrets.GARMIN_EMAIL }}
-          GARMIN_PASSWORD: ${{ secrets.GARMIN_PASSWORD }}
+      - name: Restore token
         run: |
-          python sync_garmin.py --login
-          python sync_garmin.py --days 3 --sink files --out ./garmin
+          echo "${{ secrets.GARMIN_TOKEN_B64 }}" | base64 -d > ~/.garmin_tokens
+
+      - name: Sync Garmin data
+        run: python sync_garmin.py --days 3 --sink files --out ./garmin
 
       - name: Commit and push data
         run: |

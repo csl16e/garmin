@@ -1953,7 +1953,7 @@ function renderOverview(today,wellness,runs){
     barChart('chart-weekly',wks.map(w=>sd(w)),wks.map(w=>+wkB[w].toFixed(2)),wks.map(w=>wkB[w]===maxV?'rgba(0,196,176,1)':'rgba(0,196,176,.45)'));
   },180);
 
-  
+  timeToggle('chart-readiness',(days)=>{
     const rw=wellness.filter(w=>w.training_readiness!=null&&new Date(w.date)>=cutoff(days)).sort((a,b)=>a.date.localeCompare(b.date));
     lineChart('chart-readiness',rw.map(w=>sd(w.date)),[{label:'Readiness',data:rw.map(w=>w.training_readiness),borderColor:'#00c4b0',backgroundColor:'rgba(0,196,176,.08)',fill:true}],{yMin:0,yMax:100});
   },180);

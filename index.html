@@ -155,6 +155,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .metric-toggle{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
 .mt-btn{font-size:.62rem;font-weight:700;padding:4px 10px;border-radius:20px;border:1px solid var(--border);background:none;color:var(--muted);cursor:pointer;transition:all .15s}
 .mt-btn.active{background:var(--teal);color:#000;border-color:var(--teal)}
+.runs-nav-btn{width:28px;height:28px;border-radius:6px;border:1px solid var(--border2);background:var(--card2);color:var(--fg);font-size:1.1rem;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.runs-nav-btn:hover:not(:disabled){background:var(--teal);color:#000;border-color:var(--teal)}
+.runs-nav-btn:disabled{opacity:.3;cursor:default}
 
 /* ── VO2 SECTION ──────────────────────────── */
 .vo2-big{display:flex;align-items:center;gap:16px;margin-bottom:14px}
@@ -863,19 +866,27 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
     </div>
 
         <div class="chart-card" id="all-runs-card">
-      <div class="cc-top">
-        <div class="cc-title">All Runs</div>
-        <span class="cc-badge" id="all-runs-badge"></span>
-        <div style="display:flex;gap:6px;margin-left:auto">
-          <button class="mt-btn" id="view-btn-month" onclick="setRunView('month')">By Month</button>
-          <button class="mt-btn active" id="view-btn-list" onclick="setRunView('list')">List</button>
+      <div class="cc-top" style="flex-wrap:wrap;gap:8px">
+        <div class="cc-title">All Runs <span class="cc-badge" id="all-runs-badge" style="margin-left:6px"></span></div>
+        <div style="display:flex;gap:6px;align-items:center;margin-left:auto;flex-wrap:wrap">
+          <select id="runs-month-jump" onchange="runsJumpMonth(this.value)" style="background:var(--card2);border:1px solid var(--border2);color:var(--fg);border-radius:6px;padding:4px 8px;font-size:.75rem;cursor:pointer">
+            <option value="">Jump to month…</option>
+          </select>
+        </div>
+      </div>
+      <!-- Gmail-style toolbar -->
+      <div id="runs-toolbar" style="display:flex;align-items:center;justify-content:space-between;padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:2px">
+        <span id="runs-page-label" style="font-size:.75rem;color:var(--muted)"></span>
+        <div style="display:flex;gap:4px">
+          <button class="runs-nav-btn" id="runs-prev" onclick="runsPage(-1)" title="Previous page">&#8249;</button>
+          <button class="runs-nav-btn" id="runs-next" onclick="runsPage(1)" title="Next page">&#8250;</button>
         </div>
       </div>
       <div id="all-runs-list"></div>
-      <div id="all-runs-pagination" style="display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 0;display:none">
-        <button class="mt-btn" id="runs-prev" onclick="runsPage(-1)">← Prev</button>
-        <span id="runs-page-label" style="font-size:.75rem;color:var(--muted)"></span>
-        <button class="mt-btn" id="runs-next" onclick="runsPage(1)">Next →</button>
+      <div id="runs-toolbar-bottom" style="display:none;align-items:center;justify-content:flex-end;padding:8px 0 2px;border-top:1px solid var(--border);margin-top:4px;gap:4px">
+        <span id="runs-page-label-b" style="font-size:.75rem;color:var(--muted);margin-right:4px"></span>
+        <button class="runs-nav-btn" id="runs-prev-b" onclick="runsPage(-1)">&#8249;</button>
+        <button class="runs-nav-btn" id="runs-next-b" onclick="runsPage(1)">&#8250;</button>
       </div>
     </div>
   </div>
@@ -1248,11 +1259,8 @@ function runItem(r){ r=applyEdits(r);
 }
 
 function setRunView(v) {
-  _runView = v;
-  _runPage = 0;
+  _runView = v; _runPage = 0;
   localStorage.setItem('run_view', v);
-  document.getElementById('view-btn-month').classList.toggle('active', v==='month');
-  document.getElementById('view-btn-list').classList.toggle('active', v==='list');
   renderAllRuns(_RUNS_CACHE);
 }
 
@@ -1263,43 +1271,64 @@ function runsPage(dir) {
   document.getElementById('all-runs-card')?.scrollIntoView({behavior:'smooth', block:'start'});
 }
 
+function runsJumpMonth(ym) {
+  if(!ym) return;
+  // Find the page that contains the first run in this month
+  const idx = _RUNS_CACHE.findIndex(r => r.startTimeLocal?.slice(0,7) === ym);
+  if(idx < 0) return;
+  _runPage = Math.floor(idx / _RUNS_PER_PAGE);
+  renderAllRuns(_RUNS_CACHE);
+  document.getElementById('all-runs-card')?.scrollIntoView({behavior:'smooth', block:'start'});
+  document.getElementById('runs-month-jump').value = '';
+}
+
 function renderAllRuns(runs) {
   const list = document.getElementById('all-runs-list');
-  const pag = document.getElementById('all-runs-pagination');
   if(!list) return;
+  const PER_PAGE = _RUNS_PER_PAGE;
+  const total = Math.ceil(runs.length / PER_PAGE);
+  _runPage = Math.max(0, Math.min(_runPage, total - 1));
+  const start = _runPage * PER_PAGE;
+  const end = Math.min(start + PER_PAGE, runs.length);
+  const page = runs.slice(start, end);
 
-  if(_runView === 'month') {
-    // Group by YYYY-MM
-    const groups = {};
-    runs.forEach(r => {
-      const key = (r.startTimeLocal||'').slice(0,7);
-      if(!groups[key]) groups[key] = [];
-      groups[key].push(r);
-    });
-    const keys = Object.keys(groups).sort().reverse();
-    list.innerHTML = keys.map(k => {
-      const [y,m] = k.split('-');
-      const label = new Date(+y, +m-1, 1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
-      const totalMi = groups[k].reduce((s,r)=>s+mi(r.distance||0),0);
-      return `<div class="month-group-hdr"><span>${label}</span><span class="mgh-count">${groups[k].length} runs · ${totalMi.toFixed(1)} mi</span></div>` +
-        groups[k].map(r=>runItem(r)).join('');
-    }).join('');
-    if(pag) pag.style.display = 'none';
-  } else {
-    // Paginated list
-    const total = Math.ceil(runs.length / _RUNS_PER_PAGE);
-    const start = _runPage * _RUNS_PER_PAGE;
-    const page = runs.slice(start, start + _RUNS_PER_PAGE);
-    list.innerHTML = page.map(r=>runItem(r)).join('');
-    if(pag) {
-      pag.style.display = runs.length > _RUNS_PER_PAGE ? 'flex' : 'none';
-      const lbl = document.getElementById('runs-page-label');
-      if(lbl) lbl.textContent = `Page ${_runPage+1} of ${total} · runs ${start+1}–${Math.min(start+_RUNS_PER_PAGE, runs.length)}`;
-      const prev = document.getElementById('runs-prev');
-      const next = document.getElementById('runs-next');
-      if(prev) prev.disabled = _runPage === 0;
-      if(next) next.disabled = _runPage >= total-1;
+  // Inject month header when the month changes mid-page
+  let lastMonth = start > 0 ? runs[start-1].startTimeLocal?.slice(0,7) : null;
+  let html = '';
+  page.forEach(r => {
+    const mo = r.startTimeLocal?.slice(0,7);
+    if(mo && mo !== lastMonth) {
+      const [y,m] = mo.split('-');
+      const lbl = new Date(+y,+m-1,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+      const moRuns = runs.filter(x=>x.startTimeLocal?.slice(0,7)===mo);
+      const moMi = moRuns.reduce((s,x)=>s+mi(x.distance||0),0);
+      html += `<div class="month-group-hdr"><span>${lbl}</span><span class="mgh-count">${moRuns.length} runs · ${moMi.toFixed(1)} mi</span></div>`;
+      lastMonth = mo;
     }
+    html += runItem(r);
+  });
+  list.innerHTML = html;
+
+  // Toolbar labels + button states
+  const lbl = `${start+1}–${end} of ${runs.length}`;
+  ['runs-page-label','runs-page-label-b'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=lbl;});
+  ['runs-prev','runs-prev-b'].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=_runPage===0;});
+  ['runs-next','runs-next-b'].forEach(id=>{const el=document.getElementById(id);if(el)el.disabled=_runPage>=total-1;});
+
+  // Show bottom toolbar only when there's more than one page
+  const bot = document.getElementById('runs-toolbar-bottom');
+  if(bot) bot.style.display = total > 1 ? 'flex' : 'none';
+
+  // Populate month-jump dropdown once
+  const sel = document.getElementById('runs-month-jump');
+  if(sel && sel.options.length <= 1) {
+    const months = [...new Set(runs.map(r=>r.startTimeLocal?.slice(0,7)).filter(Boolean))].sort().reverse();
+    months.forEach(ym => {
+      const [y,m] = ym.split('-');
+      const lbl2 = new Date(+y,+m-1,1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+      const opt = document.createElement('option'); opt.value=ym; opt.textContent=lbl2;
+      sel.appendChild(opt);
+    });
   }
 }
 

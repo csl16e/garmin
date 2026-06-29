@@ -288,6 +288,20 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .nr-tips{border-top:1px solid var(--border);padding-top:12px;display:flex;flex-direction:column;gap:5px}
 .nr-tip{font-size:.72rem;color:var(--muted);display:flex;gap:6px}
 .nr-tip-icon{color:var(--teal);flex-shrink:0}
+.nr-weather{display:flex;align-items:center;flex-wrap:wrap;gap:6px;background:var(--card2);border:1px solid var(--border2);border-radius:8px;padding:7px 12px;margin-bottom:12px;font-size:.75rem;font-weight:600;color:var(--text)}
+.nr-workout-steps{display:flex;flex-direction:column;gap:0;margin:14px 0;border-left:2px solid var(--border2);padding-left:14px}
+.nr-step{display:flex;align-items:flex-start;gap:10px;padding:8px 0;position:relative}
+.nr-step-main{padding:10px 0}
+.nr-step-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:3px;position:absolute;left:-20px}
+.nr-step-label{font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:2px}
+.nr-step-detail{font-size:.68rem;color:var(--muted);line-height:1.5}
+.nr-factors{margin:14px 0 10px;display:flex;flex-direction:column;gap:6px}
+.nr-factor{display:flex;flex-direction:column;gap:2px}
+.nr-factor-bar{display:flex;align-items:center;gap:7px;border-radius:6px;padding:5px 10px;font-size:.72rem}
+.nr-factor-arrow{font-size:.65rem;flex-shrink:0}
+.nr-factor-label{flex:1;font-weight:600;color:var(--text)}
+.nr-factor-val{font-weight:700;font-size:.72rem}
+.nr-factor-note{font-size:.62rem;color:var(--muted);padding-left:10px}
 
 /* ── LOAD METER ───────────────────────────── */
 .acr-display{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:4px 0}
@@ -1922,37 +1936,255 @@ function renderRunning(today,wellness,runs){
   renderAllRuns(_RUNS_CACHE);
 }
 
-// ══ NEXT RUN ═══════════════════════════════════════════════════
-function renderNextRun(today,wellness,runs){
-  const tr=today.training_readiness;
-  const last5=runs.slice(0,5);
-  const avgMps=last5.filter(r=>r.averageSpeed).reduce((s,r)=>s+r.averageSpeed,0)/(last5.filter(r=>r.averageSpeed).length||1);
-  const avgHR=last5.filter(r=>r.averageHR).reduce((s,r)=>s+r.averageHR,0)/(last5.filter(r=>r.averageHR).length||1);
-  const avgMi=last5.reduce((s,r)=>s+mi(r.distance||0),0)/(last5.length||1);
-  const avgCad=last5.filter(r=>r.averageRunningCadenceInStepsPerMinute).reduce((s,r)=>s+r.averageRunningCadenceInStepsPerMinute,0)/(last5.filter(r=>r.averageRunningCadenceInStepsPerMinute).length||1);
-  const daysSinceLast=runs[0]?(new Date()-new Date(runs[0].startTimeLocal))/864e5:999;
-  const wmi=runs.filter(r=>(new Date()-new Date(r.startTimeLocal))<7*864e5).reduce((s,r)=>s+mi(r.distance||0),0);
-  let type,desc,targets=[],tips=[];
-  const ep=avgMps?avgMps*0.88:null,tp=avgMps?avgMps*1.08:null;
-  if(tr!=null&&tr<50){type='Rest Day 🛑';desc="Readiness is low — your nervous system is still recovering. A rest day now pays dividends later. Walking or light stretching only.";targets=[{l:'Activity',v:'Rest or walk'},{l:'Duration',v:'20–30 min'},{l:'HR Target',v:'<100 bpm'},{l:'Readiness',v:`${tr}/100`}];tips=['Hydrate, sleep early tonight.','Foam roll or light stretching will help recovery.'];}
-  else if(tr!=null&&tr>=80&&wmi<9&&daysSinceLast>=1){type='Quality Run — Tempo 🔥';desc="You're well recovered and your weekly load is low. Push today — tempo pace at Zone 3–4. You should be able to say a few words but not hold a conversation.";const tDist=(avgMi*1.1).toFixed(1);targets=[{l:'Distance',v:`${tDist} mi`},{l:'Pace',v:tp?fmtPace(tp):'Hard'},{l:'HR Target',v:'145–165 bpm'},{l:'Readiness',v:`${tr}/100`}];tips=[`Readiness ${tr}/100 — ideal for hard work.`,'Warm up 1 mile easy, then push into tempo.','Cool down 5 min walk.'];}
-  else if(wmi>12){type='Easy Recovery Run 🌿';desc="Weekly mileage is building up. Back off today — a Zone 2 run lets your body absorb the training stress and come back stronger.";const tDist=(avgMi*.75).toFixed(1);targets=[{l:'Distance',v:`${tDist} mi`},{l:'Pace',v:ep?fmtPace(ep):'Easy'},{l:'HR Target',v:'120–140 bpm'},{l:'Weekly Load',v:`${wmi.toFixed(1)} mi`}];tips=['Stay conversational the whole run.','Zone 2 builds your aerobic base — this is the important stuff.'];}
-  else{type='Base Building Run 🏃';desc="Steady aerobic effort at easy conversational pace. Zone 2 running is how you build your aerobic engine. 80% of all training should feel this easy.";const tDist=(avgMi*1.05).toFixed(1);targets=[{l:'Distance',v:`${tDist} mi`},{l:'Pace',v:ep?fmtPace(ep):'Easy'},{l:'HR Target',v:'130–150 bpm'},{l:'Days Off',v:`${Math.round(daysSinceLast)}`}];tips=['If HR climbs above 150, slow down.','You should be able to speak in full sentences.'];}
-  if(avgCad&&avgCad<165)tips.push(`Cadence is ${Math.round(avgCad)} spm — try to hit 170. Take shorter, quicker steps.`);
-  else if(avgCad&&avgCad>=170)tips.push(`Cadence ${Math.round(avgCad)} spm — solid form, keep it up.`);
-  document.getElementById('next-run-card').innerHTML=`<div class="next-run-card"><div class="nr-eye">Today's Recommendation</div><div class="nr-type">${type}</div><div class="nr-desc">${desc}</div><div class="nr-targets">${targets.map(t=>`<div class="nr-t"><div class="nr-t-label">${t.l}</div><div class="nr-t-val">${t.v}</div></div>`).join('')}</div><div class="nr-tips">${tips.map(t=>`<div class="nr-tip"><span class="nr-tip-icon">›</span>${t}</div>`).join('')}</div></div>`;
+// ══ NEXT RUN — smart multi-factor algorithm ══════════════════════════════════
 
-  const last10=runs.slice(0,10).reverse();
-  const lb=last10.map(r=>sd(r.startTimeLocal?.slice(0,10)));
-  lineChart('chart-pace-trend',lb,[{label:'Pace',data:last10.map(r=>r.averageSpeed?+paceNum(r.averageSpeed).toFixed(2):null),borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.08)',fill:true}],{reverse:true});
-  lineChart('chart-hr-trend',lb,[{label:'HR',data:last10.map(r=>r.averageHR?Math.round(r.averageHR):null),borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.08)',fill:true}]);
+async function renderNextRun(today,wellness,runs){
+  // ── Raw signals ─────────────────────────────────────────────────────────────
+  const now = new Date();
+  const tr  = today.training_readiness;         // Garmin readiness 0-100
+  const ss  = today.sleep_score ?? wellness.find(w=>w.sleep_score)?.sleep_score; // sleep score
+  const slpHrs = today.sleep_seconds ? today.sleep_seconds/3600
+                 : wellness.find(w=>w.sleep_seconds)?.sleep_seconds/3600 ?? null;
 
-  const now=new Date();
-  const acute=runs.filter(r=>(now-new Date(r.startTimeLocal))<7*864e5).reduce((s,r)=>s+(r.activityTrainingLoad||0),0);
-  const chronic=runs.filter(r=>(now-new Date(r.startTimeLocal))<28*864e5).reduce((s,r)=>s+(r.activityTrainingLoad||0),0)/4;
-  const acr=chronic>0?(acute/chronic):1;
+  // Paces & distances
+  const last10 = runs.slice(0,10);
+  const last5  = runs.slice(0,5);
+  const avgMps  = last5.filter(r=>r.averageSpeed).reduce((s,r)=>s+r.averageSpeed,0) / (last5.filter(r=>r.averageSpeed).length||1);
+  const avgMi   = last5.reduce((s,r)=>s+mi(r.distance||0),0) / (last5.length||1);
+  const avgCad  = last5.filter(r=>r.averageRunningCadenceInStepsPerMinute).reduce((s,r)=>s+r.averageRunningCadenceInStepsPerMinute,0) / (last5.filter(r=>r.averageRunningCadenceInStepsPerMinute).length||1);
+
+  // 8-week baseline weekly mileage (personal normal)
+  const wkMap = {};
+  runs.forEach(r=>{const wk=getWeekKey(new Date(r.startTimeLocal));wkMap[wk]=(wkMap[wk]||0)+mi(r.distance||0);});
+  const wkKeys = Object.keys(wkMap).sort().slice(-9,-1); // last 8 complete weeks
+  const baselineWmi = wkKeys.length ? wkKeys.reduce((s,k)=>s+wkMap[k],0)/wkKeys.length : 15;
+  const wmi7 = runs.filter(r=>(now-new Date(r.startTimeLocal))<7*864e5).reduce((s,r)=>s+mi(r.distance||0),0);
+  const volRatio = wmi7 / (baselineWmi||1); // >1.1 = above baseline
+
+  // ACR — acute:chronic load ratio (gold standard injury predictor)
+  const acute   = runs.filter(r=>(now-new Date(r.startTimeLocal))<7*864e5).reduce((s,r)=>s+(r.activityTrainingLoad||0),0);
+  const chronic = runs.filter(r=>(now-new Date(r.startTimeLocal))<28*864e5).reduce((s,r)=>s+(r.activityTrainingLoad||0),0)/4;
+  const acr     = chronic>0 ? acute/chronic : 1.0;
+
+  // Days since last run + consecutive days running
+  const daysSince = runs[0] ? (now-new Date(runs[0].startTimeLocal))/864e5 : 999;
+  let consecDays = 0;
+  for(let i=0;i<runs.length;i++){
+    const d=(now-new Date(runs[i].startTimeLocal))/864e5;
+    if(d<consecDays+1.5) consecDays++;
+    else break;
+  }
+
+  // Pace trend — are last 5 runs faster or slower than 6-10?
+  const early = runs.slice(5,10).filter(r=>r.averageSpeed);
+  const recent= runs.slice(0,5).filter(r=>r.averageSpeed);
+  const earlyPace = early.length ? early.reduce((s,r)=>s+paceNum(r.averageSpeed),0)/early.length : null;
+  const recentPace= recent.length? recent.reduce((s,r)=>s+paceNum(r.averageSpeed),0)/recent.length: null;
+  const paceTrend = (earlyPace&&recentPace) ? earlyPace-recentPace : 0; // positive = getting faster
+
+  // Day of week — suggest long run on Sat/Sun
+  const dow = now.getDay(); // 0=Sun, 6=Sat
+  const isWeekend = dow===0||dow===6;
+
+  // ── Scoring system — each factor adds/subtracts from a 0-100 "go hard" score
+  // Higher score = more ready for intensity
+  let score = 50;
+  const factors = [];
+
+  // Training readiness (most important signal)
+  if(tr!=null){
+    if(tr>=80){score+=20;factors.push({l:'Readiness',v:`${tr}/100`,note:'High — body is primed',c:'#22c55e',dir:'up'});}
+    else if(tr>=65){score+=8;factors.push({l:'Readiness',v:`${tr}/100`,note:'Good — ready to train',c:'#00c4b0',dir:'up'});}
+    else if(tr>=50){score-=5;factors.push({l:'Readiness',v:`${tr}/100`,note:'Moderate — keep it easy',c:'#f59e0b',dir:'flat'});}
+    else{score-=30;factors.push({l:'Readiness',v:`${tr}/100`,note:'Low — recovery needed',c:'#ef4444',dir:'down'});}
+  }
+
+  // Sleep score
+  if(ss!=null){
+    if(ss>=80){score+=10;factors.push({l:'Sleep',v:`${ss}/100`,note:'Great sleep last night',c:'#22c55e',dir:'up'});}
+    else if(ss>=60){score+=3;factors.push({l:'Sleep',v:`${ss}/100`,note:'Decent sleep',c:'#00c4b0',dir:'flat'});}
+    else{score-=12;factors.push({l:'Sleep',v:`${ss}/100`,note:'Poor sleep — intensity costs more',c:'#ef4444',dir:'down'});}
+  } else if(slpHrs!=null){
+    if(slpHrs>=7.5){score+=8;factors.push({l:'Sleep',v:`${slpHrs.toFixed(1)}h`,note:'Well rested',c:'#22c55e',dir:'up'});}
+    else if(slpHrs<6){score-=10;factors.push({l:'Sleep',v:`${slpHrs.toFixed(1)}h`,note:'Under-rested',c:'#ef4444',dir:'down'});}
+  }
+
+  // ACR — injury risk window
+  if(acr>1.5){score-=35;factors.push({l:'Training Load',v:`ACR ${acr.toFixed(2)}`,note:'High injury risk — ease back',c:'#ef4444',dir:'down'});}
+  else if(acr>1.3){score-=15;factors.push({l:'Training Load',v:`ACR ${acr.toFixed(2)}`,note:'Slight overload — be careful',c:'#f97316',dir:'down'});}
+  else if(acr<0.7){score-=5;factors.push({l:'Training Load',v:`ACR ${acr.toFixed(2)}`,note:'Low load — room to build',c:'#8b5cf6',dir:'up'});}
+  else{score+=5;factors.push({l:'Training Load',v:`ACR ${acr.toFixed(2)}`,note:'Optimal training zone',c:'#00c4b0',dir:'up'});}
+
+  // Consecutive days
+  if(consecDays>=4){score-=20;factors.push({l:'Streak',v:`${consecDays} days in a row`,note:'Rest day overdue',c:'#ef4444',dir:'down'});}
+  else if(consecDays>=3){score-=8;factors.push({l:'Streak',v:`${consecDays} days running`,note:'Watch for fatigue',c:'#f59e0b',dir:'flat'});}
+  else if(daysSince>3){score+=10;factors.push({l:'Rest',v:`${Math.round(daysSince)}d off`,note:'Well rested — ready to run',c:'#22c55e',dir:'up'});}
+
+  // Volume vs baseline
+  if(volRatio>1.2){score-=10;factors.push({l:'Weekly Volume',v:`${wmi7.toFixed(1)} mi`,note:`${Math.round((volRatio-1)*100)}% above your baseline`,c:'#f59e0b',dir:'down'});}
+  else if(volRatio<0.6&&wkKeys.length>2){score+=8;factors.push({l:'Weekly Volume',v:`${wmi7.toFixed(1)} mi`,note:'Light week — room to push',c:'#22c55e',dir:'up'});}
+  else{factors.push({l:'Weekly Volume',v:`${wmi7.toFixed(1)} mi`,note:`Baseline: ~${baselineWmi.toFixed(1)} mi/wk`,c:'#6b7280',dir:'flat'});}
+
+  // Pace trend
+  if(paceTrend>0.3){score+=8;factors.push({l:'Pace Trend',v:`↑ ${paceTrend.toFixed(1)} min/mi faster`,note:'Fitness is building',c:'#22c55e',dir:'up'});}
+  else if(paceTrend<-0.3){score-=5;factors.push({l:'Pace Trend',v:`↓ ${Math.abs(paceTrend).toFixed(1)} min/mi slower`,note:'May indicate fatigue',c:'#f59e0b',dir:'down'});}
+
+  // Weekend long run opportunity
+  if(isWeekend && wmi7<baselineWmi*0.5 && score>30){
+    score+=5;factors.push({l:'Day of Week',v:'Weekend',note:'Good day for a long run',c:'#8b5cf6',dir:'up'});}
+
+  score = Math.max(0,Math.min(100,score));
+
+  // ── Decide workout type ──────────────────────────────────────────────────────
+  let workout;
+  const easyMps  = avgMps * 0.88;
+  const tempoMps = avgMps * 1.06;
+  const longMi   = Math.max(avgMi*1.4, baselineWmi*0.4).toFixed(1);
+  const easyMi   = (avgMi*0.8).toFixed(1);
+  const baseMi   = (avgMi*1.05).toFixed(1);
+
+  if(score<25 || (tr!=null&&tr<45) || consecDays>=4 || acr>1.5){
+    workout={
+      type:'Rest Day',emoji:'🛑',color:'#ef4444',
+      desc:'Your body is asking for a break. Skipping today is the right training decision — recovery is when fitness is actually built.',
+      warmup:null,
+      main:{label:'Rest or gentle walk',detail:'20–30 min easy walk if you want to move. No running.',pace:null,hr:'<110 bpm',dist:null},
+      cooldown:null,
+      tips:['Foam roll tight spots — calves, quads, IT band.','Hydrate well and aim for 8+ hours sleep tonight.','A rest day now prevents a forced rest week later.']
+    };
+  } else if(score<40 || acr>1.3){
+    workout={
+      type:'Easy Recovery Run',emoji:'🌿',color:'#00c4b0',
+      desc:'You have some fatigue in the system. A short, truly easy run promotes blood flow and speeds recovery without adding stress.',
+      warmup:{label:'5 min walk',detail:'Brisk walk to get blood moving'},
+      main:{label:'Easy Zone 2',detail:'Conversational pace — if you can\'t hold a full sentence, slow down.',pace:fmtPace(easyMps),hr:'120–138 bpm',dist:easyMi+' mi'},
+      cooldown:{label:'5 min walk + stretch',detail:'Hip flexors, calves, quads'},
+      tips:['Slower than this feels is the point.','Your easy pace should feel embarrassingly slow.','HR creeping above 140? Walk until it drops.']
+    };
+  } else if(score>=70 && isWeekend && wmi7<baselineWmi*0.6){
+    workout={
+      type:'Long Run',emoji:'🏔️',color:'#8b5cf6',
+      desc:'Weekend + fresh legs + low weekly mileage = long run day. This is your most important run of the week for building aerobic base and mental toughness.',
+      warmup:{label:'1 mile easy walk/jog',detail:'Start slower than you think — the goal is to finish strong'},
+      main:{label:'Long slow distance',detail:'Zone 2 the whole way. Never let HR exceed 150. Walk hills if needed.',pace:fmtPace(easyMps),hr:'125–148 bpm',dist:longMi+' mi'},
+      cooldown:{label:'10 min walk + full stretch',detail:'Spend extra time on hips and hamstrings'},
+      tips:['The long run should end feeling like you had more left.','Fuel with water every 20 min past the 45-min mark.','Your next 1-2 days should be easy or rest.']
+    };
+  } else if(score>=65 && daysSince>=2){
+    workout={
+      type:'Tempo Run',emoji:'🔥',color:'#f59e0b',
+      desc:'You\'re well-recovered and your load is under control. Time to stress the system in a good way. Tempo pace raises your lactate threshold — the single biggest predictor of race performance.',
+      warmup:{label:'1.5 miles easy jog',detail:'Build from walk to easy jog. You should be sweating before the tempo starts.'},
+      main:{label:'Tempo effort',detail:'Comfortably hard — you can speak 3-4 words but not a full sentence. Zone 3-4.',pace:fmtPace(tempoMps),hr:'145–162 bpm',dist:(avgMi*0.7).toFixed(1)+' mi'},
+      cooldown:{label:'1 mile easy jog + walk',detail:'Never stop cold after a tempo — keep moving for at least 10 min'},
+      tips:['Resist going out too fast — the last mile should feel like the hardest.','If you blow up halfway, you started too fast.','Tomorrow should be easy or rest.']
+    };
+  } else if(score>=55){
+    workout={
+      type:'Base Run',emoji:'🏃',color:'#00c4b0',
+      desc:'A solid aerobic base run. Zone 2 training is how 80% of elite runners train 80% of the time — it builds your engine without breaking you down.',
+      warmup:{label:'5 min easy walk',detail:'Let your heart rate rise naturally'},
+      main:{label:'Zone 2 base run',detail:'Fully conversational. You should be able to recite the alphabet out loud.',pace:fmtPace(avgMps*0.92),hr:'130–148 bpm',dist:baseMi+' mi'},
+      cooldown:{label:'5 min walk',detail:'Gradual slowdown — never stop running and immediately sit down'},
+      tips:['If HR drifts above 150, slow down or walk a minute.',avgCad&&avgCad<168?`Focus on quick light steps — target 170 spm (yours: ${Math.round(avgCad)}).`:'Good cadence — keep that quick turnover.','This pace feels too easy. That\'s exactly right.']
+    };
+  } else {
+    workout={
+      type:'Easy Run',emoji:'😌',color:'#6b7280',
+      desc:'Mixed signals today — some indicators are lower than ideal. A shorter, fully easy run keeps your streak alive without digging a hole.',
+      warmup:{label:'5 min walk',detail:'No rushing'},
+      main:{label:'Easy effort',detail:'Pure Zone 2. No pressure.',pace:fmtPace(easyMps),hr:'120–142 bpm',dist:easyMi+' mi'},
+      cooldown:{label:'5 min walk',detail:''},
+      tips:['Listen to your body — it\'s ok to cut it short.','Focus on how you feel, not the pace or distance.']
+    };
+  }
+
+  // ── Fetch weather async ───────────────────────────────────────────────────
+  let weatherHTML = '';
+  try {
+    const lastLat = runs.find(r=>r.startLatitude)?.startLatitude;
+    const lastLon = runs.find(r=>r.startLongitude)?.startLongitude;
+    if(lastLat&&lastLon){
+      const today2 = new Date().toISOString().slice(0,10);
+      const wu=`https://api.open-meteo.com/v1/forecast?latitude=${lastLat.toFixed(2)}&longitude=${lastLon.toFixed(2)}&daily=temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max,weathercode&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=auto&forecast_days=1`;
+      const wd = await fetch(wu).then(r=>r.json());
+      const tMax=Math.round(wd.daily?.temperature_2m_max?.[0]??0);
+      const tMin=Math.round(wd.daily?.temperature_2m_min?.[0]??0);
+      const rain=wd.daily?.precipitation_probability_max?.[0]??0;
+      const wind=Math.round(wd.daily?.windspeed_10m_max?.[0]??0);
+      const wcode=wd.daily?.weathercode?.[0]??0;
+      const wIcon=wcode<=1?'☀️':wcode<=3?'⛅':wcode<=67?'🌧':wcode<=77?'🌨':'⛈';
+      const wNote=tMax>90?'🔥 Very hot — run early morning, hydrate every 15 min':
+                  tMax>80?'☀️ Warm — start easy, HR will run higher than usual':
+                  tMax<32?'🥶 Freezing — layer up, traction risk':
+                  tMax<45?'🧤 Cold — warm up indoors first':
+                  wind>20?'💨 Windy — run into wind first half, wind-assisted on return':
+                  rain>60?'🌧 High rain chance — embrace it or adjust distance':'Perfect running weather';
+      weatherHTML=`<div class="nr-weather"><span>${wIcon} ${tMin}–${tMax}°F · ${wind}mph wind${rain>30?' · '+rain+'% rain':''}</span><span style="color:var(--muted);font-size:.65rem;margin-left:8px">${wNote}</span></div>`;
+    }
+  } catch(e){}
+
+  // ── Render ───────────────────────────────────────────────────────────────────
+  const scoreColor = score>=65?'#22c55e':score>=45?'#00c4b0':score>=30?'#f59e0b':'#ef4444';
+  const scoreLabel = score>=65?'Go for it':'score>=45?\'Train smart\':(score>=30?\'Take it easy\':\'Rest today\')';
+
+  document.getElementById('next-run-card').innerHTML=`
+  <div class="next-run-card">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px">
+      <div>
+        <div class="nr-eye">Today's Recommendation</div>
+        <div class="nr-type" style="color:${workout.color}">${workout.emoji} ${workout.type}</div>
+      </div>
+      <div style="text-align:center;flex-shrink:0">
+        <div style="width:52px;height:52px;border-radius:50%;border:3px solid ${scoreColor};display:flex;flex-direction:column;align-items:center;justify-content:center">
+          <div style="font-size:1rem;font-weight:900;color:${scoreColor};line-height:1">${score}</div>
+          <div style="font-size:.45rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">score</div>
+        </div>
+      </div>
+    </div>
+    ${weatherHTML}
+    <div class="nr-desc">${workout.desc}</div>
+
+    ${workout.warmup||workout.cooldown?`
+    <div class="nr-workout-steps">
+      ${workout.warmup?`<div class="nr-step"><div class="nr-step-dot" style="background:#6b7280"></div><div><div class="nr-step-label">Warm-up</div><div class="nr-step-detail">${workout.warmup.label} — ${workout.warmup.detail}</div></div></div>`:''}
+      <div class="nr-step nr-step-main"><div class="nr-step-dot" style="background:${workout.color}"></div><div style="flex:1"><div class="nr-step-label" style="color:${workout.color}">${workout.main.label}</div><div class="nr-step-detail">${workout.main.detail}</div></div></div>
+      ${workout.cooldown?`<div class="nr-step"><div class="nr-step-dot" style="background:#6b7280"></div><div><div class="nr-step-label">Cool-down</div><div class="nr-step-detail">${workout.cooldown.label} — ${workout.cooldown.detail}</div></div></div>`:''}
+    </div>` : ''}
+
+    <div class="nr-targets">
+      ${workout.main.dist?`<div class="nr-t"><div class="nr-t-label">Distance</div><div class="nr-t-val">${workout.main.dist}</div></div>`:''}
+      ${workout.main.pace?`<div class="nr-t"><div class="nr-t-label">Target Pace</div><div class="nr-t-val">${workout.main.pace}/mi</div></div>`:''}
+      ${workout.main.hr?`<div class="nr-t"><div class="nr-t-label">HR Zone</div><div class="nr-t-val">${workout.main.hr}</div></div>`:''}
+      ${tr!=null?`<div class="nr-t"><div class="nr-t-label">Readiness</div><div class="nr-t-val" style="color:${tr>=70?'#22c55e':tr>=50?'#f59e0b':'#ef4444'}">${tr}/100</div></div>`:''}
+    </div>
+
+    <div class="nr-factors">
+      <div style="font-size:.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Why this recommendation</div>
+      ${factors.map(f=>`<div class="nr-factor">
+        <div class="nr-factor-bar" style="background:${f.c}22;border:1px solid ${f.c}44">
+          <span class="nr-factor-arrow" style="color:${f.c}">${f.dir==='up'?'▲':f.dir==='down'?'▼':'—'}</span>
+          <span class="nr-factor-label">${f.l}</span>
+          <span class="nr-factor-val" style="color:${f.c}">${f.v}</span>
+        </div>
+        <div class="nr-factor-note">${f.note}</div>
+      </div>`).join('')}
+    </div>
+
+    <div class="nr-tips">
+      ${workout.tips.map(t=>`<div class="nr-tip"><span class="nr-tip-icon">›</span>${t}</div>`).join('')}
+    </div>
+  </div>`;
+
+  // Charts
+  const last10r=runs.slice(0,10).reverse();
+  const lb=last10r.map(r=>sd(r.startTimeLocal?.slice(0,10)));
+  lineChart('chart-pace-trend',lb,[{label:'Pace',data:last10r.map(r=>r.averageSpeed?+paceNum(r.averageSpeed).toFixed(2):null),borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.08)',fill:true}],{reverse:true});
+  lineChart('chart-hr-trend',lb,[{label:'HR',data:last10r.map(r=>r.averageHR?Math.round(r.averageHR):null),borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.08)',fill:true}]);
+
+  // ACR display
   const acrCol=acr>1.5?'#ef4444':acr>1.3?'#f97316':acr<0.8?'#8b5cf6':'#00c4b0';
-  const acrLab=acr>1.5?'High injury risk — back off':acr>1.3?'Slight overload — monitor fatigue':acr<0.8?'Undertraining — room to add more':'Optimal training load ✓';
+  const acrLab=acr>1.5?'High injury risk — back off':acr>1.3?'Slight overload — monitor fatigue':acr<0.8?'Undertraining — room to build':'Optimal training load ✓';
   document.getElementById('acr-badge').textContent=`ACR: ${acr.toFixed(2)}`;
   document.getElementById('load-display').innerHTML=`<div class="acr-display"><div class="acr-num" style="color:${acrCol}">${acr.toFixed(2)}</div><div class="acr-info"><div class="acr-label" style="color:${acrCol}">${acrLab}</div><div class="acr-sub">7-day load: <strong>${Math.round(acute)}</strong> · 28-day weekly avg: <strong>${Math.round(chronic)}</strong></div><div class="acr-bar-bg"><div class="acr-bar-fill" style="width:${Math.min(100,acr/2*100)}%;background:${acrCol}"></div></div><div class="acr-markers"><span>Undertrained</span><span>Optimal (0.8–1.3)</span><span>High risk (>1.5)</span></div></div></div>`;
 }

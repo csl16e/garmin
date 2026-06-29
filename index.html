@@ -2278,7 +2278,9 @@ function renderMonthly(runs){
     const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     barChart('chart-monthly',ks.map(k=>{const[,m]=k.split('-');return MN[+m-1];}),ks.map(k=>+mb[k].toFixed(2)),ks.map(k=>mb[k]===mv?'rgba(0,196,176,1)':'rgba(0,196,176,.45)'));
   },null);
-  document.getElementById('monthly-table').innerHTML=`<div style="font-size:.82rem;font-weight:700;margin-bottom:14px">Month by Month</div>`+[...keys].reverse().map(k=>{const{mi:miles,count,mins}=months[k];const[y,m]=k.split('-');const mn=['January','February','March','April','May','June','July','August','September','October','November','December'][+m-1]+' '+y;return`<div class="month-row"><div class="month-name">${mn}</div><div class="month-bar-bg"><div class="month-bar-fill" style="width:${maxV>0?miles/maxV*100:0}%"></div></div><div class="month-stats">${miles.toFixed(1)} mi · ${count} run${count!==1?'s':''}</div></div>`;}).join('');
+  const keys=Object.keys(months).sort();
+  const maxV=Math.max(...keys.map(k=>months[k].mi),1);
+  document.getElementById('monthly-table').innerHTML=`<div style="font-size:.82rem;font-weight:700;margin-bottom:14px">Month by Month</div>`+[...keys].reverse().map(k=>{const{mi:miles,count}=months[k];const[y,m]=k.split('-');const mn=['January','February','March','April','May','June','July','August','September','October','November','December'][+m-1]+' '+y;return`<div class="month-row"><div class="month-name">${mn}</div><div class="month-bar-bg"><div class="month-bar-fill" style="width:${maxV>0?miles/maxV*100:0}%"></div></div><div class="month-stats">${miles.toFixed(1)} mi · ${count} run${count!==1?'s':''}</div></div>`;}).join('');
 }
 
 // ══ HEART ══════════════════════════════════════════════════════

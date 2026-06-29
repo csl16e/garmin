@@ -537,7 +537,7 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
   :root { --sw:0px; }
   .sidebar { display:none !important; }
   .main { margin-left:0 !important; padding:0 !important; height:100dvh; overflow:hidden; display:flex; flex-direction:column; }
-  .top-nav { padding:10px 16px !important; min-height:48px; flex-shrink:0; }
+  .top-nav { padding:max(10px,env(safe-area-inset-top)) 16px 10px !important; min-height:48px; flex-shrink:0; }
   .pages-wrap { flex:1; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; padding-bottom:80px; }
   .page { padding:12px 12px 16px !important; }
   .two-col, .three-col { grid-template-columns:1fr !important; gap:10px !important; }

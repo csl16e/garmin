@@ -35,8 +35,16 @@ jobs:
           data = json.load(open('garmin/data.json'))
           html = open('index.html').read()
 
-          new_data_js = 'const GARMIN_DATA = ' + json.dumps(data) + ';'
-          html = re.sub(r'const GARMIN_DATA = \{.*?\};', new_data_js, html, flags=re.DOTALL)
+          new_js = 'const GARMIN_DATA = ' + json.dumps(data) + ';'
+          # Replace everything between the two sentinel markers
+          html = re.sub(
+            r'(// DATA_START\n)[\s\S]*?(// DATA_END)',
+            r'\g<1>' + new_js + r'\n// DATA_END',
+            html, count=1
+          )
+          if '// DATA_START' not in html:
+            # Fallback: replace the const declaration line
+            html = re.sub(r'const GARMIN_DATA = [^\n]+;', new_js, html, count=1)
 
           open('index.html', 'w').write(html)
           print('Dashboard rebuilt with', len(data['activities']), 'activities')

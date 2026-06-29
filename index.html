@@ -525,7 +525,7 @@ function renderRuns(runs) {
   const el = document.getElementById('runs-list');
   if (!runs.length) { el.innerHTML = `<p class="no-data">No runs yet.</p>`; return; }
 
-  el.innerHTML = runs.map(r => {
+  el.innerHTML = runs.map(r => { try {
     const totalZone = (r.hrTimeInZone_1||0)+(r.hrTimeInZone_2||0)+(r.hrTimeInZone_3||0)+(r.hrTimeInZone_4||0)+(r.hrTimeInZone_5||0);
     const zones = totalZone > 5 ? `
       <hr>
@@ -567,6 +567,7 @@ function renderRuns(runs) {
       </div>
       ${zones}
     </div>`;
+  } catch(e) { return `<div class="card"><p class="no-data">Could not render: ${r?.activityName||'activity'}</p></div>`; }
   }).join('');
 }
 

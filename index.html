@@ -395,11 +395,19 @@ function renderTrend(id, items, key, colorFn, maxVal) {
 // ─── Main Render ──────────────────────────────────────────────────────────────
 async function load() {
   let data;
-  try {
-    const res = await fetch('garmin/data.json?t=' + Date.now());
-    data = await res.json();
-  } catch(e) {
-    document.getElementById('last-updated').textContent = 'Could not load data.json';
+  const urls = [
+    'garmin/data.json?t=' + Date.now(),
+    './garmin/data.json?t=' + Date.now(),
+    '/garmin/garmin/data.json?t=' + Date.now(),
+  ];
+  for (const url of urls) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) { data = await res.json(); break; }
+    } catch(e) {}
+  }
+  if (!data) {
+    document.getElementById('last-updated').textContent = 'Could not load data — try refreshing';
     return;
   }
 
@@ -517,7 +525,7 @@ function renderRuns(runs) {
   const el = document.getElementById('runs-list');
   if (!runs.length) { el.innerHTML = `<p class="no-data">No runs yet.</p>`; return; }
 
-  el.innerHTML = runs.slice(0,15).map(r => {
+  el.innerHTML = runs.map(r => {
     const totalZone = (r.hrTimeInZone_1||0)+(r.hrTimeInZone_2||0)+(r.hrTimeInZone_3||0)+(r.hrTimeInZone_4||0)+(r.hrTimeInZone_5||0);
     const zones = totalZone > 5 ? `
       <hr>

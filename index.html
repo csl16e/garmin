@@ -563,6 +563,79 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 :root[data-theme="slate"]    { --teal:#94a3b8; --teal2:#64748b; --teal-bg:rgba(148,163,184,.08); --teal-glow:rgba(148,163,184,.15); --bg:#0d1117; --bg2:#111820; --card:#161d28; --card2:#1a2330; }
 :root[data-theme="light-blue"] { --bg:#f0f6ff; --bg2:#e8f0fc; --card:#ffffff; --card2:#f5f8ff; --border:rgba(0,0,0,.1); --border2:rgba(0,0,0,.15); --text:#0f172a; --muted:#64748b; --dim:#94a3b8; --teal:#2563eb; --teal2:#1d4ed8; --teal-bg:rgba(37,99,235,.08); --teal-glow:rgba(37,99,235,.2); }
 
+
+/* ── Heatmap ─────────────────────────────────────── */
+.heatmap-wrap{overflow-x:auto;padding-bottom:4px}
+.heatmap-grid{display:flex;gap:3px;align-items:flex-start}
+.heatmap-col{display:flex;flex-direction:column;gap:3px}
+.hm-cell{width:11px;height:11px;border-radius:2px;background:var(--border);transition:background .15s;cursor:pointer;flex-shrink:0}
+.hm-cell:hover{opacity:.8;transform:scale(1.3)}
+.hm-day-label{font-size:.5rem;color:var(--muted);height:11px;display:flex;align-items:center;margin-right:4px}
+.hm-month-labels{display:flex;gap:3px;margin-bottom:4px;padding-left:26px}
+.hm-month-lbl{font-size:.55rem;color:var(--muted);min-width:11px}
+.hm-legend{display:flex;align-items:center;gap:5px;margin-top:8px;justify-content:flex-end}
+.hm-legend span{font-size:.58rem;color:var(--muted)}
+
+/* ── Goal ring ───────────────────────────────────── */
+.goal-ring-wrap{display:flex;align-items:center;gap:18px}
+.goal-ring-svg{flex-shrink:0}
+.goal-ring-info{flex:1}
+.goal-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:4px}
+.goal-val{font-size:1.6rem;font-weight:900;color:var(--teal);line-height:1}
+.goal-sub{font-size:.72rem;color:var(--muted);margin-top:2px}
+.goal-edit{font-size:.65rem;color:var(--teal);cursor:pointer;margin-top:6px;display:inline-block}
+.goal-input-wrap{display:flex;gap:8px;margin-top:8px;align-items:center}
+.goal-input{background:var(--card2);border:1px solid var(--border2);color:var(--text);border-radius:8px;padding:6px 10px;font-size:.8rem;width:80px}
+
+/* ── Race predictor ──────────────────────────────── */
+.race-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:10px}
+.race-card{background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center}
+.race-dist{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px}
+.race-time{font-size:1.3rem;font-weight:900;color:var(--teal);line-height:1}
+.race-pace{font-size:.65rem;color:var(--muted);margin-top:3px}
+
+/* ── Comparison modal ────────────────────────────── */
+.compare-modal{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:600;display:none;align-items:center;justify-content:center;padding:20px}
+.compare-modal.open{display:flex}
+.compare-inner{background:var(--bg2);border:1px solid var(--border2);border-radius:16px;width:100%;max-width:700px;max-height:90vh;overflow-y:auto;padding:24px}
+.compare-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.compare-table{width:100%;border-collapse:collapse}
+.compare-table th{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding:8px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.compare-table td{padding:10px 12px;font-size:.82rem;border-bottom:1px solid var(--border);color:var(--text)}
+.compare-table td.winner{color:var(--teal);font-weight:700}
+.compare-table tr:last-child td{border-bottom:none}
+.compare-pick{background:var(--card);border:1px solid var(--border2);border-radius:8px;padding:10px 14px;cursor:pointer;font-size:.78rem;color:var(--text);text-align:left;width:100%}
+.compare-pick:hover{border-color:var(--teal)}
+
+/* ── Shoe tracker ────────────────────────────────── */
+.shoe-card{background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:14px;display:flex;align-items:center;gap:14px}
+.shoe-icon{font-size:1.8rem;flex-shrink:0}
+.shoe-info{flex:1;min-width:0}
+.shoe-name{font-size:.88rem;font-weight:700}
+.shoe-miles{font-size:.72rem;color:var(--muted);margin-top:2px}
+.shoe-bar-wrap{height:4px;background:var(--border);border-radius:2px;margin-top:6px;overflow:hidden}
+.shoe-bar-fill{height:100%;border-radius:2px;background:var(--teal)}
+.shoe-bar-fill.warn{background:#f59e0b}
+.shoe-bar-fill.danger{background:#ef4444}
+
+/* ── Pin / Share ─────────────────────────────────── */
+.pin-btn{background:none;border:none;cursor:pointer;font-size:.9rem;opacity:.4;transition:opacity .15s,transform .15s;padding:2px 4px}
+.pin-btn.pinned{opacity:1;transform:scale(1.2)}
+.share-btn{display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--border2);border-radius:8px;padding:8px 14px;cursor:pointer;font-size:.75rem;color:var(--text);transition:border-color .15s}
+.share-btn:hover{border-color:var(--teal);color:var(--teal)}
+
+/* ── Year stats ──────────────────────────────────── */
+.year-stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+.year-stat{background:var(--card2);border:1px solid var(--border2);border-radius:10px;padding:14px;text-align:center}
+.year-stat-val{font-size:1.4rem;font-weight:900;color:var(--teal);line-height:1}
+.year-stat-lbl{font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-top:4px}
+.year-stat-delta{font-size:.65rem;color:var(--muted);margin-top:2px}
+.year-stat-delta.up{color:#22c55e}
+.year-stat-delta.down{color:#ef4444}
+
+/* ── Weather chip ────────────────────────────────── */
+.weather-chip{display:inline-flex;align-items:center;gap:5px;background:var(--card2);border:1px solid var(--border2);border-radius:20px;padding:3px 10px;font-size:.65rem;color:var(--muted)}
+
 </style>
 </head>
 <body>
@@ -651,12 +724,32 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
     <div class="page-title-h" id="global-page-title"></div>
     <div class="page-sub" id="global-page-sub"></div>
   </div>
+  <button onclick="quickToggleDark()" id="quick-dark-btn" title="Toggle dark/light" style="margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted);font-size:1rem;padding:4px 8px;border-radius:6px;transition:color .15s" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='var(--muted)'">☀️</button>
 </div>
 
 <!-- ═══ OVERVIEW ═══════════════════════════════════════════════════════ -->
 <div class="page active" id="page-overview">
   <div class="overview-hero" id="hero"></div>
   <div class="grid-auto" id="overview-cards"></div>
+
+  <!-- Goal Ring + Year Stats -->
+  <div class="two-col" style="margin-top:12px">
+    <div class="chart-card">
+      <div class="cc-top"><div class="cc-title">Weekly Mileage Goal</div></div>
+      <div id="goal-ring-section"></div>
+    </div>
+    <div class="chart-card">
+      <div class="cc-top"><div class="cc-title">Year in Review</div><span id="year-review-label" class="cc-badge"></span></div>
+      <div id="year-stats-section"></div>
+    </div>
+  </div>
+
+  <!-- Activity Heatmap -->
+  <div class="chart-card" style="margin-top:12px">
+    <div class="cc-top"><div class="cc-title">Activity Heatmap</div><span class="cc-badge">Last 12 months</span></div>
+    <div class="cc-sub">Each square = one day · darker = more miles</div>
+    <div class="heatmap-wrap"><div id="heatmap-grid"></div></div>
+  </div>
   <div class="two-col">
     <div class="chart-card">
       <div class="cc-top"><div class="cc-title">Weekly Mileage</div><span class="cc-badge">Last 10 wks</span></div>
@@ -728,7 +821,48 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
       <div class="cc-sub">Click any run for details</div>
       <div id="recent-runs-list"></div>
     </div>
-    <div class="chart-card" id="all-runs-card">
+    <!-- Race Predictor -->
+    <div class="chart-card" style="margin-bottom:12px">
+      <div class="cc-top"><div class="cc-title">🏁 Race Time Predictor</div></div>
+      <div class="cc-sub">Based on your VO2 Max and recent training</div>
+      <div id="race-predictor"></div>
+    </div>
+
+    <!-- Training Load -->
+    <div class="chart-card" style="margin-bottom:12px">
+      <div class="cc-top"><div class="cc-title">Training Load</div><span class="cc-badge">Last 12 weeks</span></div>
+      <div class="cc-sub">Acute (7d) vs chronic (28d) load ratio — target 0.8–1.3</div>
+      <div class="chart-wrap" style="height:160px"><canvas id="chart-training-load"></canvas></div>
+    </div>
+
+    <!-- Run Comparison -->
+    <div class="chart-card" style="margin-bottom:12px">
+      <div class="cc-top"><div class="cc-title">Compare Runs</div></div>
+      <div class="cc-sub">Pick two runs to compare side-by-side</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+        <div>
+          <div style="font-size:.62rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em">Run A</div>
+          <select id="compare-a" class="goal-input" style="width:100%" onchange="updateComparison()"><option value="">Select run…</option></select>
+        </div>
+        <div>
+          <div style="font-size:.62rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em">Run B</div>
+          <select id="compare-b" class="goal-input" style="width:100%" onchange="updateComparison()"><option value="">Select run…</option></select>
+        </div>
+      </div>
+      <div id="comparison-result" style="margin-top:12px"></div>
+    </div>
+
+    <!-- Shoe Tracker -->
+    <div class="chart-card" style="margin-bottom:12px">
+      <div class="cc-top">
+        <div class="cc-title">👟 Shoe Tracker</div>
+        <button class="mt-btn" onclick="addShoe()" style="margin-left:auto">+ Add Shoe</button>
+      </div>
+      <div class="cc-sub">Track mileage per pair · alert at 400 mi</div>
+      <div id="shoe-list" style="margin-top:10px;display:flex;flex-direction:column;gap:8px"></div>
+    </div>
+
+        <div class="chart-card" id="all-runs-card">
       <div class="cc-top">
         <div class="cc-title">All Runs</div>
         <span class="cc-badge" id="all-runs-badge"></span>
@@ -759,6 +893,10 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 
 <!-- ═══ MONTHLY ══════════════════════════════════════════════════════════ -->
 <div class="page" id="page-monthly">
+  <div class="chart-card" style="margin-bottom:12px" id="year-comparison-card">
+    <div class="cc-top"><div class="cc-title">This Year vs Last Year</div></div>
+    <div id="year-compare-section"></div>
+  </div>
   <div class="chart-card">
     <div class="cc-top"><div class="cc-title">Miles Per Month</div></div>
     <div class="cc-sub"></div>
@@ -800,6 +938,22 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 
 <!-- ═══ SLEEP ════════════════════════════════════════════════════════════ -->
 <div class="page" id="page-sleep">
+  <!-- Sleep ↔ Performance Correlation -->
+  <div class="chart-card" style="margin-bottom:12px">
+    <div class="cc-top"><div class="cc-title">Sleep vs Next Run</div></div>
+    <div class="cc-sub">Does better sleep = faster runs? Scatter plot of sleep score vs next-day pace</div>
+    <div class="chart-wrap" style="height:200px"><canvas id="chart-sleep-corr"></canvas></div>
+  </div>
+  <div class="two-col" style="margin-bottom:12px">
+    <div class="chart-card">
+      <div class="cc-top"><div class="cc-title">Sleep Score Trend</div></div>
+      <div class="chart-wrap" style="height:150px"><canvas id="chart-sleep-score-trend"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="cc-top"><div class="cc-title">Sleep Duration Trend</div></div>
+      <div class="chart-wrap" style="height:150px"><canvas id="chart-sleep-dur-trend"></canvas></div>
+    </div>
+  </div>
   <div id="sleep-content"></div>
 </div>
 
@@ -1209,6 +1363,325 @@ function saveRunEdit(activityId) {
   }
 }
 
+
+// ══ HEATMAP ════════════════════════════════════════════════════════════════
+function renderHeatmap(runs) {
+  const el = document.getElementById('heatmap-grid');
+  if(!el) return;
+  const runMap = {};
+  runs.forEach(r => {
+    const d = r.startTimeLocal?.slice(0,10);
+    if(d) runMap[d] = (runMap[d]||0) + mi(r.distance||0);
+  });
+  const today = new Date(); today.setHours(0,0,0,0);
+  const start = new Date(today); start.setFullYear(start.getFullYear()-1); start.setDate(start.getDate() - start.getDay());
+  const maxMi = Math.max(...Object.values(runMap), 1);
+  const cols = [];
+  const monthLabels = [];
+  let lastMonth = -1;
+  let d = new Date(start);
+  while(d <= today) {
+    const col = [];
+    for(let i=0;i<7;i++) {
+      const ds = d.toISOString().slice(0,10);
+      const miles = runMap[ds]||0;
+      const pct = miles/maxMi;
+      const color = miles===0 ? 'var(--border)' : pct<.25 ? 'rgba(0,196,176,.2)' : pct<.5 ? 'rgba(0,196,176,.45)' : pct<.75 ? 'rgba(0,196,176,.7)' : 'rgba(0,196,176,1)';
+      const title = miles>0 ? `${ds}: ${miles.toFixed(1)} mi` : ds;
+      col.push(`<div class="hm-cell" style="background:${color}" title="${title}"></div>`);
+      if(d.getMonth()!==lastMonth) { monthLabels.push({col:cols.length,month:d.toLocaleDateString('en-US',{month:'short'})}); lastMonth=d.getMonth(); }
+      d.setDate(d.getDate()+1);
+      if(d>today) break;
+    }
+    cols.push(col);
+  }
+  const dayLabels = ['','M','','W','','F',''];
+  const legendColors = ['var(--border)','rgba(0,196,176,.2)','rgba(0,196,176,.45)','rgba(0,196,176,.7)','rgba(0,196,176,1)'];
+  el.innerHTML = `
+    <div class="hm-month-labels">${cols.map((_,i)=>{const lbl=monthLabels.find(m=>m.col===i);return `<div class="hm-month-lbl" style="width:11px">${lbl?lbl.month:''}</div>`;}).join('')}</div>
+    <div style="display:flex;gap:3px">
+      <div style="display:flex;flex-direction:column;gap:3px;padding-top:0">${dayLabels.map(l=>`<div class="hm-day-label">${l}</div>`).join('')}</div>
+      <div class="heatmap-grid">${cols.map(c=>`<div class="heatmap-col">${c.join('')}</div>`).join('')}</div>
+    </div>
+    <div class="hm-legend"><span>Less</span>${legendColors.map(c=>`<div class="hm-cell" style="background:${c};cursor:default"></div>`).join('')}<span>More</span></div>`;
+}
+
+// ══ GOAL RING ═══════════════════════════════════════════════════════════════
+let _weeklyGoal = parseInt(localStorage.getItem('weekly_goal')||'25');
+let _editingGoal = false;
+function renderGoalRing(runs) {
+  const el = document.getElementById('goal-ring-section'); if(!el) return;
+  const week7 = runs.filter(r=>(new Date()-new Date(r.startTimeLocal))<7*864e5);
+  const actual = week7.reduce((s,r)=>s+mi(r.distance||0),0);
+  const pct = Math.min(actual/_weeklyGoal, 1);
+  const r=42, cx=54, cy=54, circ=2*Math.PI*r;
+  const dash = pct*circ;
+  const color = pct>=1?'#22c55e':pct>=.7?'var(--teal)':'#f59e0b';
+  const dayOfWeek = new Date().getDay();
+  const projected = dayOfWeek>0 ? (actual/dayOfWeek)*7 : actual;
+  el.innerHTML = `
+    <div class="goal-ring-wrap">
+      <svg class="goal-ring-svg" width="108" height="108" viewBox="0 0 108 108">
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--border2)" stroke-width="8"/>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${color}" stroke-width="8"
+          stroke-dasharray="${dash} ${circ}" stroke-dashoffset="${circ*0.25}" stroke-linecap="round"
+          style="transition:stroke-dasharray .6s ease"/>
+        <text x="${cx}" y="${cy-4}" text-anchor="middle" fill="${color}" font-size="14" font-weight="900">${actual.toFixed(1)}</text>
+        <text x="${cx}" y="${cy+12}" text-anchor="middle" fill="var(--muted)" font-size="8">of ${_weeklyGoal} mi</text>
+      </svg>
+      <div class="goal-ring-info">
+        <div class="goal-title">This Week</div>
+        <div class="goal-val" style="color:${color}">${Math.round(pct*100)}%</div>
+        <div class="goal-sub">${actual.toFixed(1)} of ${_weeklyGoal} mi · ${week7.length} run${week7.length!==1?'s':''}</div>
+        <div class="goal-sub" style="margin-top:3px">Projected: <b>${projected.toFixed(1)} mi</b></div>
+        ${_editingGoal ? `<div class="goal-input-wrap"><input class="goal-input" type="number" id="goal-inp" value="${_weeklyGoal}" min="1" max="200"/><button class="mt-btn active" onclick="saveGoal()">Save</button><button class="mt-btn" onclick="cancelGoal()">✕</button></div>` 
+        : `<span class="goal-edit" onclick="editGoal()">✏️ Change goal</span>`}
+      </div>
+    </div>`;
+}
+function editGoal(){_editingGoal=true;renderGoalRing(_RUNS_CACHE);}
+function cancelGoal(){_editingGoal=false;renderGoalRing(_RUNS_CACHE);}
+function saveGoal(){const v=parseInt(document.getElementById('goal-inp')?.value)||25;_weeklyGoal=v;localStorage.setItem('weekly_goal',v);_editingGoal=false;renderGoalRing(_RUNS_CACHE);}
+
+// ══ YEAR STATS ═══════════════════════════════════════════════════════════════
+function renderYearStats(runs) {
+  const el = document.getElementById('year-stats-section'); if(!el) return;
+  const lbl = document.getElementById('year-review-label');
+  const thisYear = new Date().getFullYear();
+  const ty = runs.filter(r=>r.startTimeLocal?.startsWith(thisYear));
+  const ly = runs.filter(r=>r.startTimeLocal?.startsWith(thisYear-1));
+  if(lbl) lbl.textContent = String(thisYear);
+  const tyMi=ty.reduce((s,r)=>s+mi(r.distance||0),0), lyMi=ly.reduce((s,r)=>s+mi(r.distance||0),0);
+  const tyElev=ty.reduce((s,r)=>s+(r.elevationGain||0)*3.281,0), lyElev=ly.reduce((s,r)=>s+(r.elevationGain||0)*3.281,0);
+  const tyTime=ty.reduce((s,r)=>s+(r.duration||0),0)/3600, lyTime=ly.reduce((s,r)=>s+(r.duration||0)/3600,0);
+  const delta=(a,b)=>b>0?`<div class="year-stat-delta ${a>=b?'up':'down'}">${a>=b?'▲':'▼'} ${Math.abs(((a-b)/b)*100).toFixed(0)}% vs ${thisYear-1}</div>`:'';
+  el.innerHTML = `<div class="year-stat-grid">
+    <div class="year-stat"><div class="year-stat-val">${tyMi.toFixed(0)}</div><div class="year-stat-lbl">Miles Run</div>${delta(tyMi,lyMi)}</div>
+    <div class="year-stat"><div class="year-stat-val">${ty.length}</div><div class="year-stat-lbl">Total Runs</div>${delta(ty.length,ly.length)}</div>
+    <div class="year-stat"><div class="year-stat-val">${Math.round(tyTime)}h</div><div class="year-stat-lbl">Time Running</div>${delta(tyTime,lyTime)}</div>
+    <div class="year-stat"><div class="year-stat-val">${(tyElev/1000).toFixed(0)}k</div><div class="year-stat-lbl">Feet Climbed</div>${delta(tyElev,lyElev)}</div>
+  </div>`;
+
+  // Year comparison on monthly page
+  const el2=document.getElementById('year-compare-section'); if(!el2) return;
+  const months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const tyByM=Array(12).fill(0), lyByM=Array(12).fill(0);
+  ty.forEach(r=>{const m=new Date(r.startTimeLocal).getMonth();tyByM[m]+=mi(r.distance||0);});
+  ly.forEach(r=>{const m=new Date(r.startTimeLocal).getMonth();lyByM[m]+=mi(r.distance||0);});
+  setTimeout(()=>{ mkChart('chart-year-compare','bar',months,[
+    {label:String(thisYear),data:tyByM.map(v=>+v.toFixed(1)),backgroundColor:'rgba(0,196,176,.7)',borderRadius:4},
+    {label:String(thisYear-1),data:lyByM.map(v=>+v.toFixed(1)),backgroundColor:'rgba(0,196,176,.25)',borderRadius:4}
+  ],{plugins:{legend:{display:true,labels:{color:'#6b7280'}}},scales:{x:{grid:{display:false},ticks:{color:'#6b7280'}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7280'}}}});
+  el2.innerHTML='<div class="chart-wrap" style="height:180px"><canvas id="chart-year-compare"></canvas></div>';
+  setTimeout(()=>mkChart('chart-year-compare','bar',months,[
+    {label:String(thisYear),data:tyByM.map(v=>+v.toFixed(1)),backgroundColor:'rgba(0,196,176,.7)',borderRadius:4},
+    {label:String(thisYear-1),data:lyByM.map(v=>+v.toFixed(1)),backgroundColor:'rgba(0,196,176,.25)',borderRadius:4}
+  ],{plugins:{legend:{display:true,labels:{color:'#6b7280'}}},scales:{x:{grid:{display:false},ticks:{color:'#6b7280'}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7280'}}}}),50);
+  },50);
+}
+
+// ══ RACE PREDICTOR ══════════════════════════════════════════════════════════
+function renderRacePredictor(runs) {
+  const el=document.getElementById('race-predictor'); if(!el) return;
+  const vo2 = runs.slice(0,10).find(r=>r.vO2MaxValue)?.vO2MaxValue;
+  if(!vo2){el.innerHTML='<div style="color:var(--muted);font-size:.78rem;padding:10px 0">Need VO2 Max data to predict times.</div>';return;}
+  // Jack Daniels VDOT formula
+  const vdotToVel = v => (-4.6+0.182258*v+0.000104*v*v); // m/min at VO2max
+  const vdot = vo2;
+  const races = [
+    {name:'1 Mile',d:1609,fracVO2:.97},
+    {name:'5 K',d:5000,fracVO2:.95},
+    {name:'10 K',d:10000,fracVO2:.9},
+    {name:'Half Marathon',d:21097,fracVO2:.83},
+    {name:'Marathon',d:42195,fracVO2:.74},
+  ];
+  el.innerHTML = '<div class="race-grid">' + races.map(race=>{
+    const vel = vdotToVel(vdot * race.fracVO2); // m/min
+    const secs = (race.d / vel) * 60;
+    const h=Math.floor(secs/3600), m=Math.floor((secs%3600)/60), s=Math.round(secs%60);
+    const timeStr = h>0 ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}` : `${m}:${String(s).padStart(2,'0')}`;
+    const mpm = secs / (race.d/1609.34) / 60;
+    const paceM=Math.floor(mpm), paceS=Math.round((mpm-paceM)*60);
+    return `<div class="race-card"><div class="race-dist">${race.name}</div><div class="race-time">${timeStr}</div><div class="race-pace">${paceM}:${String(paceS).padStart(2,'0')}/mi</div></div>`;
+  }).join('') + '</div><div style="font-size:.62rem;color:var(--dim);margin-top:8px">Based on VO2 Max ${vo2} · VDOT formula by Jack Daniels</div>';
+}
+
+// ══ TRAINING LOAD ════════════════════════════════════════════════════════════
+function renderTrainingLoad(runs) {
+  const runsWithLoad = runs.filter(r=>r.activityTrainingLoad);
+  if(!runsWithLoad.length) return;
+  // Build weekly buckets for last 12 weeks
+  const now = new Date();
+  const weeks = Array.from({length:12},(_,i)=>{
+    const d=new Date(now); d.setDate(d.getDate()-((11-i)*7));
+    return getWeekKey(d);
+  });
+  const weekMap = {};
+  runsWithLoad.forEach(r=>{const wk=getWeekKey(new Date(r.startTimeLocal));weekMap[wk]=(weekMap[wk]||0)+r.activityTrainingLoad;});
+  const loads = weeks.map(w=>+(weekMap[w]||0).toFixed(0));
+  // ATL (acute 1wk) / CTL (chronic 4wk) ratio
+  const recent4 = loads.slice(-5,-1);
+  const ctl = recent4.reduce((s,v)=>s+v,0)/recent4.length||1;
+  const atl = loads[loads.length-1]||0;
+  const ratio = atl/ctl;
+  const status = ratio>1.3?'⚠️ High load':'ratio<0.8?'🔵 Easy week':'✅ Optimal'';
+  setTimeout(()=>barChart('chart-training-load',weeks.map(w=>sd(w)),loads,
+    loads.map((_,i)=>i===loads.length-1?'rgba(0,196,176,1)':'rgba(0,196,176,.5)')),50);
+}
+
+// ══ SLEEP CORRELATION ════════════════════════════════════════════════════════
+function renderSleepCorrelation(wellness, runs) {
+  const el=document.getElementById('chart-sleep-corr'); if(!el) return;
+  const scored = wellness.filter(w=>w.sleep_score);
+  const points = [];
+  scored.forEach(w=>{
+    const nextDay = new Date(w.date); nextDay.setDate(nextDay.getDate()+1);
+    const nd = nextDay.toISOString().slice(0,10);
+    const run = runs.find(r=>r.startTimeLocal?.slice(0,10)===nd);
+    if(run?.averageSpeed) points.push({x:w.sleep_score, y:+paceNum(run.averageSpeed).toFixed(2), label:nd});
+  });
+  if(!points.length) return;
+  mkChart('chart-sleep-corr','scatter',null,[{
+    label:'Sleep score vs next run pace',
+    data:points,
+    backgroundColor:'rgba(0,196,176,.5)',
+    pointRadius:4,pointHoverRadius:6
+  }],{plugins:{legend:{display:false},tooltip:{callbacks:{label:p=>`Sleep ${p.raw.x} → ${p.raw.y} min/mi on ${p.raw.label}`}}},
+  scales:{x:{title:{display:true,text:'Sleep Score',color:'#6b7280'},grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7280'}},
+          y:{title:{display:true,text:'Pace (min/mi)',color:'#6b7280'},grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7280'},reverse:true}}});
+
+  // Sleep score trend
+  const last30 = scored.slice(0,30).reverse();
+  lineChart('chart-sleep-score-trend',last30.map(w=>sd(w.date)),[{label:'Sleep Score',data:last30.map(w=>w.sleep_score),borderColor:'#a855f7',backgroundColor:'rgba(168,85,247,.08)',fill:true}],{yMin:0,yMax:100});
+  // Sleep duration trend
+  const hasDur = wellness.filter(w=>w.sleep_seconds).slice(0,30).reverse();
+  lineChart('chart-sleep-dur-trend',hasDur.map(w=>sd(w.date)),[{label:'Hours',data:hasDur.map(w=>+(w.sleep_seconds/3600).toFixed(1)),borderColor:'#67e8f9',backgroundColor:'rgba(103,232,249,.08)',fill:true}],{yMin:4,yMax:10});
+}
+
+// ══ SHOE TRACKER ════════════════════════════════════════════════════════════
+function getShoes(){return JSON.parse(localStorage.getItem('shoes')||'[]');}
+function saveShoes(s){localStorage.setItem('shoes',JSON.stringify(s));}
+function addShoe(){
+  const name=prompt('Shoe name (e.g. "Nike Pegasus 41"):'); if(!name) return;
+  const maxMi=parseInt(prompt('Max miles before replacing? (default 400):','400'))||400;
+  const shoes=getShoes(); shoes.push({id:Date.now(),name,maxMi,assignedRuns:[]});
+  saveShoes(shoes); renderShoeTracker(_RUNS_CACHE);
+}
+function deleteShoe(id){if(!confirm('Delete this shoe?'))return;saveShoes(getShoes().filter(s=>s.id!==id));renderShoeTracker(_RUNS_CACHE);}
+function assignShoe(runId, shoeId){
+  const shoes=getShoes();
+  shoes.forEach(s=>{s.assignedRuns=(s.assignedRuns||[]).filter(r=>r!==runId);});
+  if(shoeId) shoes.find(s=>s.id==shoeId)?.assignedRuns.push(runId);
+  saveShoes(shoes); renderShoeTracker(_RUNS_CACHE);
+}
+function renderShoeTracker(runs){
+  const el=document.getElementById('shoe-list'); if(!el) return;
+  const shoes=getShoes();
+  if(!shoes.length){el.innerHTML='<div style="color:var(--muted);font-size:.78rem;padding:8px 0">No shoes added yet. Click "+ Add Shoe" to start tracking.</div>';return;}
+  el.innerHTML=shoes.map(s=>{
+    const assigned=runs.filter(r=>(s.assignedRuns||[]).includes(String(r.activityId)));
+    const miles=assigned.reduce((t,r)=>t+mi(r.distance||0),0);
+    const pct=Math.min(miles/s.maxMi*100,100);
+    const cls=pct>=90?'danger':pct>=70?'warn':'';
+    const status=pct>=100?'⚠️ Replace soon':pct>=70?'Getting worn':'Good';
+    return `<div class="shoe-card">
+      <div class="shoe-icon">👟</div>
+      <div class="shoe-info">
+        <div class="shoe-name">${s.name}</div>
+        <div class="shoe-miles">${miles.toFixed(0)} / ${s.maxMi} mi · ${status}</div>
+        <div class="shoe-bar-wrap"><div class="shoe-bar-fill ${cls}" style="width:${pct}%"></div></div>
+      </div>
+      <button onclick="deleteShoe(${s.id})" style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:.8rem;padding:4px">✕</button>
+    </div>`;
+  }).join('');
+}
+
+// ══ RUN COMPARISON ══════════════════════════════════════════════════════════
+function populateCompareSelects(runs){
+  ['compare-a','compare-b'].forEach(id=>{
+    const sel=document.getElementById(id); if(!sel) return;
+    const opts=runs.slice(0,100).map(r=>`<option value="${r.activityId}">${r.startTimeLocal?.slice(0,10)} · ${r.activityName} (${fmtMi(r.distance)})</option>`).join('');
+    sel.innerHTML='<option value="">Select run…</option>'+opts;
+  });
+}
+function updateComparison(){
+  const aId=document.getElementById('compare-a')?.value;
+  const bId=document.getElementById('compare-b')?.value;
+  const el=document.getElementById('comparison-result'); if(!el) return;
+  if(!aId||!bId){el.innerHTML='';return;}
+  const a=_RUNS_CACHE.find(r=>String(r.activityId)===aId);
+  const b=_RUNS_CACHE.find(r=>String(r.activityId)===bId);
+  if(!a||!b){el.innerHTML='';return;}
+  const rows=[
+    ['Distance', fmtMi(a.distance), fmtMi(b.distance), mi(a.distance)>mi(b.distance)?'a':'b'],
+    ['Pace', fmtPace(a.averageSpeed), fmtPace(b.averageSpeed), (a.averageSpeed||0)>(b.averageSpeed||0)?'a':'b'],
+    ['Time', fmtDur(a.duration), fmtDur(b.duration), null],
+    ['Avg HR', a.averageHR?Math.round(a.averageHR)+' bpm':'—', b.averageHR?Math.round(b.averageHR)+' bpm':'—', a.averageHR&&b.averageHR?(a.averageHR<b.averageHR?'a':'b'):null],
+    ['Elev Gain', a.elevationGain?Math.round(a.elevationGain*3.281)+'ft':'—', b.elevationGain?Math.round(b.elevationGain*3.281)+'ft':'—', null],
+    ['Cadence', a.averageRunningCadenceInStepsPerMinute?Math.round(a.averageRunningCadenceInStepsPerMinute)+' spm':'—', b.averageRunningCadenceInStepsPerMinute?Math.round(b.averageRunningCadenceInStepsPerMinute)+' spm':'—', null],
+    ['Training Load', a.activityTrainingLoad?Math.round(a.activityTrainingLoad):'—', b.activityTrainingLoad?Math.round(b.activityTrainingLoad):'—', null],
+    ['VO2 Max', a.vO2MaxValue||'—', b.vO2MaxValue||'—', null],
+  ];
+  el.innerHTML=`<table class="compare-table">
+    <thead><tr><th>Metric</th><th>${a.startTimeLocal?.slice(0,10)}</th><th>${b.startTimeLocal?.slice(0,10)}</th></tr></thead>
+    <tbody>${rows.map(([lbl,av,bv,w])=>`<tr>
+      <td style="color:var(--muted)">${lbl}</td>
+      <td class="${w==='a'?'winner':''}">${av}</td>
+      <td class="${w==='b'?'winner':''}">${bv}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+}
+
+// ══ SHARE RUN ════════════════════════════════════════════════════════════════
+function shareRun(r){
+  if(navigator.share){
+    navigator.share({title:r.activityName||'Run',text:`${fmtMi(r.distance)} · ${fmtPace(r.averageSpeed)} pace · ${fmtDur(r.duration)}`,url:window.location.href})
+    .catch(()=>{});
+  } else {
+    const text=`${r.activityName||'Run'} — ${fmtMi(r.distance)} in ${fmtDur(r.duration)} at ${fmtPace(r.averageSpeed)} pace`;
+    navigator.clipboard?.writeText(text).then(()=>alert('Copied to clipboard!')).catch(()=>alert(text));
+  }
+}
+
+// ══ PIN RUNS ════════════════════════════════════════════════════════════════
+function getPins(){return JSON.parse(localStorage.getItem('pinned_runs')||'[]');}
+function togglePin(activityId){
+  const pins=getPins();
+  const id=String(activityId);
+  const idx=pins.indexOf(id);
+  if(idx>=0) pins.splice(idx,1); else pins.unshift(id);
+  localStorage.setItem('pinned_runs',JSON.stringify(pins));
+  renderAllRuns(_RUNS_CACHE);
+}
+function isPinned(activityId){return getPins().includes(String(activityId));}
+
+// ══ QUICK DARK/LIGHT TOGGLE ══════════════════════════════════════════════════
+function quickToggleDark(){
+  const cur=document.documentElement.getAttribute('data-theme');
+  if(cur==='light'||cur==='light-blue'){applyTheme('default');}
+  else{applyTheme('light');}
+  const btn=document.getElementById('quick-dark-btn');
+  if(btn) btn.textContent=document.documentElement.getAttribute('data-theme')==='light'?'🌙':'☀️';
+}
+
+// ══ WEATHER (lazy fetch per run) ══════════════════════════════════════════════
+async function fetchWeather(r){
+  const el=document.getElementById('run-weather'); if(!el) return;
+  if(!r.startLatitude||!r.startLongitude){el.innerHTML='';return;}
+  const date=r.startTimeLocal?.slice(0,10);
+  if(!date){el.innerHTML='';return;}
+  el.innerHTML='<span class="weather-chip">🌤 Loading…</span>';
+  try{
+    const url=`https://archive-api.open-meteo.com/v1/archive?latitude=${r.startLatitude.toFixed(2)}&longitude=${r.startLongitude.toFixed(2)}&start_date=${date}&end_date=${date}&daily=temperature_2m_max,precipitation_sum,windspeed_10m_max&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=auto`;
+    const res=await fetch(url); const data=await res.json();
+    const temp=Math.round(data.daily?.temperature_2m_max?.[0]||0);
+    const rain=data.daily?.precipitation_sum?.[0]||0;
+    const wind=Math.round(data.daily?.windspeed_10m_max?.[0]||0);
+    const icon=rain>0.1?'🌧':temp>85?'🔥':temp<40?'🥶':temp<60?'🌤':'☀️';
+    el.innerHTML=`<span class="weather-chip">${icon} ${temp}°F · ${wind}mph wind${rain>0.1?' · '+rain.toFixed(1)+'"rain':''}</span>`;
+  }catch(e){el.innerHTML='';}
+}
+
 function load(){
   updateTopNav('overview');
   const data=GARMIN_DATA;
@@ -1229,6 +1702,16 @@ function load(){
   _try('form',()=>renderForm(runs));
   _try('gym',()=>renderGym(runs,wellness));
   _try('sleep',()=>renderSleep(today,wellness,runs));
+  _try('heatmap',()=>renderHeatmap(runs));
+  _try('goalring',()=>renderGoalRing(runs));
+  _try('yearstats',()=>renderYearStats(runs));
+  _try('racepredictor',()=>renderRacePredictor(runs));
+  _try('shoetracker',()=>renderShoeTracker(runs));
+  _try('compareselects',()=>populateCompareSelects(runs));
+  _try('sleepcorr',()=>renderSleepCorrelation(wellness,runs));
+  // Init quick toggle icon
+  const _qtb=document.getElementById('quick-dark-btn');
+  if(_qtb){const _ct=document.documentElement.getAttribute('data-theme');_qtb.textContent=(_ct==='light'||_ct==='light-blue')?'🌙':'☀️';}
   if(_errs.length){
     const d=document.createElement('div');
     d.style.cssText='position:fixed;top:10px;right:10px;background:#1e0000;border:1px solid #ef4444;border-radius:8px;padding:14px 18px;z-index:9999;max-width:420px;font-size:.75rem;color:#ef4444;font-family:monospace';

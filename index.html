@@ -1524,7 +1524,7 @@ function renderTrainingLoad(runs) {
   const ctl = recent4.reduce((s,v)=>s+v,0)/recent4.length||1;
   const atl = loads[loads.length-1]||0;
   const ratio = atl/ctl;
-  const status = ratio>1.3?'⚠️ High load':'ratio<0.8?'🔵 Easy week':'✅ Optimal'';
+  const status = ratio>1.3?'High load':ratio<0.8?'Easy week':'Optimal';
   setTimeout(()=>barChart('chart-training-load',weeks.map(w=>sd(w)),loads,
     loads.map((_,i)=>i===loads.length-1?'rgba(0,196,176,1)':'rgba(0,196,176,.5)')),50);
 }

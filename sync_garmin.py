@@ -171,6 +171,34 @@ def fetch_activities(client, day: date) -> list:
         return []
 
 
+def fetch_gps(client, activity_id: int, max_points: int = 150) -> list:
+    """Return a simplified list of [lat, lon] pairs for the activity route."""
+    try:
+        details = client.get_activity_details(activity_id, maxchart=100, maxpoly=2000)
+        geo = details.get("geoPolylineDTO", {})
+        raw = []
+        sp = geo.get("startPoint")
+        if sp and sp.get("lat") and sp.get("lon"):
+            raw.append([sp["lat"], sp["lon"]])
+        for pt in (geo.get("polyline") or []):
+            if pt.get("lat") and pt.get("lon"):
+                raw.append([pt["lat"], pt["lon"]])
+        ep = geo.get("endPoint")
+        if ep and ep.get("lat") and ep.get("lon"):
+            raw.append([ep["lat"], ep["lon"]])
+        points = raw
+        if not points:
+            return []
+        # Downsample to max_points using even spacing
+        if len(points) > max_points:
+            step = len(points) / max_points
+            points = [points[int(i * step)] for i in range(max_points)]
+        return points
+    except Exception as e:
+        print(f"  GPS fetch failed for {activity_id}: {e}")
+        return []
+
+
 # ---------------------------------------------------------------------------
 # Formatting
 # ---------------------------------------------------------------------------
@@ -254,7 +282,7 @@ def activity_to_md(a: dict) -> str:
 # Sinks
 # ---------------------------------------------------------------------------
 
-def sink_files(all_wellness: list, all_activities: list, out_dir: Path, dry_run: bool):
+def sink_files(all_wellness: list, all_activities: list, out_dir: Path, dry_run: bool, client=None):
     daily_dir = out_dir / "daily"
     acts_dir = out_dir / "activities"
 
@@ -303,7 +331,23 @@ def sink_files(all_wellness: list, all_activities: list, out_dir: Path, dry_run:
             w_map[w["date"]] = w
         a_map = {str(a.get("activityId", id(a))): a for a in existing.get("activities", [])}
         for a in all_activities:
-            a_map[str(a.get("activityId", id(a)))] = a
+            aid = str(a.get("activityId", id(a)))
+            # Preserve existing GPS points if we're not re-fetching
+            if aid in a_map and a_map[aid].get("gps_points") and not a.get("gps_points"):
+                a["gps_points"] = a_map[aid]["gps_points"]
+            a_map[aid] = a
+        # Fetch GPS for any activities missing it (runs/walks with hasPolyline=True)
+        if client:
+            missing = [a for a in a_map.values() if not a.get("gps_points") and a.get("hasPolyline")]
+            if missing:
+                print(f"Fetching GPS for {len(missing)} activities...")
+            for a in missing:
+                aid = a.get("activityId")
+                if aid:
+                    pts = fetch_gps(client, aid)
+                    if pts:
+                        a["gps_points"] = pts
+                        print(f"  GPS: {a.get('activityName','?')} → {len(pts)} points")
         store = {"wellness": list(w_map.values()), "activities": list(a_map.values())}
         json_path.write_text(json.dumps(store, indent=2, default=str))
         print(f"  updated {json_path}")
@@ -365,7 +409,7 @@ def main():
         print(f"  wellness ok | {len(acts)} activities")
 
     if args.sink == "files":
-        sink_files(all_wellness, all_activities, Path(args.out), args.dry_run)
+        sink_files(all_wellness, all_activities, Path(args.out), args.dry_run, client=client)
     elif args.sink == "supabase":
         sink_supabase(all_wellness, all_activities)
 

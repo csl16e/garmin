@@ -2091,45 +2091,45 @@ async function renderNextRun(today,wellness,runs){
 
   // Training readiness (most important signal)
   if(tr!=null){
-    if(tr>=80){score+=20;factors.push({l:'Readiness',v:`${tr}/100`,note:'High — body is primed',c:'#22c55e',dir:'up'});}
-    else if(tr>=65){score+=8;factors.push({l:'Readiness',v:`${tr}/100`,note:'Good — ready to train',c:'#00c4b0',dir:'up'});}
-    else if(tr>=50){score-=5;factors.push({l:'Readiness',v:`${tr}/100`,note:'Moderate — keep it easy',c:'#f59e0b',dir:'flat'});}
-    else{score-=30;factors.push({l:'Readiness',v:`${tr}/100`,note:'Low — recovery needed',c:'#ef4444',dir:'down'});}
+    if(tr>=80){score+=20;factors.push({l:'Training Readiness',v:`${tr}/100`,note:'Your Garmin tracked your HRV, sleep quality, and stress overnight and says your body is fully recovered. This is your green light to push hard today.',c:'#22c55e',dir:'up'});}
+    else if(tr>=65){score+=8;factors.push({l:'Training Readiness',v:`${tr}/100`,note:'Your body is in good shape. Garmin measures this from your heart rate variability (HRV) while you sleep — a higher number means your nervous system has recovered well.',c:'#00c4b0',dir:'up'});}
+    else if(tr>=50){score-=5;factors.push({l:'Training Readiness',v:`${tr}/100`,note:'Your body is partially recovered but not fully. Going hard today risks deeper fatigue. Stick to easy effort so you come back stronger tomorrow.',c:'#f59e0b',dir:'flat'});}
+    else{score-=30;factors.push({l:'Training Readiness',v:`${tr}/100`,note:'Garmin detected signs of stress or incomplete recovery in your overnight data. Your body is telling you it needs more time. Training hard when this is low leads to injury and burnout.',c:'#ef4444',dir:'down'});}
   }
 
   // Sleep score
   if(ss!=null){
-    if(ss>=80){score+=10;factors.push({l:'Sleep',v:`${ss}/100`,note:'Great sleep last night',c:'#22c55e',dir:'up'});}
-    else if(ss>=60){score+=3;factors.push({l:'Sleep',v:`${ss}/100`,note:'Decent sleep',c:'#00c4b0',dir:'flat'});}
-    else{score-=12;factors.push({l:'Sleep',v:`${ss}/100`,note:'Poor sleep — intensity costs more',c:'#ef4444',dir:'down'});}
+    if(ss>=80){score+=10;factors.push({l:'Sleep Quality',v:`${ss}/100`,note:'Great sleep. Your muscles repair and your brain consolidates motor patterns during deep sleep — good sleep tonight means better performance today.',c:'#22c55e',dir:'up'});}
+    else if(ss>=60){score+=3;factors.push({l:'Sleep Quality',v:`${ss}/100`,note:'Decent sleep. Not perfect, but good enough to train normally. Sleep is when your muscles actually rebuild from yesterday\'s run.',c:'#00c4b0',dir:'flat'});}
+    else{score-=12;factors.push({l:'Sleep Quality',v:`${ss}/100`,note:'Poor sleep makes everything harder — your perceived effort is higher, your injury risk goes up, and your body hasn\'t fully repaired from your last workout. Keep today easy.',c:'#ef4444',dir:'down'});}
   } else if(slpHrs!=null){
-    if(slpHrs>=7.5){score+=8;factors.push({l:'Sleep',v:`${slpHrs.toFixed(1)}h`,note:'Well rested',c:'#22c55e',dir:'up'});}
-    else if(slpHrs<6){score-=10;factors.push({l:'Sleep',v:`${slpHrs.toFixed(1)}h`,note:'Under-rested',c:'#ef4444',dir:'down'});}
+    if(slpHrs>=7.5){score+=8;factors.push({l:'Sleep Duration',v:`${slpHrs.toFixed(1)}h`,note:'7.5+ hours is the sweet spot for athletes. Your muscles and nervous system had enough time to repair and recharge.',c:'#22c55e',dir:'up'});}
+    else if(slpHrs<6){score-=10;factors.push({l:'Sleep Duration',v:`${slpHrs.toFixed(1)}h`,note:'Under 6 hours significantly raises injury risk and makes hard workouts counterproductive. Your body can\'t adapt to training it hasn\'t recovered from.',c:'#ef4444',dir:'down'});}
   }
 
   // ACR — injury risk window
-  if(acr>1.5){score-=35;factors.push({l:'Training Load',v:`ACR ${acr.toFixed(2)}`,note:'High injury risk — ease back',c:'#ef4444',dir:'down'});}
-  else if(acr>1.3){score-=15;factors.push({l:'Training Load',v:`ACR ${acr.toFixed(2)}`,note:'Slight overload — be careful',c:'#f97316',dir:'down'});}
-  else if(acr<0.7){score-=5;factors.push({l:'Training Load',v:`ACR ${acr.toFixed(2)}`,note:'Low load — room to build',c:'#8b5cf6',dir:'up'});}
-  else{score+=5;factors.push({l:'Training Load',v:`ACR ${acr.toFixed(2)}`,note:'Optimal training zone',c:'#00c4b0',dir:'up'});}
+  if(acr>1.5){score-=35;factors.push({l:'Training Load Ratio',v:`${acr.toFixed(2)} (high)`,note:'ACR compares what you did this week vs. your 4-week average. Above 1.5 means you\'ve spiked your workload too fast — this is the #1 predictor of running injuries. Ease back now.',c:'#ef4444',dir:'down'});}
+  else if(acr>1.3){score-=15;factors.push({l:'Training Load Ratio',v:`${acr.toFixed(2)} (elevated)`,note:'Your recent training is outpacing your body\'s ability to absorb it. The "10% rule" exists for a reason — too much too soon causes stress fractures, tendinitis, and burnout.',c:'#f97316',dir:'down'});}
+  else if(acr<0.7){score-=5;factors.push({l:'Training Load Ratio',v:`${acr.toFixed(2)} (low)`,note:'You\'ve been training below your usual level. Your body is fresh, but go easy ramping back up — deconditioning happens faster than you think and your connective tissue needs time to re-adapt.',c:'#8b5cf6',dir:'up'});}
+  else{score+=5;factors.push({l:'Training Load Ratio',v:`${acr.toFixed(2)} (optimal)`,note:'Perfect balance. Your recent training matches your fitness base, which means you\'re absorbing the work and getting stronger without overloading your body. This is the sweet spot.',c:'#00c4b0',dir:'up'});}
 
   // Consecutive days
-  if(consecDays>=4){score-=20;factors.push({l:'Streak',v:`${consecDays} days in a row`,note:'Rest day overdue',c:'#ef4444',dir:'down'});}
-  else if(consecDays>=3){score-=8;factors.push({l:'Streak',v:`${consecDays} days running`,note:'Watch for fatigue',c:'#f59e0b',dir:'flat'});}
-  else if(daysSince>3){score+=10;factors.push({l:'Rest',v:`${Math.round(daysSince)}d off`,note:'Well rested — ready to run',c:'#22c55e',dir:'up'});}
+  if(consecDays>=4){score-=20;factors.push({l:'Days Running in a Row',v:`${consecDays} days straight`,note:'Running every day without a break prevents your muscles from fully repairing. Rest days aren\'t laziness — they\'re when your body actually gets stronger. You\'ve earned a break.',c:'#ef4444',dir:'down'});}
+  else if(consecDays>=3){score-=8;factors.push({l:'Days Running in a Row',v:`${consecDays} days straight`,note:'Three days in a row starts to accumulate fatigue. Not a red flag yet, but worth noting. Tomorrow should be easy or a rest day.',c:'#f59e0b',dir:'flat'});}
+  else if(daysSince>3){score+=10;factors.push({l:'Days Since Last Run',v:`${Math.round(daysSince)} days off`,note:'Your muscles have had time to fully repair and restock glycogen (energy). After a few days off you might feel a little stiff at first, but you\'ll have more energy once you warm up.',c:'#22c55e',dir:'up'});}
 
   // Volume vs baseline
-  if(volRatio>1.2){score-=10;factors.push({l:'Weekly Volume',v:`${wmi7.toFixed(1)} mi`,note:`${Math.round((volRatio-1)*100)}% above your baseline`,c:'#f59e0b',dir:'down'});}
-  else if(volRatio<0.6&&wkKeys.length>2){score+=8;factors.push({l:'Weekly Volume',v:`${wmi7.toFixed(1)} mi`,note:'Light week — room to push',c:'#22c55e',dir:'up'});}
-  else{factors.push({l:'Weekly Volume',v:`${wmi7.toFixed(1)} mi`,note:`Baseline: ~${baselineWmi.toFixed(1)} mi/wk`,c:'#6b7280',dir:'flat'});}
+  if(volRatio>1.2){score-=10;factors.push({l:'Weekly Mileage',v:`${wmi7.toFixed(1)} mi this week`,note:`You\'re running ${Math.round((volRatio-1)*100)}% more than your normal weekly average of ~${baselineWmi.toFixed(1)} mi. Sudden mileage spikes are the most common cause of running injuries — ease off the gas a little.`,c:'#f59e0b',dir:'down'});}
+  else if(volRatio<0.6&&wkKeys.length>2){score+=8;factors.push({l:'Weekly Mileage',v:`${wmi7.toFixed(1)} mi this week`,note:`It\'s been a light week — well under your normal ~${baselineWmi.toFixed(1)} mi/week. Your legs are fresh and you have room to run a bit more without risking overload.`,c:'#22c55e',dir:'up'});}
+  else{factors.push({l:'Weekly Mileage',v:`${wmi7.toFixed(1)} mi this week`,note:`Right in line with your typical week (~${baselineWmi.toFixed(1)} mi average). Consistent mileage builds the aerobic base that makes you faster over time.`,c:'#6b7280',dir:'flat'});}
 
   // Pace trend
-  if(paceTrend>0.3){score+=8;factors.push({l:'Pace Trend',v:`↑ ${paceTrend.toFixed(1)} min/mi faster`,note:'Fitness is building',c:'#22c55e',dir:'up'});}
-  else if(paceTrend<-0.3){score-=5;factors.push({l:'Pace Trend',v:`↓ ${Math.abs(paceTrend).toFixed(1)} min/mi slower`,note:'May indicate fatigue',c:'#f59e0b',dir:'down'});}
+  if(paceTrend>0.3){score+=8;factors.push({l:'Pace Trend',v:`Getting faster (+${paceTrend.toFixed(1)} min/mi)`,note:'Your last 5 runs are faster than the 5 before that. This is a sign your aerobic fitness is improving. Now is a good time to push a bit harder.',c:'#22c55e',dir:'up'});}
+  else if(paceTrend<-0.3){score-=5;factors.push({l:'Pace Trend',v:`Slowing down (${Math.abs(paceTrend).toFixed(1)} min/mi)`,note:'Your recent paces are slower than your prior runs. This could be fatigue building up, heat, or just natural variation — either way, it\'s a reason to keep today easy and see if you bounce back.',c:'#f59e0b',dir:'down'});}
 
   // Weekend long run opportunity
   if(isWeekend && wmi7<baselineWmi*0.5 && score>30){
-    score+=5;factors.push({l:'Day of Week',v:'Weekend',note:'Good day for a long run',c:'#8b5cf6',dir:'up'});}
+    score+=5;factors.push({l:'Day of Week',v:'Weekend',note:'Weekends are the traditional long run day for a reason — you have more time and no rush. Combined with a light week so far, this is a great opportunity to get in a longer effort.',c:'#8b5cf6',dir:'up'});}
 
   score = Math.max(0,Math.min(100,score));
 
@@ -2224,7 +2224,7 @@ async function renderNextRun(today,wellness,runs){
 
   // ── Render ───────────────────────────────────────────────────────────────────
   const scoreColor = score>=65?'#22c55e':score>=45?'#00c4b0':score>=30?'#f59e0b':'#ef4444';
-  const scoreLabel = score>=65?'Go for it':'score>=45?\'Train smart\':(score>=30?\'Take it easy\':\'Rest today\')';
+  const scoreLabel = score>=65?'Go for it':score>=45?'Train smart':score>=30?'Take it easy':'Rest today';
 
   document.getElementById('next-run-card').innerHTML=`
   <div class="next-run-card">
@@ -2234,10 +2234,11 @@ async function renderNextRun(today,wellness,runs){
         <div class="nr-type" style="color:${workout.color}">${workout.emoji} ${workout.type}</div>
       </div>
       <div style="text-align:center;flex-shrink:0">
-        <div style="width:52px;height:52px;border-radius:50%;border:3px solid ${scoreColor};display:flex;flex-direction:column;align-items:center;justify-content:center">
-          <div style="font-size:1rem;font-weight:900;color:${scoreColor};line-height:1">${score}</div>
-          <div style="font-size:.45rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">score</div>
+        <div style="width:58px;height:58px;border-radius:50%;border:3px solid ${scoreColor};display:flex;flex-direction:column;align-items:center;justify-content:center;background:${scoreColor}18">
+          <div style="font-size:1.1rem;font-weight:900;color:${scoreColor};line-height:1">${score}</div>
+          <div style="font-size:.42rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:1px">/ 100</div>
         </div>
+        <div style="font-size:.55rem;font-weight:700;color:${scoreColor};margin-top:4px;letter-spacing:.03em">${scoreLabel}</div>
       </div>
     </div>
     ${weatherHTML}
@@ -2258,14 +2259,14 @@ async function renderNextRun(today,wellness,runs){
     </div>
 
     <div class="nr-factors">
-      <div style="font-size:.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Why this recommendation</div>
-      ${factors.map(f=>`<div class="nr-factor">
-        <div class="nr-factor-bar" style="background:${f.c}22;border:1px solid ${f.c}44">
-          <span class="nr-factor-arrow" style="color:${f.c}">${f.dir==='up'?'▲':f.dir==='down'?'▼':'—'}</span>
-          <span class="nr-factor-label">${f.l}</span>
-          <span class="nr-factor-val" style="color:${f.c}">${f.v}</span>
+      <div style="font-size:.62rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px">What's driving this recommendation</div>
+      ${factors.map(f=>`<div class="nr-factor" style="background:${f.c}0d;border:1px solid ${f.c}33;border-radius:9px;padding:10px 12px;margin-bottom:6px">
+        <div style="display:flex;align-items:center;gap:7px;margin-bottom:5px">
+          <span style="font-size:.75rem;color:${f.c};flex-shrink:0">${f.dir==='up'?'▲':f.dir==='down'?'▼':'●'}</span>
+          <span style="font-size:.78rem;font-weight:700;color:var(--text);flex:1">${f.l}</span>
+          <span style="font-size:.78rem;font-weight:800;color:${f.c};white-space:nowrap">${f.v}</span>
         </div>
-        <div class="nr-factor-note">${f.note}</div>
+        <div style="font-size:.7rem;color:var(--muted);line-height:1.55;padding-left:18px">${f.note}</div>
       </div>`).join('')}
     </div>
 

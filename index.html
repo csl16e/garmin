@@ -1689,11 +1689,11 @@ function renderSleepCorrelation(wellness, runs) {
   timeToggle('chart-sleep-score-trend',(days)=>{
     const ws=wellness.filter(w=>w.sleep_score!=null&&new Date(w.date)>=cutoff(days)).sort((a,b)=>a.date.localeCompare(b.date));
     lineChart('chart-sleep-score-trend',ws.map(w=>sd(w.date)),[{label:'Sleep Score',data:ws.map(w=>w.sleep_score),borderColor:'#a855f7',backgroundColor:'rgba(168,85,247,.08)',fill:true}],{yMin:0,yMax:100});
-  },90);
+  },180);
   timeToggle('chart-sleep-dur-trend',(days)=>{
     const wd=wellness.filter(w=>w.sleep_seconds&&new Date(w.date)>=cutoff(days)).sort((a,b)=>a.date.localeCompare(b.date));
     lineChart('chart-sleep-dur-trend',wd.map(w=>sd(w.date)),[{label:'Hours',data:wd.map(w=>+(w.sleep_seconds/3600).toFixed(1)),borderColor:'#67e8f9',backgroundColor:'rgba(103,232,249,.08)',fill:true}],{yMin:4,yMax:10});
-  },90);
+  },180);
 }
 
 // ══ SHOE TRACKER ════════════════════════════════════════════════════════════
@@ -1903,10 +1903,10 @@ function renderOverview(today,wellness,runs){
     barChart('chart-weekly',wks.map(w=>sd(w)),wks.map(w=>+wkB[w].toFixed(2)),wks.map(w=>wkB[w]===maxV?'rgba(0,196,176,1)':'rgba(0,196,176,.45)'));
   },180);
 
-  timeToggle('chart-readiness',(days)=>{
+  
     const rw=wellness.filter(w=>w.training_readiness!=null&&new Date(w.date)>=cutoff(days)).sort((a,b)=>a.date.localeCompare(b.date));
     lineChart('chart-readiness',rw.map(w=>sd(w.date)),[{label:'Readiness',data:rw.map(w=>w.training_readiness),borderColor:'#00c4b0',backgroundColor:'rgba(0,196,176,.08)',fill:true}],{yMin:0,yMax:100});
-  },90);
+  },180);
 
   const last7=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-i);return d.toISOString().slice(0,10);}).reverse();
   document.getElementById('week-badge').textContent=`${week7.length} run${week7.length!==1?'s':''} · ${wmi.toFixed(1)} mi`;
@@ -1963,7 +1963,7 @@ function renderRunning(today,wellness,runs){
   timeToggle('chart-vo2-trend',(days)=>{
     const v=runs.filter(r=>r.vO2MaxValue&&new Date(r.startTimeLocal)>=cutoff(days)).sort((a,b)=>a.startTimeLocal.localeCompare(b.startTimeLocal));
     lineChart('chart-vo2-trend',v.map(r=>sd(r.startTimeLocal?.slice(0,10))),[{label:'VO2 Max',data:v.map(r=>r.vO2MaxValue),borderColor:'#00c4b0',backgroundColor:'rgba(0,196,176,.08)',fill:true}]);
-  },365);
+  },180);
   timeToggle('chart-easy-pace',(days)=>{
     const ep=runs.filter(r=>r.averageHR&&r.averageHR<150&&r.averageSpeed&&new Date(r.startTimeLocal)>=cutoff(days)).sort((a,b)=>a.startTimeLocal.localeCompare(b.startTimeLocal));
     lineChart('chart-easy-pace',ep.map(r=>sd(r.startTimeLocal?.slice(0,10))),[{label:'Pace (min/mi)',data:ep.map(r=>+paceNum(r.averageSpeed).toFixed(2)),borderColor:'#00c4b0',backgroundColor:'rgba(0,196,176,.06)',fill:true}],{reverse:true});
@@ -2227,11 +2227,11 @@ async function renderNextRun(today,wellness,runs){
   timeToggle('chart-pace-trend',(days)=>{
     const r=runs.filter(r=>r.averageSpeed&&new Date(r.startTimeLocal)>=cutoff(days)).sort((a,b)=>a.startTimeLocal.localeCompare(b.startTimeLocal));
     lineChart('chart-pace-trend',r.map(x=>sd(x.startTimeLocal?.slice(0,10))),[{label:'Pace',data:r.map(x=>+paceNum(x.averageSpeed).toFixed(2)),borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.08)',fill:true}],{reverse:true});
-  },90);
+  },180);
   timeToggle('chart-hr-trend',(days)=>{
     const r=runs.filter(x=>x.averageHR&&new Date(x.startTimeLocal)>=cutoff(days)).sort((a,b)=>a.startTimeLocal.localeCompare(b.startTimeLocal));
     lineChart('chart-hr-trend',r.map(x=>sd(x.startTimeLocal?.slice(0,10))),[{label:'HR',data:r.map(x=>Math.round(x.averageHR)),borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.08)',fill:true}]);
-  },90);
+  },180);
 
   // ACR display
   const acrCol=acr>1.5?'#ef4444':acr>1.3?'#f97316':acr<0.8?'#8b5cf6':'#00c4b0';
@@ -2263,7 +2263,7 @@ function renderPRs(runs){
   timeToggle('chart-mile-splits',(days)=>{
     const sr=runs.filter(r=>r.fastestSplit_1609&&new Date(r.startTimeLocal)>=cutoff(days)).sort((a,b)=>a.startTimeLocal.localeCompare(b.startTimeLocal));
     lineChart('chart-mile-splits',sr.map(r=>sd(r.startTimeLocal?.slice(0,10))),[{label:'Best 1-mi split (min)',data:sr.map(r=>+(r.fastestSplit_1609/60).toFixed(2)),borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.08)',fill:true}],{reverse:true});
-  },365);
+  },180);
 }
 
 // ══ MONTHLY ════════════════════════════════════════════════════
@@ -2277,7 +2277,7 @@ function renderMonthly(runs){
     const mv=Math.max(...Object.values(mb),1);
     const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     barChart('chart-monthly',ks.map(k=>{const[,m]=k.split('-');return MN[+m-1];}),ks.map(k=>+mb[k].toFixed(2)),ks.map(k=>mb[k]===mv?'rgba(0,196,176,1)':'rgba(0,196,176,.45)'));
-  },null);
+  },180);
   const keys=Object.keys(months).sort();
   const maxV=Math.max(...keys.map(k=>months[k].mi),1);
   document.getElementById('monthly-table').innerHTML=`<div style="font-size:.82rem;font-weight:700;margin-bottom:14px">Month by Month</div>`+[...keys].reverse().map(k=>{const{mi:miles,count}=months[k];const[y,m]=k.split('-');const mn=['January','February','March','April','May','June','July','August','September','October','November','December'][+m-1]+' '+y;return`<div class="month-row"><div class="month-name">${mn}</div><div class="month-bar-bg"><div class="month-bar-fill" style="width:${maxV>0?miles/maxV*100:0}%"></div></div><div class="month-stats">${miles.toFixed(1)} mi · ${count} run${count!==1?'s':''}</div></div>`;}).join('');
@@ -2501,7 +2501,7 @@ function renderSleep(today,wellness,runs){
     timeToggle('chart-sleep-bar',(days)=>{
       const sb=wellness.filter(w=>w.sleep_seconds&&new Date(w.date)>=cutoff(days)).sort((a,b)=>a.date.localeCompare(b.date));
       barChart('chart-sleep-bar',sb.map(w=>sd(w.date)),sb.map(w=>+(w.sleep_seconds/3600).toFixed(1)),sb.map(w=>w.sleep_seconds>=25200?'rgba(0,196,176,.8)':w.sleep_seconds>=21600?'rgba(245,158,11,.8)':'rgba(239,68,68,.8)'),{yMin:0});
-    },90);
+    },180);
   },50);
 }
 

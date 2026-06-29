@@ -346,6 +346,17 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 .wp-body { flex:1; }
 .wp-goal { font-size:.8rem; font-weight:700; color:var(--text); }
 .wp-how { font-size:.67rem; color:var(--muted); margin-top:2px; line-height:1.4; }
+
+/* ── BACK BUTTON & BREADCRUMB NAV ─────── */
+.top-nav { display:flex; align-items:center; gap:10px; margin-bottom:18px; }
+.back-btn { display:none; align-items:center; gap:6px; background:rgba(255,255,255,.06); border:1px solid var(--border2); border-radius:8px; padding:7px 13px; font-size:.75rem; font-weight:600; color:var(--muted); cursor:pointer; transition:all .15s; flex-shrink:0; }
+.back-btn:hover { background:rgba(0,196,176,.12); color:var(--teal); border-color:rgba(0,196,176,.3); }
+.back-btn.visible { display:flex; }
+.back-btn svg { width:14px; height:14px; flex-shrink:0; }
+.top-nav .breadcrumb { margin:0; font-size:.62rem; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; }
+.top-nav .page-title-wrap { flex:1; }
+.top-nav .page-title-wrap .page-title { margin-bottom:0; }
+.top-nav .page-title-wrap .page-sub { margin-bottom:0; margin-top:3px; }
 </style>
 </head>
 <body>
@@ -395,12 +406,19 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 </nav>
 
 <main class="main">
+<div class="top-nav" id="global-top-nav">
+  <button class="back-btn" id="global-back-btn" onclick="goBack()">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 12L6 8l4-4"/></svg>
+    Back
+  </button>
+  <div class="page-title-wrap">
+    <div class="breadcrumb" id="global-breadcrumb"></div>
+      <div class="page-sub" id="global-page-sub"></div>
+  </div>
+</div>
 
 <!-- ═══ OVERVIEW ═══════════════════════════════════════════════════════ -->
 <div class="page active" id="page-overview">
-  <div class="breadcrumb">Dashboard</div>
-  <div class="page-title" id="overview-title">Overview</div>
-  <div class="page-sub">Your training &amp; wellness — the whole picture.</div>
   <div class="overview-hero" id="hero"></div>
   <div class="grid-auto" id="overview-cards"></div>
   <div class="two-col">
@@ -424,9 +442,6 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 
 <!-- ═══ NEXT RUN ═══════════════════════════════════════════════════════ -->
 <div class="page" id="page-next">
-  <div class="breadcrumb">Training</div>
-  <div class="page-title">Next Run</div>
-  <div class="page-sub">Personalized recommendation based on your data</div>
   <div id="next-run-card"></div>
   <div class="two-col">
     <div class="chart-card">
@@ -449,9 +464,6 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 
 <!-- ═══ RUNNING ═════════════════════════════════════════════════════════ -->
 <div class="page" id="page-running">
-  <div class="breadcrumb">Dashboard · Running</div>
-  <div class="page-title">Running</div>
-  <div class="page-sub">Your aerobic engine — VO2max, race predictions, easy-pace gains and weekly volume.</div>
   <div id="running-detail-wrap" style="display:none"></div>
   <div id="running-main">
     <div class="two-col" style="margin-bottom:12px">
@@ -490,9 +502,6 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 
 <!-- ═══ PERSONAL RECORDS ════════════════════════════════════════════════ -->
 <div class="page" id="page-prs">
-  <div class="breadcrumb">Training</div>
-  <div class="page-title">Personal Records</div>
-  <div class="page-sub">Your all-time bests</div>
   <div class="pr-grid" id="pr-grid"></div>
   <div class="chart-card">
     <div class="cc-top"><div class="cc-title">Best Mile Split — History</div></div>
@@ -503,9 +512,6 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 
 <!-- ═══ MONTHLY ══════════════════════════════════════════════════════════ -->
 <div class="page" id="page-monthly">
-  <div class="breadcrumb">Training</div>
-  <div class="page-title">Monthly Log</div>
-  <div class="page-sub">Mileage and activity by month</div>
   <div class="chart-card">
     <div class="cc-top"><div class="cc-title">Miles Per Month</div></div>
     <div class="cc-sub"></div>
@@ -516,9 +522,6 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 
 <!-- ═══ HEART ════════════════════════════════════════════════════════════ -->
 <div class="page" id="page-heart">
-  <div class="breadcrumb">Health</div>
-  <div class="page-title">Heart &amp; VO2</div>
-  <div class="page-sub">Cardiovascular fitness</div>
   <div class="grid-auto" id="heart-cards"></div>
   <div class="two-col">
     <div class="chart-card">
@@ -533,9 +536,6 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 
 <!-- ═══ FORM ════════════════════════════════════════════════════════════ -->
 <div class="page" id="page-form">
-  <div class="breadcrumb">Health</div>
-  <div class="page-title">Running Form</div>
-  <div class="page-sub">Biomechanics from your latest run</div>
   <div id="form-tip" style="background:rgba(0,196,176,.08);border:1px solid rgba(0,196,176,.2);border-radius:var(--radius);padding:12px 16px;font-size:.75rem;color:var(--text);line-height:1.6;margin-bottom:12px"></div>
   <div class="chart-card" id="form-metrics"></div>
   <div class="chart-card">
@@ -548,17 +548,11 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 
 <!-- ═══ GYM ══════════════════════════════════════════════════════════════ -->
 <div class="page" id="page-gym">
-  <div class="breadcrumb">Health</div>
-  <div class="page-title">Gym &amp; Lifting</div>
-  <div class="page-sub">Strength training program and workout tracker</div>
   <div id="gym-content"></div>
 </div>
 
 <!-- ═══ SLEEP ════════════════════════════════════════════════════════════ -->
 <div class="page" id="page-sleep">
-  <div class="breadcrumb">Health</div>
-  <div class="page-title">Sleep Analysis</div>
-  <div class="page-sub">Your sleep quality and how to improve it</div>
   <div id="sleep-content"></div>
 </div>
 
@@ -570,12 +564,68 @@ const GARMIN_DATA = {"wellness": [{"date": "2026-06-28", "stats_error": "Error i
 // DATA_END
 
 // ══ NAV ════════════════════════════════════════════════════════
-function showPage(id,btn){
+const PAGE_META = {
+  overview:  { title:'Overview',        sub:'Your training & wellness — the whole picture.',          breadcrumb:'Dashboard', isHome:true },
+  next:      { title:'Next Run',         sub:'Personalized recommendation based on your data',        breadcrumb:'Dashboard' },
+  running:   { title:'Running',          sub:'Your aerobic engine — VO2max, pace gains and volume.',  breadcrumb:'Training' },
+  prs:       { title:'Personal Records', sub:'Your all-time bests',                                    breadcrumb:'Training' },
+  monthly:   { title:'Monthly Log',      sub:'Mileage and activity by month',                         breadcrumb:'Training' },
+  heart:     { title:'Heart & VO2',      sub:'Cardiovascular fitness',                                breadcrumb:'Health' },
+  form:      { title:'Running Form',     sub:'Biomechanics + cadence coaching',                       breadcrumb:'Health' },
+  gym:       { title:'Gym & Lifting',    sub:'Strength training program',                             breadcrumb:'Health' },
+  sleep:     { title:'Sleep Analysis',   sub:'Sleep quality and how to improve it',                   breadcrumb:'Health' },
+};
+
+let _navStack = [];
+let _currentPage = 'overview';
+
+function showPage(id, btn, pushHistory=true) {
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nav-btn,.mob-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('page-'+id).classList.add('active');
-  if(btn)btn.classList.add('active');
+  const el = document.getElementById('page-'+id);
+  if(el) el.classList.add('active');
+  if(btn) btn.classList.add('active');
+  // Sync sidebar highlight without a btn reference
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    if(b.getAttribute('onclick')?.includes("'"+id+"'")) b.classList.add('active');
+  });
+  document.querySelectorAll('.mob-btn').forEach(b=>{
+    if(b.getAttribute('onclick')?.includes("'"+id+"'")) b.classList.add('active');
+  });
+
+  if(pushHistory && id !== _currentPage) {
+    _navStack.push(_currentPage);
+  }
+  _currentPage = id;
+  updateTopNav(id);
 }
+
+function updateTopNav(id) {
+  const meta = PAGE_META[id] || { title: id, sub: '', breadcrumb: '', isHome: false };
+  const backBtn = document.getElementById('global-back-btn');
+  const bc = document.getElementById('global-breadcrumb');
+  const pt = document.getElementById('global-page-title');
+  const ps = document.getElementById('global-page-sub');
+  if(bc) bc.textContent = meta.breadcrumb || '';
+  if(pt) pt.textContent = meta.title || '';
+  if(ps) ps.textContent = meta.sub || '';
+  const canGoBack = _navStack.length > 0;
+  if(backBtn) backBtn.classList.toggle('visible', canGoBack);
+}
+
+function goBack() {
+  if(_navStack.length === 0) return;
+  // If we're in run detail, go back to running list first
+  const runMain = document.getElementById('running-main');
+  const runDetail = document.getElementById('running-detail-wrap');
+  if(runDetail && runDetail.style.display !== 'none') {
+    hideRunDetail();
+    return;
+  }
+  const prev = _navStack.pop();
+  showPage(prev, null, false);
+}
+
 
 // ══ HELPERS ═══════════════════════════════════════════════════
 const mi=m=>m/1609.34;
@@ -656,6 +706,17 @@ function buildFakeRoute(seed, w, h) {
 
 // ══ RUN DETAIL ═════════════════════════════════════════════════
 function showRunDetail(r){
+  // Push 'running' to history so back goes back to the list
+  if(_currentPage === 'running') _navStack.push('running');
+  const meta = { breadcrumb:'Running', title: r.activityName, sub: r.startTimeLocal?.slice(0,10) };
+  const backBtn = document.getElementById('global-back-btn');
+  const bc = document.getElementById('global-breadcrumb');
+  const pt = document.getElementById('global-page-title');
+  const ps = document.getElementById('global-page-sub');
+  if(bc) bc.textContent = 'Running';
+  if(pt) pt.textContent = r.activityName;
+  if(ps) ps.textContent = r.startTimeLocal?.slice(0,10) + ' · ' + (r.activityType?.typeKey?.replace(/_/g,' ')||'');
+  if(backBtn) backBtn.classList.add('visible');
   const main=document.getElementById('running-main');
   const wrap=document.getElementById('running-detail-wrap');
   main.style.display='none';wrap.style.display='block';
@@ -671,7 +732,6 @@ function showRunDetail(r){
   const dynHtml=dynRows.length?`<div class="dyn-section"><div class="dyn-title">🔄 Running Dynamics · Session Averages</div><div class="dyn-grid">${dynRows.map(d=>`<div class="dyn-item"><div class="dyn-label">${d.l}</div><div class="dyn-val">${d.v}</div><span class="dyn-badge ${d.c}">${d.t}</span></div>`).join('')}</div>${dynRows[0]?`<div style="font-size:.65rem;color:var(--muted);margin-top:8px;line-height:1.5">Lower ground contact, oscillation and vertical ratio = a springier, more efficient stride.</div>`:''}</div>`:'';
   const aemMsg=({'IMPACTING_TEMPO_22':'Improving your tempo fitness.','MAINTAINING_TEMPO_21':'Maintaining tempo fitness.','MINOR_AEROBIC_BENEFIT_0':'Minor aerobic benefit.','IMPACTING_BASE_25':'Building your aerobic base.','MAINTAINING_BASE_24':'Maintaining aerobic base.'}[r.aerobicTrainingEffectMessage])||r.aerobicTrainingEffectMessage||'';
   wrap.innerHTML=`<div class="run-detail">
-    <div class="rd-back" onclick="hideRunDetail()">← back to running</div>
     <div class="rd-header">
       <div class="rd-title">${r.activityName}</div>
       <div class="rd-subtitle">${r.activityType?.typeKey?.replace('_',' ')} · ${fmtDur(r.duration)} · ${fmtPace(r.averageSpeed)}${aemMsg?` · ${aemMsg}`:''}</div>
@@ -713,6 +773,7 @@ function showRunDetail(r){
 function hideRunDetail(){
   document.getElementById('running-main').style.display='block';
   document.getElementById('running-detail-wrap').style.display='none';
+  updateTopNav('running');
 }
 
 function runItem(r,showIcon=true){
@@ -733,6 +794,7 @@ function runItem(r,showIcon=true){
 
 // ══ LOAD ═══════════════════════════════════════════════════════
 function load(){
+  updateTopNav('overview');
   const data=GARMIN_DATA;
   const wellness=(data.wellness||[]).sort((a,b)=>b.date.localeCompare(a.date));
   const runs=(data.activities||[]).filter(a=>a.activityType?.typeKey==='running'||a.activityType?.typeKey==='treadmill_running').sort((a,b)=>b.startTimeLocal.localeCompare(a.startTimeLocal));
@@ -760,7 +822,7 @@ function renderOverview(today,wellness,runs){
   const streak=calcStreak(runs);
   const lr=runs[0];
   const h=new Date().getHours();
-  document.getElementById('overview-title').textContent=`${h<12?'Good Morning':'Good Afternoon'}, Chris!`;
+  document.getElementById('global-page-title').textContent=`${h<12?'Good Morning':'Good Afternoon'}, Chris!`;
   document.getElementById('hero').innerHTML=`
     <div>
       <h1 style="font-size:.9rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">${new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</h1>
@@ -1130,6 +1192,13 @@ function renderSleep(today,wellness,runs){
 }
 
 load();
+
+// Keyboard back navigation
+document.addEventListener('keydown', e => {
+  if((e.key === 'Escape' || e.key === 'Backspace' && e.target.tagName !== 'INPUT') && _navStack.length > 0) {
+    goBack();
+  }
+});
 </script>
 </body>
 </html>

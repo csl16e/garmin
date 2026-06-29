@@ -1,4 +1,4 @@
-const CACHE = 'garmin-v1'
+const CACHE = 'garmin-v3'
 const OFFLINE_URLS = [
   '/garmin/',
   '/garmin/index.html',

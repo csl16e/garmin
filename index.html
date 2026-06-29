@@ -2697,10 +2697,11 @@ load();
 // Hide splash screen after load (with 3s fallback in case window.load is slow)
 function _hideSplash() {
   const splash = document.getElementById('pwa-splash');
-  if (splash && !splash.classList.contains('hidden')) splash.classList.add('hidden');
+  if (splash) { splash.classList.add('hidden'); setTimeout(()=>splash.remove(),500); }
 }
-window.addEventListener('load', () => setTimeout(_hideSplash, 400));
-setTimeout(_hideSplash, 3000);
+window.addEventListener('load', () => _hideSplash());
+setTimeout(_hideSplash, 2000);
+document.addEventListener('DOMContentLoaded', () => setTimeout(_hideSplash, 800));
 
 // Register service worker for offline support
 if ('serviceWorker' in navigator) {

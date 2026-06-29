@@ -478,7 +478,7 @@ function renderOverview(today, wellness, runs, activities) {
   const weekRows = last7Days.map(d => {
     const dayRuns = runs.filter(r => r.startTimeLocal?.slice(0,10) === d);
     if (!dayRuns.length) {
-      const w = (data?.wellness||[]).find(x => x.date === d);
+      const w = wellness.find(x => x.date === d);
       const tr = w?.training_readiness;
       return `<div class="week-row">
         <div class="week-day">${dayName(d)}</div>

@@ -116,18 +116,31 @@ def fetch_wellness(client, day: date) -> dict:
     out = {"date": d}
 
     try:
-        stats = client.get_stats(d)
+        stats = client.get_stats_and_body(d)
         out["resting_hr"] = stats.get("restingHeartRate")
         out["steps"] = stats.get("totalSteps")
         out["stress_avg"] = stats.get("averageStressLevel")
-        out["body_battery_low"] = stats.get("bodyBatteryMostRecentValue")
         charged = stats.get("bodyBatteryChargedValue")
         drained = stats.get("bodyBatteryDrainedValue")
-        if charged is not None and drained is not None:
+        out["body_battery_high"] = charged
+        out["body_battery_low"] = drained
+        out["active_calories"] = stats.get("activeKilocalories")
+        out["moderate_intensity_minutes"] = stats.get("moderateIntensityMinutes")
+        out["vigorous_intensity_minutes"] = stats.get("vigorousIntensityMinutes")
+        out["floors_ascended"] = stats.get("floorsAscended")
+        out["distance_meters"] = stats.get("totalDistanceMeters")
+    except Exception:
+        try:
+            stats = client.get_stats(d)
+            out["resting_hr"] = stats.get("restingHeartRate")
+            out["steps"] = stats.get("totalSteps")
+            out["stress_avg"] = stats.get("averageStressLevel")
+            charged = stats.get("bodyBatteryChargedValue")
+            drained = stats.get("bodyBatteryDrainedValue")
             out["body_battery_high"] = charged
             out["body_battery_low"] = drained
-    except Exception as e:
-        out["stats_error"] = str(e)
+        except Exception as e:
+            out["stats_error"] = str(e)
 
     try:
         sleep = client.get_sleep_data(d)

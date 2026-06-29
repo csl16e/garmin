@@ -926,10 +926,13 @@ function hideRunDetail(){
   updateTopNav('running');
 }
 
+let _RUNS_CACHE = [];
 function runItem(r,showIcon=true){ r=applyEdits(r);
+  const idx = _RUNS_CACHE.findIndex(x=>x.activityId===r.activityId);
+  const ref = idx>=0 ? idx : (_RUNS_CACHE.push(r)-1);
   const isWalk=r.activityType?.typeKey==='walking'||r.activityType?.typeKey==='treadmill_running';
   const badges=[r.pr?'<span class="badge b-yellow">PR</span>':'',mi(r.distance||0)>4?'<span class="badge b-purple">Long</span>':''].filter(Boolean).join(' ');
-  return`<div class="run-list-item" onclick="showRunDetail(${JSON.stringify(r).replace(/"/g,'&quot;')})">
+  return`<div class="run-list-item" onclick="showRunDetail(_RUNS_CACHE[${ref}])">
     <div class="rli-icon${isWalk?' walk':''}">🏃</div>
     <div class="rli-main">
       <div class="rli-top">${r.activityName} ${badges}</div>
@@ -1110,6 +1113,7 @@ function renderRunning(today,wellness,runs){
   document.getElementById('recent-runs-list').innerHTML=recent.length?recent.map(r=>runItem(r)).join(''):'<div class="no-data">No runs in the last 7 days.</div>';
   // All runs
   document.getElementById('all-runs-badge').textContent=`${runs.length} runs`;
+  _RUNS_CACHE=runs.map(r=>applyEdits(r));
   document.getElementById('all-runs-list').innerHTML=runs.slice(0,25).map(r=>runItem(r)).join('');
 }
 

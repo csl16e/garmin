@@ -30,24 +30,25 @@ jobs:
       - name: Rebuild dashboard with fresh data
         run: |
           python3 - <<'EOF'
-          import json, re
+          import json
 
           data = json.load(open('garmin/data.json'))
           html = open('index.html').read()
 
-          new_js = 'const GARMIN_DATA = ' + json.dumps(data) + ';'
-          # Replace everything between the two sentinel markers
-          html = re.sub(
-            r'(// DATA_START\n)[\s\S]*?(// DATA_END)',
-            r'\g<1>' + new_js + r'\n// DATA_END',
-            html, count=1
-          )
-          if '// DATA_START' not in html:
-            # Fallback: replace the const declaration line
-            html = re.sub(r'const GARMIN_DATA = [^\n]+;', new_js, html, count=1)
+          start_marker = '// DATA_START\n'
+          end_marker = '\n// DATA_END'
+          start_idx = html.find(start_marker)
+          end_idx = html.find(end_marker)
+
+          if start_idx == -1 or end_idx == -1:
+              print('ERROR: sentinel markers not found in index.html')
+              exit(1)
+
+          new_js = 'const GARMIN_DATA = ' + json.dumps(data, ensure_ascii=True) + ';'
+          html = html[:start_idx + len(start_marker)] + new_js + html[end_idx:]
 
           open('index.html', 'w').write(html)
-          print('Dashboard rebuilt with', len(data['activities']), 'activities')
+          print('Dashboard rebuilt with', len(data['activities']), 'activities,', len(data['wellness']), 'wellness days')
           EOF
 
       - name: Commit and push

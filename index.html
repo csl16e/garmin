@@ -76,9 +76,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 
 /* ── CHART CARD ───────────────────────────── */
 .chart-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:12px}
-.cc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px}
+.cc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px;gap:6px}
 .cc-title{font-size:.82rem;font-weight:700;color:var(--text)}
 .cc-badge{font-size:.58rem;padding:2px 8px;border-radius:10px;background:var(--teal-bg);color:var(--teal);font-weight:700}
+.drag-handle{color:var(--dim);cursor:grab;font-size:1rem;margin-left:auto;padding:0 2px;user-select:none;line-height:1;opacity:.5;transition:opacity .15s}
+.drag-handle:hover{opacity:1}
+.ov-section{margin-top:12px;transition:opacity .2s}
+.ov-section.drag-over{outline:2px dashed var(--teal);border-radius:var(--radius);opacity:.7}
+.ov-section[draggable="true"]{cursor:grab}
 .cc-sub{font-size:.65rem;color:var(--muted);margin-bottom:14px}
 .chart-wrap{position:relative}
 
@@ -88,7 +93,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 @media(max-width:700px){.two-col,.three-col{grid-template-columns:1fr}}
 
 /* ── OVERVIEW HERO ────────────────────────── */
-.overview-hero{background:linear-gradient(135deg,#0f1d2e,#0a1628);border:1px solid var(--border2);border-radius:var(--radius);padding:22px 24px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px}
+.overview-hero{background:var(--hero-bg,linear-gradient(135deg,#0f1d2e,#0a1628));border:1px solid var(--border2);border-radius:var(--radius);padding:22px 24px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:14px}
 .oh-left h1{font-size:1.5rem;font-weight:900;color:var(--text)}
 .oh-left p{font-size:.72rem;color:var(--muted);margin-top:3px}
 .oh-chips{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
@@ -430,6 +435,7 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
   --text:#0f172a; --muted:#64748b; --dim:#94a3b8;
   --teal:#0d9488; --teal2:#0f766e; --teal-bg:rgba(13,148,136,.08); --teal-glow:rgba(13,148,136,.2);
   --sidebar-bg:#1e293b; --sidebar-text:#e2e8f0;
+  --hero-bg:linear-gradient(135deg,#e0f2f1,#e8f4f8);
 }
 :root[data-theme="light"] .sidebar { background:var(--bg2); border-right:1px solid rgba(0,0,0,.1); }
 :root[data-theme="light"] .nav-btn { color:#94a3b8; }
@@ -737,40 +743,55 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
   <div class="overview-hero" id="hero"></div>
   <div class="grid-auto" id="overview-cards"></div>
 
-  <!-- Goal Ring + Year Stats -->
-  <div class="two-col" style="margin-top:12px">
-    <div class="chart-card">
-      <div class="cc-top"><div class="cc-title">Weekly Mileage Goal</div></div>
-      <div id="goal-ring-section"></div>
-    </div>
-    <div class="chart-card">
-      <div class="cc-top"><div class="cc-title">Year in Review</div><span id="year-review-label" class="cc-badge"></span></div>
-      <div id="year-stats-section"></div>
-    </div>
-  </div>
+  <!-- Draggable overview sections -->
+  <div id="overview-sections">
 
-  <!-- Activity Heatmap -->
-  <div class="chart-card" style="margin-top:12px">
-    <div class="cc-top"><div class="cc-title">Activity Heatmap</div><span class="cc-badge">Last 12 months</span></div>
-    <div class="cc-sub">Each square = one day · darker = more miles</div>
-    <div class="heatmap-wrap"><div id="heatmap-grid"></div></div>
-  </div>
-  <div class="two-col">
-    <div class="chart-card">
-      <div class="cc-top"><div class="cc-title">Weekly Mileage</div><span class="cc-badge">Last 10 wks</span></div>
-      <div class="cc-sub">Miles per week</div>
-      <div class="chart-wrap" style="height:160px"><canvas id="chart-weekly"></canvas></div>
+    <div class="ov-section" data-section="thisweek">
+      <div class="chart-card">
+        <div class="cc-top">
+          <div class="cc-title">This Week</div><span class="cc-badge" id="week-badge"></span>
+          <span class="drag-handle" title="Drag to reorder">⠿</span>
+        </div>
+        <div id="week-log"></div>
+      </div>
     </div>
-    <div class="chart-card">
-      <div class="cc-top"><div class="cc-title">Training Readiness</div></div>
-      <div class="cc-sub">Daily score — last 14 days</div>
-      <div class="chart-wrap" style="height:160px"><canvas id="chart-readiness"></canvas></div>
+
+    <div class="ov-section" data-section="goalring">
+      <div class="two-col">
+        <div class="chart-card">
+          <div class="cc-top"><div class="cc-title">Weekly Mileage Goal</div><span class="drag-handle" title="Drag to reorder">⠿</span></div>
+          <div id="goal-ring-section"></div>
+        </div>
+        <div class="chart-card">
+          <div class="cc-top"><div class="cc-title">Year in Review</div><span id="year-review-label" class="cc-badge"></span></div>
+          <div id="year-stats-section"></div>
+        </div>
+      </div>
     </div>
-  </div>
-  <div class="chart-card">
-    <div class="cc-top"><div class="cc-title">This Week</div><span class="cc-badge" id="week-badge"></span></div>
-    <div class="cc-sub"></div>
-    <div id="week-log"></div>
+
+    <div class="ov-section" data-section="charts">
+      <div class="two-col">
+        <div class="chart-card">
+          <div class="cc-top"><div class="cc-title">Weekly Mileage</div><span class="cc-badge">Last 10 wks</span></div>
+          <div class="cc-sub">Miles per week</div>
+          <div class="chart-wrap" style="height:160px"><canvas id="chart-weekly"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="cc-top"><div class="cc-title">Training Readiness</div></div>
+          <div class="cc-sub">Daily score — last 14 days</div>
+          <div class="chart-wrap" style="height:160px"><canvas id="chart-readiness"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ov-section" data-section="heatmap">
+      <div class="chart-card">
+        <div class="cc-top"><div class="cc-title">Activity Heatmap</div><span class="cc-badge">Last 12 months</span><span class="drag-handle" title="Drag to reorder">⠿</span></div>
+        <div class="cc-sub">Each square = one day · darker = more miles</div>
+        <div class="heatmap-wrap"><div id="heatmap-grid"></div></div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -1741,6 +1762,7 @@ function load(){
   _try('shoetracker',()=>renderShoeTracker(runs));
   _try('compareselects',()=>populateCompareSelects(runs));
   _try('sleepcorr',()=>renderSleepCorrelation(wellness,runs));
+  _try('sectiondrag',()=>initSectionDrag());
   // Init quick toggle icon
   const _qtb=document.getElementById('quick-dark-btn');
   if(_qtb){const _ct=document.documentElement.getAttribute('data-theme');_qtb.textContent=(_ct==='light'||_ct==='light-blue')?'🌙':'☀️';}
@@ -1797,14 +1819,40 @@ function renderOverview(today,wellness,runs){
   lineChart('chart-readiness',rw.map(w=>sd(w.date)),[{label:'Readiness',data:rw.map(w=>w.training_readiness),borderColor:'#00c4b0',backgroundColor:'rgba(0,196,176,.08)',fill:true}],{yMin:0,yMax:100});
 
   const last7=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-i);return d.toISOString().slice(0,10);}).reverse();
-  document.getElementById('week-badge').textContent=`${week7.length} run${week7.length!==1?'s':''}`;
+  document.getElementById('week-badge').textContent=`${week7.length} run${week7.length!==1?'s':''} · ${wmi.toFixed(1)} mi`;
   document.getElementById('week-log').innerHTML=last7.map(d=>{
     const dr=runs.filter(r=>r.startTimeLocal?.slice(0,10)===d);
     const w=wellness.find(x=>x.date===d),tr2=w?.training_readiness;
-    if(!dr.length)return`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)"><div style="font-size:.7rem;font-weight:700;color:var(--muted);width:28px">${dn(d)}</div><div style="flex:1;font-size:.8rem;color:var(--dim)">Rest</div>${tr2?`<div style="font-size:.7rem;font-weight:700;color:${rc(tr2)}">${tr2}</div>`:''}</div>`;
-    return dr.map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)"><div style="font-size:.7rem;font-weight:700;color:var(--muted);width:28px">${dn(d)}</div><div style="flex:1"><div style="font-size:.8rem;font-weight:600">${r.activityName}</div><div style="font-size:.65rem;color:var(--muted);margin-top:1px">${r.locationName?'📍 '+r.locationName+' · ':''}${fmtDur(r.duration)} · ${fmtPace(r.averageSpeed)} · ${r.averageHR?Math.round(r.averageHR)+' bpm':''}</div></div><div style="font-size:.85rem;font-weight:800;color:var(--teal)">${fmtMi(r.distance)}</div></div>`).join('');
+    const isToday=d===new Date().toISOString().slice(0,10);
+    const fullDate=new Date(d+'T12:00:00').toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'});
+    const dateEl=`<div style="min-width:80px"><div style="font-size:.72rem;font-weight:700;color:${isToday?'var(--teal)':'var(--muted)'}">${fullDate}</div>${isToday?'<div style="font-size:.55rem;color:var(--teal);font-weight:700">TODAY</div>':''}</div>`;
+    if(!dr.length)return`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">${dateEl}<div style="flex:1;font-size:.78rem;color:var(--dim)">Rest day</div>${tr2?`<div style="font-size:.72rem;font-weight:700;color:${rc(tr2)};text-align:right"><div>${tr2}</div><div style="font-size:.55rem;color:var(--dim)">readiness</div></div>`:''}</div>`;
+    return dr.map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">${dateEl}<div style="flex:1"><div style="font-size:.8rem;font-weight:600">${r.activityName}</div><div style="font-size:.65rem;color:var(--muted);margin-top:2px">${fmtDur(r.duration)} · ${fmtPace(r.averageSpeed)}/mi${r.averageHR?' · ❤️ '+Math.round(r.averageHR):''}</div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:.9rem;font-weight:800;color:var(--teal)">${fmtMi(r.distance)}</div>${tr2?`<div style="font-size:.6rem;color:${rc(tr2)}">${tr2} rdy</div>`:''}</div></div>`).join('');
   }).join('');
 }
+// ══ DRAG-TO-REORDER OVERVIEW SECTIONS ══════════════════════════════════════
+function initSectionDrag() {
+  const container = document.getElementById('overview-sections');
+  if(!container) return;
+  const saved = JSON.parse(localStorage.getItem('ov_section_order')||'null');
+  if(saved) {
+    saved.forEach(key => {
+      const el = container.querySelector(`[data-section="${key}"]`);
+      if(el) container.appendChild(el);
+    });
+  }
+  let dragSrc = null;
+  container.querySelectorAll('.ov-section').forEach(sec => {
+    sec.setAttribute('draggable','true');
+    sec.addEventListener('dragstart', e => { dragSrc=sec; e.dataTransfer.effectAllowed='move'; sec.style.opacity='.4'; });
+    sec.addEventListener('dragend', () => { dragSrc=null; sec.style.opacity=''; container.querySelectorAll('.ov-section').forEach(s=>s.classList.remove('drag-over')); saveOrder(); });
+    sec.addEventListener('dragover', e => { e.preventDefault(); e.dataTransfer.dropEffect='move'; if(sec!==dragSrc){container.querySelectorAll('.ov-section').forEach(s=>s.classList.remove('drag-over'));sec.classList.add('drag-over');} });
+    sec.addEventListener('dragleave', () => sec.classList.remove('drag-over'));
+    sec.addEventListener('drop', e => { e.preventDefault(); if(dragSrc&&dragSrc!==sec){ const all=[...container.querySelectorAll('.ov-section')]; const si=all.indexOf(dragSrc),ti=all.indexOf(sec); si<ti?sec.after(dragSrc):sec.before(dragSrc); } sec.classList.remove('drag-over'); });
+  });
+  function saveOrder(){ localStorage.setItem('ov_section_order',JSON.stringify([...container.querySelectorAll('.ov-section')].map(s=>s.dataset.section))); }
+}
+
 function calcStreak(runs){
   const dates=new Set(runs.map(r=>r.startTimeLocal?.slice(0,10)));
   let streak=0,d=new Date();
@@ -2093,7 +2141,7 @@ function renderSleep(today,wellness,runs){
         <svg width="100" height="100" viewBox="0 0 100 100">
           <circle cx="50" cy="50" r="${R}" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="8"/>
           <circle cx="50" cy="50" r="${R}" fill="none" stroke="${scoreCol}" stroke-width="8" stroke-dasharray="${dash.toFixed(1)} ${gap.toFixed(1)}" stroke-linecap="round" style="transition:stroke-dasharray .8s"/>
-          <text x="50" y="54" text-anchor="middle" fill="${scoreCol}" font-size="18" font-weight="900" style="font-family:-apple-system,sans-serif">${Math.round(score)}</text>
+          <text x="50" y="50" text-anchor="middle" dominant-baseline="central" fill="${scoreCol}" font-size="18" font-weight="900" style="font-family:-apple-system,sans-serif">${Math.round(score)}</text>
         </svg>
       </div>
       <div class="ss-info">

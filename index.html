@@ -357,6 +357,32 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 .top-nav .page-title-wrap { flex:1; }
 .top-nav .page-title-wrap .page-title { margin-bottom:0; }
 .top-nav .page-title-wrap .page-sub { margin-bottom:0; margin-top:3px; }
+
+/* ── INLINE EDIT ──────────────────────────── */
+.editable { cursor:pointer; border-bottom:1px dashed rgba(255,255,255,.2); transition:border-color .15s; }
+.editable:hover { border-bottom-color:var(--teal); }
+.edit-pencil { font-size:.65rem; color:var(--muted); margin-left:5px; opacity:0; transition:opacity .15s; cursor:pointer; }
+*:hover > .edit-pencil, .editable:hover + .edit-pencil { opacity:1; }
+
+.edit-field-wrap { display:flex; flex-direction:column; gap:6px; margin-top:6px; }
+.edit-input { background:rgba(255,255,255,.06); border:1px solid rgba(0,196,176,.35); border-radius:7px; padding:8px 11px; font-size:.82rem; color:var(--text); font-family:inherit; width:100%; outline:none; transition:border-color .15s; }
+.edit-input:focus { border-color:var(--teal); box-shadow:0 0 0 3px rgba(0,196,176,.12); }
+.edit-textarea { min-height:70px; resize:vertical; }
+.edit-actions { display:flex; gap:7px; }
+.edit-save { background:var(--teal); color:#000; border:none; border-radius:7px; padding:7px 16px; font-size:.75rem; font-weight:700; cursor:pointer; transition:opacity .15s; }
+.edit-save:hover { opacity:.85; }
+.edit-cancel { background:rgba(255,255,255,.07); color:var(--muted); border:1px solid var(--border); border-radius:7px; padding:7px 14px; font-size:.75rem; cursor:pointer; }
+.edit-cancel:hover { color:var(--text); }
+
+.run-notes { margin-top:12px; padding:12px 14px; background:rgba(0,196,176,.05); border:1px solid rgba(0,196,176,.15); border-radius:9px; }
+.run-notes-label { font-size:.58rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--teal); margin-bottom:5px; }
+.run-notes-text { font-size:.78rem; color:var(--muted); line-height:1.6; white-space:pre-wrap; }
+.run-notes-empty { font-size:.72rem; color:var(--dim); font-style:italic; }
+
+.edit-section { border-top:1px solid var(--border); padding-top:14px; margin-top:14px; }
+.edit-section-title { font-size:.62rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:10px; }
+.edit-row { margin-bottom:10px; }
+.edit-row label { font-size:.68rem; color:var(--muted); display:block; margin-bottom:4px; }
 </style>
 </head>
 <body>
@@ -717,6 +743,7 @@ function showRunDetail(r){
   if(pt) pt.textContent = r.activityName;
   if(ps) ps.textContent = r.startTimeLocal?.slice(0,10) + ' · ' + (r.activityType?.typeKey?.replace(/_/g,' ')||'');
   if(backBtn) backBtn.classList.add('visible');
+  r = applyEdits(r);
   const main=document.getElementById('running-main');
   const wrap=document.getElementById('running-detail-wrap');
   main.style.display='none';wrap.style.display='block';
@@ -768,6 +795,31 @@ function showRunDetail(r){
       </div>
       ${dynHtml}
       ${zones?`<hr class="divider"><div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px">HR Zones — Over Distance</div>${zones}`:''}
+
+      <div class="run-notes">
+        <div class="run-notes-label">📝 Notes</div>
+        <div id="rd-notes-${r.activityId}">${loadEdits()[String(r.activityId)]?._notes ? `<div class="run-notes-text">${(loadEdits()[String(r.activityId)]._notes||'').replace(/</g,'&lt;')}</div>` : '<div class="run-notes-empty">No notes yet — tap Edit to add something about this run.</div>'}</div>
+      </div>
+
+      <div class="edit-section" id="run-edit-panel-${r.activityId}" style="display:none">
+        <div class="edit-section-title">✏️ Edit Run</div>
+        <div class="edit-row">
+          <label>Run Name</label>
+          <input class="edit-input" id="edit-name-${r.activityId}" type="text" value="${(loadEdits()[String(r.activityId)]?.activityName||r.activityName||'').replace(/"/g,'&quot;')}" placeholder="e.g. Morning Tempo Run"/>
+        </div>
+        <div class="edit-row">
+          <label>Location</label>
+          <input class="edit-input" id="edit-loc-${r.activityId}" type="text" value="${(loadEdits()[String(r.activityId)]?.locationName||r.locationName||'').replace(/"/g,'&quot;')}" placeholder="e.g. Audubon Park, New Orleans"/>
+        </div>
+        <div class="edit-row">
+          <label>Notes (how it felt, what you were working on, etc.)</label>
+          <textarea class="edit-input edit-textarea" id="edit-note-${r.activityId}" placeholder="e.g. Felt strong on the second mile. Focused on keeping cadence above 170. Hot and humid.">${(loadEdits()[String(r.activityId)]?._notes||'').replace(/</g,'&lt;')}</textarea>
+        </div>
+        <div class="edit-actions">
+          <button class="edit-save" onclick="saveRunEdit(${r.activityId})">Save Changes</button>
+          <button class="edit-cancel" onclick="document.getElementById('run-edit-panel-${r.activityId}').style.display='none'">Cancel</button>
+        </div>
+      </div>
     </div>
   </div>`;
 }
@@ -777,7 +829,7 @@ function hideRunDetail(){
   updateTopNav('running');
 }
 
-function runItem(r,showIcon=true){
+function runItem(r,showIcon=true){ r=applyEdits(r);
   const isWalk=r.activityType?.typeKey==='walking'||r.activityType?.typeKey==='treadmill_running';
   const badges=[r.pr?'<span class="badge b-yellow">PR</span>':'',mi(r.distance||0)>4?'<span class="badge b-purple">Long</span>':''].filter(Boolean).join(' ');
   return`<div class="run-list-item" onclick="showRunDetail(${JSON.stringify(r).replace(/"/g,'&quot;')})">
@@ -794,6 +846,65 @@ function runItem(r,showIcon=true){
 }
 
 // ══ LOAD ═══════════════════════════════════════════════════════
+
+// ══ RUN EDITS (localStorage) ════════════════════════════════════════════
+const EDITS_KEY = 'garmin_run_edits';
+
+function loadEdits() {
+  try { return JSON.parse(localStorage.getItem(EDITS_KEY) || '{}'); } catch { return {}; }
+}
+function saveEdit(activityId, field, value) {
+  const edits = loadEdits();
+  if (!edits[activityId]) edits[activityId] = {};
+  edits[activityId][field] = value;
+  localStorage.setItem(EDITS_KEY, JSON.stringify(edits));
+}
+function deleteEditField(activityId, field) {
+  const edits = loadEdits();
+  if (edits[activityId]) { delete edits[activityId][field]; }
+  localStorage.setItem(EDITS_KEY, JSON.stringify(edits));
+}
+function applyEdits(r) {
+  const edits = loadEdits();
+  const e = edits[String(r.activityId)];
+  if (!e) return r;
+  return { ...r, ...e };
+}
+
+function openRunEdit(activityId, currentName, currentLocation, currentNotes) {
+  const el = document.getElementById('run-edit-panel-' + activityId);
+  if (!el) return;
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+function saveRunEdit(activityId) {
+  const nameEl = document.getElementById('edit-name-' + activityId);
+  const locEl  = document.getElementById('edit-loc-'  + activityId);
+  const noteEl = document.getElementById('edit-note-' + activityId);
+  if (nameEl?.value.trim()) saveEdit(activityId, 'activityName', nameEl.value.trim());
+  else deleteEditField(activityId, 'activityName');
+  if (locEl?.value.trim()) saveEdit(activityId, 'locationName', locEl.value.trim());
+  else deleteEditField(activityId, 'locationName');
+  const note = noteEl?.value.trim() || '';
+  if (note) saveEdit(activityId, '_notes', note);
+  else deleteEditField(activityId, '_notes');
+  // Close panel and refresh the detail view
+  const el = document.getElementById('run-edit-panel-' + activityId);
+  if (el) el.style.display = 'none';
+  // Refresh displayed name/location/notes inline
+  const dispName = document.getElementById('rd-name-' + activityId);
+  const dispLoc  = document.getElementById('rd-loc-'  + activityId);
+  const dispNote = document.getElementById('rd-notes-' + activityId);
+  const edits = loadEdits()[String(activityId)] || {};
+  if (dispName) dispName.textContent = edits.activityName || nameEl?._orig || '';
+  if (dispLoc)  dispLoc.textContent  = edits.locationName  || locEl?._orig  || '';
+  if (dispNote) {
+    dispNote.innerHTML = edits._notes
+      ? `<div class="run-notes-text">${edits._notes.replace(/</g,'&lt;')}</div>`
+      : '<div class="run-notes-empty">No notes yet — add something about this run.</div>';
+  }
+}
+
 function load(){
   updateTopNav('overview');
   const data=GARMIN_DATA;

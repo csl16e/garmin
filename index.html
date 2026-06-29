@@ -408,8 +408,10 @@ async function load() {
   }
   if (!data) {
     document.getElementById('last-updated').textContent = 'Could not load data — try refreshing';
+    document.getElementById('runs-list').innerHTML = '<p style="color:red;padding:20px">Failed to load data.json</p>';
     return;
   }
+  document.getElementById('last-updated').textContent = `Last synced: ${data.wellness?.[0]?.date || '?'} — ${data.activities?.length || 0} activities, ${data.wellness?.length || 0} wellness days loaded`;
 
   const wellness = (data.wellness || []).sort((a,b) => b.date.localeCompare(a.date));
   const activities = (data.activities || []).sort((a,b) => b.startTimeLocal.localeCompare(a.startTimeLocal));

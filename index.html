@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link id="google-font-link" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Rajdhani:wght@400;500;600;700&family=Oswald:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=DM+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Chris · Training Dashboard</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -383,6 +386,100 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 .edit-section-title { font-size:.62rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:10px; }
 .edit-row { margin-bottom:10px; }
 .edit-row label { font-size:.68rem; color:var(--muted); display:block; margin-bottom:4px; }
+
+/* ── THEMES ───────────────────────────────── */
+:root[data-theme="neon-purple"] {
+  --teal:#a855f7; --teal2:#9333ea; --teal-bg:rgba(168,85,247,.1); --teal-glow:rgba(168,85,247,.25);
+  --bg:#0d0a1e; --bg2:#110f28; --card:#151230; --card2:#1a1638;
+}
+:root[data-theme="fire"] {
+  --teal:#f97316; --teal2:#ea6c0a; --teal-bg:rgba(249,115,22,.1); --teal-glow:rgba(249,115,22,.25);
+  --bg:#1a0f06; --bg2:#1e1208; --card:#25170a; --card2:#2c1e0d;
+}
+:root[data-theme="ocean"] {
+  --teal:#3b82f6; --teal2:#2563eb; --teal-bg:rgba(59,130,246,.1); --teal-glow:rgba(59,130,246,.25);
+  --bg:#060f1e; --bg2:#081428; --card:#0c1a30; --card2:#101f38;
+}
+:root[data-theme="matrix"] {
+  --teal:#22c55e; --teal2:#16a34a; --teal-bg:rgba(34,197,94,.1); --teal-glow:rgba(34,197,94,.25);
+  --bg:#020c02; --bg2:#050f05; --card:#081408; --card2:#0c180c;
+}
+:root[data-theme="sunset"] {
+  --teal:#ec4899; --teal2:#db2777; --teal-bg:rgba(236,72,153,.1); --teal-glow:rgba(236,72,153,.25);
+  --bg:#1a0714; --bg2:#1e0818; --card:#250c1e; --card2:#2c1025;
+}
+:root[data-theme="gold"] {
+  --teal:#f59e0b; --teal2:#d97706; --teal-bg:rgba(245,158,11,.1); --teal-glow:rgba(245,158,11,.25);
+  --bg:#141006; --bg2:#181408; --card:#1f180a; --card2:#261e0d;
+}
+:root[data-theme="ice"] {
+  --teal:#67e8f9; --teal2:#22d3ee; --teal-bg:rgba(103,232,249,.08); --teal-glow:rgba(103,232,249,.2);
+  --bg:#050e18; --bg2:#071220; --card:#0a1928; --card2:#0d2030;
+}
+:root[data-theme="light"] {
+  --bg:#f0f4f8; --bg2:#e8ecf0; --card:#ffffff; --card2:#f8fafc;
+  --border:rgba(0,0,0,.1); --border2:rgba(0,0,0,.15);
+  --text:#0f172a; --muted:#64748b; --dim:#94a3b8;
+  --teal:#0d9488; --teal2:#0f766e; --teal-bg:rgba(13,148,136,.08); --teal-glow:rgba(13,148,136,.2);
+  --sidebar-bg:#1e293b; --sidebar-text:#e2e8f0;
+}
+:root[data-theme="light"] .sidebar { background:var(--bg2); border-right:1px solid rgba(0,0,0,.1); }
+:root[data-theme="light"] .nav-btn { color:#94a3b8; }
+:root[data-theme="light"] .nav-btn.active { color:var(--teal); background:rgba(13,148,136,.1); }
+:root[data-theme="light"] .nav-label { color:#475569; }
+:root[data-theme="light"] .logo-text { color:#e2e8f0; }
+:root[data-theme="light"] .logo-sub { color:#94a3b8; }
+:root[data-theme="light"] .sidebar-foot { color:#94a3b8; border-top-color:rgba(255,255,255,.1); }
+:root[data-theme="light"] .mob-nav { background:var(--card); border-top:1px solid rgba(0,0,0,.1); }
+:root[data-theme="light"] .mob-btn { color:var(--muted); }
+:root[data-theme="light"] body { background-image:none; }
+
+/* ── SETTINGS PANEL ───────────────────────── */
+.settings-trigger { position:fixed; bottom:24px; right:20px; width:44px; height:44px; border-radius:50%; background:var(--card); border:1px solid var(--border2); display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.1rem; z-index:300; box-shadow:0 4px 20px rgba(0,0,0,.5), 0 0 20px var(--teal-glow); transition:transform .2s, box-shadow .2s; }
+.settings-trigger:hover { transform:scale(1.1); box-shadow:0 6px 28px rgba(0,0,0,.6), 0 0 30px var(--teal-glow); }
+@media(max-width:700px) { .settings-trigger { bottom:72px; right:14px; } }
+
+.settings-overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:400; opacity:0; pointer-events:none; transition:opacity .2s; backdrop-filter:blur(4px); }
+.settings-overlay.open { opacity:1; pointer-events:all; }
+.settings-panel { position:fixed; right:0; top:0; bottom:0; width:320px; background:var(--bg2); border-left:1px solid var(--border2); z-index:500; transform:translateX(100%); transition:transform .25s cubic-bezier(.4,0,.2,1); overflow-y:auto; padding-bottom:30px; }
+.settings-panel.open { transform:none; box-shadow:-8px 0 40px rgba(0,0,0,.6); }
+@media(max-width:400px) { .settings-panel { width:100%; } }
+
+.sp-header { padding:20px 20px 14px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; }
+.sp-header h2 { font-size:1rem; font-weight:800; }
+.sp-close { background:none; border:none; color:var(--muted); font-size:1.3rem; cursor:pointer; padding:4px; line-height:1; }
+.sp-close:hover { color:var(--text); }
+.sp-section { padding:16px 20px; border-bottom:1px solid var(--border); }
+.sp-label { font-size:.6rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); margin-bottom:12px; }
+
+/* Theme swatches */
+.theme-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.theme-swatch { border-radius:10px; overflow:hidden; cursor:pointer; border:2px solid transparent; transition:all .15s; }
+.theme-swatch.active { border-color:var(--teal); box-shadow:0 0 12px var(--teal-glow); }
+.theme-swatch:hover { transform:scale(1.03); }
+.ts-preview { height:44px; display:flex; flex-direction:column; gap:3px; padding:8px; }
+.ts-bar { border-radius:3px; height:6px; }
+.ts-dot { width:10px; height:10px; border-radius:50%; margin-top:2px; }
+.ts-label { font-size:.6rem; font-weight:700; text-align:center; padding:5px 6px; background:rgba(0,0,0,.3); }
+
+/* Font options */
+.font-grid { display:flex; flex-direction:column; gap:7px; }
+.font-option { display:flex; align-items:center; justify-content:space-between; padding:11px 14px; background:rgba(255,255,255,.04); border:1px solid var(--border); border-radius:9px; cursor:pointer; transition:all .15s; }
+.font-option:hover { border-color:var(--teal); background:var(--teal-bg); }
+.font-option.active { border-color:var(--teal); background:var(--teal-bg); box-shadow:0 0 12px var(--teal-glow); }
+.font-option .fo-name { font-size:.82rem; font-weight:700; }
+.font-option .fo-sample { font-size:.7rem; color:var(--muted); margin-top:2px; }
+.font-check { color:var(--teal); font-size:.8rem; opacity:0; }
+.font-option.active .font-check { opacity:1; }
+
+/* Size slider */
+.size-slider-wrap { display:flex; align-items:center; gap:10px; }
+.size-slider { flex:1; -webkit-appearance:none; appearance:none; height:4px; border-radius:2px; background:rgba(255,255,255,.1); outline:none; }
+.size-slider::-webkit-slider-thumb { -webkit-appearance:none; width:16px; height:16px; border-radius:50%; background:var(--teal); cursor:pointer; box-shadow:0 0 8px var(--teal-glow); }
+.size-label { font-size:.68rem; color:var(--muted); width:30px; text-align:right; }
+
+/* Accent preview bar */
+.accent-preview { height:4px; border-radius:2px; margin-top:8px; background:linear-gradient(90deg, var(--teal), var(--teal2)); box-shadow:0 0 8px var(--teal-glow); }
 </style>
 </head>
 <body>
@@ -1303,6 +1400,110 @@ function renderSleep(today,wellness,runs){
   },50);
 }
 
+
+// ══ SETTINGS ══════════════════════════════════════════════════════════════
+const THEMES = [
+  { id:'default',      name:'Teal',     bg:'#0a0f1e', accent:'#00c4b0', bar:'#00c4b0' },
+  { id:'neon-purple',  name:'Purple',   bg:'#0d0a1e', accent:'#a855f7', bar:'#a855f7' },
+  { id:'fire',         name:'Fire',     bg:'#1a0f06', accent:'#f97316', bar:'#f97316' },
+  { id:'ocean',        name:'Ocean',    bg:'#060f1e', accent:'#3b82f6', bar:'#3b82f6' },
+  { id:'matrix',       name:'Matrix',   bg:'#020c02', accent:'#22c55e', bar:'#22c55e' },
+  { id:'sunset',       name:'Sunset',   bg:'#1a0714', accent:'#ec4899', bar:'#ec4899' },
+  { id:'gold',         name:'Gold',     bg:'#141006', accent:'#f59e0b', bar:'#f59e0b' },
+  { id:'ice',          name:'Ice',      bg:'#050e18', accent:'#67e8f9', bar:'#67e8f9' },
+  { id:'light',        name:'Light',    bg:'#f0f4f8', accent:'#0d9488', bar:'#0d9488' },
+];
+const FONTS = [
+  { id:'system',  name:'System Default', family:'-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', sample:'Clean · Native feel' },
+  { id:'inter',   name:'Inter',          family:'"Inter", sans-serif',           sample:'Modern · Used by Figma & Linear' },
+  { id:'space',   name:'Space Grotesk',  family:'"Space Grotesk", sans-serif',   sample:'Geometric · Techy & sharp' },
+  { id:'rajdhani',name:'Rajdhani',       family:'"Rajdhani", sans-serif',        sample:'Athletic · Sporty & bold' },
+  { id:'oswald',  name:'Oswald',         family:'"Oswald", sans-serif',          sample:'Condensed · Strong presence' },
+  { id:'orbitron',name:'Orbitron',       family:'"Orbitron", sans-serif',        sample:'Sci-Fi · Full gamer mode 🎮' },
+  { id:'dmsans',  name:'DM Sans',        family:'"DM Sans", sans-serif',         sample:'Friendly · Rounded & approachable' },
+];
+
+let _theme = localStorage.getItem('dash_theme') || 'default';
+let _font  = localStorage.getItem('dash_font')  || 'system';
+let _size  = parseInt(localStorage.getItem('dash_size') || '14');
+
+function openSettings()  { document.getElementById('settings-panel').classList.add('open'); document.getElementById('settings-overlay').classList.add('open'); }
+function closeSettings() { document.getElementById('settings-panel').classList.remove('open'); document.getElementById('settings-overlay').classList.remove('open'); }
+
+function applyTheme(id, save=true) {
+  _theme = id;
+  const root = document.documentElement;
+  if(id === 'default') root.removeAttribute('data-theme');
+  else root.setAttribute('data-theme', id);
+  if(save) localStorage.setItem('dash_theme', id);
+  document.querySelectorAll('.theme-swatch').forEach(s => s.classList.toggle('active', s.dataset.theme === id));
+}
+
+function applyFont(id, save=true) {
+  _font = id;
+  const f = FONTS.find(f => f.id === id);
+  if(f) {
+    document.body.style.fontFamily = f.family;
+    Chart.defaults.font.family = f.family;
+  }
+  if(save) localStorage.setItem('dash_font', id);
+  document.querySelectorAll('.font-option').forEach(el => el.classList.toggle('active', el.dataset.font === id));
+}
+
+function applySize(v, save=true) {
+  _size = parseInt(v);
+  document.documentElement.style.fontSize = _size + 'px';
+  const lbl = document.getElementById('size-label');
+  if(lbl) lbl.textContent = _size + 'px';
+  const sl = document.getElementById('size-slider');
+  if(sl) sl.value = _size;
+  if(save) localStorage.setItem('dash_size', _size);
+}
+
+function applyStatStyle(style, btn) {
+  document.querySelectorAll('#stat-style-cards,#stat-style-compact').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const grid = document.getElementById('overview-cards');
+  if(!grid) return;
+  if(style === 'compact') {
+    grid.style.gridTemplateColumns = 'repeat(auto-fill,minmax(120px,1fr))';
+    grid.querySelectorAll('.mini-card').forEach(c => { c.style.padding = '10px 12px'; });
+  } else {
+    grid.style.gridTemplateColumns = '';
+    grid.querySelectorAll('.mini-card').forEach(c => { c.style.padding = ''; });
+  }
+}
+
+function initSettings() {
+  // Build theme grid
+  const tg = document.getElementById('theme-grid');
+  if(tg) tg.innerHTML = THEMES.map(t => `
+    <div class="theme-swatch${t.id===_theme?' active':''}" data-theme="${t.id}" onclick="applyTheme('${t.id}')">
+      <div class="ts-preview" style="background:${t.bg}">
+        <div class="ts-bar" style="background:${t.accent}88;width:80%"></div>
+        <div class="ts-bar" style="background:${t.accent}44;width:55%"></div>
+        <div class="ts-dot" style="background:${t.accent}"></div>
+      </div>
+      <div class="ts-label" style="background:${t.bg};color:${t.accent};font-size:.58rem">${t.name}</div>
+    </div>`).join('');
+
+  // Build font list
+  const fg = document.getElementById('font-grid');
+  if(fg) fg.innerHTML = FONTS.map(f => `
+    <div class="font-option${f.id===_font?' active':''}" data-font="${f.id}" onclick="applyFont('${f.id}')" style="font-family:${f.family}">
+      <div><div class="fo-name">${f.name}</div><div class="fo-sample">${f.sample}</div></div>
+      <span class="font-check">✓</span>
+    </div>`).join('');
+
+  // Apply saved preferences
+  applyTheme(_theme, false);
+  applyFont(_font, false);
+  applySize(_size, false);
+}
+
+// Init on load
+initSettings();
+
 load();
 
 // Keyboard back navigation
@@ -1312,5 +1513,47 @@ document.addEventListener('keydown', e => {
   }
 });
 </script>
+
+<!-- ═══ SETTINGS ════════════════════════════════════════════════════════════ -->
+<div class="settings-trigger" onclick="openSettings()" title="Customize">⚙️</div>
+
+<div class="settings-overlay" id="settings-overlay" onclick="closeSettings()"></div>
+
+<div class="settings-panel" id="settings-panel">
+  <div class="sp-header">
+    <h2>✨ Customize</h2>
+    <button class="sp-close" onclick="closeSettings()">✕</button>
+  </div>
+
+  <div class="sp-section">
+    <div class="sp-label">Color Theme</div>
+    <div class="theme-grid" id="theme-grid"></div>
+    <div class="accent-preview"></div>
+  </div>
+
+  <div class="sp-section">
+    <div class="sp-label">Font</div>
+    <div class="font-grid" id="font-grid"></div>
+  </div>
+
+  <div class="sp-section">
+    <div class="sp-label">Text Size</div>
+    <div class="size-slider-wrap">
+      <span style="font-size:.7rem;color:var(--muted)">A</span>
+      <input type="range" class="size-slider" id="size-slider" min="12" max="17" step="1" value="14" oninput="applySize(this.value)"/>
+      <span style="font-size:.9rem;color:var(--muted)">A</span>
+      <span class="size-label" id="size-label">14px</span>
+    </div>
+  </div>
+
+  <div class="sp-section" style="border-bottom:none">
+    <div class="sp-label">Quick Stats Style</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="mt-btn active" id="stat-style-cards" onclick="applyStatStyle('cards',this)">Cards</button>
+      <button class="mt-btn" id="stat-style-compact" onclick="applyStatStyle('compact',this)">Compact</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

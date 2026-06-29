@@ -536,7 +536,8 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
   </button>
   <div class="page-title-wrap">
     <div class="breadcrumb" id="global-breadcrumb"></div>
-      <div class="page-sub" id="global-page-sub"></div>
+    <div class="page-title-h" id="global-page-title"></div>
+    <div class="page-sub" id="global-page-sub"></div>
   </div>
 </div>
 
@@ -1042,7 +1043,7 @@ function renderOverview(today,wellness,runs){
   const streak=calcStreak(runs);
   const lr=runs[0];
   const h=new Date().getHours();
-  document.getElementById('global-page-title').textContent=`${h<12?'Good Morning':'Good Afternoon'}, Chris!`;
+  const _gpt=document.getElementById('global-page-title');if(_gpt)_gpt.textContent=`${h<12?'Good Morning':'Good Afternoon'}, Chris!`;
   document.getElementById('hero').innerHTML=`
     <div>
       <h1 style="font-size:.9rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px">${new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}</h1>

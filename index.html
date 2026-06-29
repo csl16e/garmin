@@ -403,11 +403,11 @@ function load() {
   const today = wellness[0] || {};
   const latestRun = runs[0];
   document.getElementById('last-updated').textContent = 'Last synced: ' + (today.date || '—') + ' — ' + runs.length + ' runs';
-  renderOverview(today, wellness, runs);
-  renderRuns(runs);
-  renderHeart(today, wellness, runs, latestRun);
-  renderForm(latestRun);
-  renderWellness(today, wellness);
+  try { renderOverview(today, wellness, runs); } catch(e) { console.error('renderOverview', e); document.getElementById('readiness-hero-card').innerHTML = '<p style="color:red">Overview error: ' + e.message + '</p>'; }
+  try { renderRuns(runs); } catch(e) { console.error('renderRuns', e); document.getElementById('runs-list').innerHTML = '<p style="color:red">Runs error: ' + e.message + '</p>'; }
+  try { renderHeart(today, wellness, runs, latestRun); } catch(e) { console.error('renderHeart', e); }
+  try { renderForm(latestRun); } catch(e) { console.error('renderForm', e); }
+  try { renderWellness(today, wellness); } catch(e) { console.error('renderWellness', e); }
 }
 load();
 </script>

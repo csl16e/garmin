@@ -660,6 +660,57 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 :root[data-theme="light-green"] .mob-btn { color:var(--muted); }
 
 
+/* ── Calendar ─────────────────────────────────────────── */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-nav h3{font-size:1rem;font-weight:800;color:var(--text)}
+.cal-arrow{background:var(--surface-sm);border:1px solid var(--border2);border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted);font-size:1rem;transition:all .15s}
+.cal-arrow:hover{background:var(--teal-bg);color:var(--teal);border-color:var(--teal)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-dow{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);text-align:center;padding:4px 0}
+.cal-cell{aspect-ratio:1;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:default;position:relative;transition:transform .1s;min-height:40px}
+.cal-cell.has-run{cursor:pointer}
+.cal-cell.has-run:hover{transform:scale(1.08);z-index:2}
+.cal-cell.today{box-shadow:0 0 0 2px var(--teal)}
+.cal-cell.other-month{opacity:.25}
+.cal-cell.rest{background:var(--surface-sm)}
+.cal-day-num{font-size:.6rem;font-weight:600;color:var(--muted);line-height:1;margin-bottom:2px}
+.cal-cell.has-run .cal-day-num{color:inherit}
+.cal-dist{font-size:.65rem;font-weight:800;line-height:1}
+.cal-month-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.cal-stat{background:var(--card2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;flex:1;min-width:80px;text-align:center}
+.cal-stat-val{font-size:1.1rem;font-weight:900;color:var(--teal)}
+.cal-stat-lbl{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+
+/* ── Race Goal ─────────────────────────────────────────── */
+.rg-setup{background:var(--card);border:1px solid var(--border2);border-radius:var(--radius);padding:20px 22px;margin-bottom:14px}
+.rg-setup h3{font-size:.88rem;font-weight:800;color:var(--text);margin-bottom:14px}
+.rg-form{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rg-field{display:flex;flex-direction:column;gap:4px}
+.rg-field label{font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.rg-field input,.rg-field select{background:var(--surface);border:1px solid var(--border2);border-radius:8px;padding:8px 10px;font-size:.82rem;color:var(--text);font-family:inherit;outline:none;transition:border-color .15s;width:100%}
+.rg-field input:focus,.rg-field select:focus{border-color:var(--teal);box-shadow:0 0 0 3px var(--teal-bg)}
+.rg-save{background:var(--teal);color:#000;border:none;border-radius:8px;padding:10px 20px;font-size:.8rem;font-weight:800;cursor:pointer;margin-top:4px;transition:opacity .15s}
+.rg-save:hover{opacity:.85}
+.rg-countdown{text-align:center;padding:22px 16px;background:linear-gradient(135deg,var(--teal-bg),transparent);border:1px solid var(--border2);border-radius:var(--radius);margin-bottom:12px}
+.rg-days-num{font-size:3rem;font-weight:900;color:var(--teal);line-height:1}
+.rg-days-lbl{font-size:.72rem;color:var(--muted);margin-top:4px}
+.rg-race-name{font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:8px}
+.rg-phase{display:inline-block;padding:4px 12px;border-radius:20px;font-size:.65rem;font-weight:700;letter-spacing:.04em;margin-top:8px}
+.rg-metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.rg-metric{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 14px;text-align:center}
+.rg-metric-val{font-size:1.15rem;font-weight:900;color:var(--teal)}
+.rg-metric-lbl{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-top:2px}
+.rg-plan{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;margin-bottom:12px}
+.rg-plan h4{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:10px}
+.rg-week-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border)}
+.rg-week-row:last-child{border-bottom:none}
+.rg-week-label{font-size:.72rem;font-weight:700;color:var(--muted);width:70px;flex-shrink:0}
+.rg-week-bar{flex:1;height:8px;background:var(--surface);border-radius:4px;overflow:hidden}
+.rg-week-bar-fill{height:100%;border-radius:4px;transition:width .3s}
+.rg-week-mi{font-size:.72rem;font-weight:700;width:40px;text-align:right;flex-shrink:0}
+.rg-edit-btn{background:none;border:1px solid var(--border2);border-radius:8px;padding:6px 14px;font-size:.72rem;color:var(--muted);cursor:pointer;transition:all .15s}
+.rg-edit-btn:hover{border-color:var(--teal);color:var(--teal)}
+
 /* ── Heatmap ─────────────────────────────────────── */
 .heatmap-wrap{overflow-x:auto;padding-bottom:4px}
 .heatmap-grid{display:flex;gap:3px;align-items:flex-start}
@@ -766,6 +817,8 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
     <button class="nav-btn" onclick="showPage('running',this)"><span class="ni">🏃</span> Running</button>
     <button class="nav-btn" onclick="showPage('prs',this)"><span class="ni">🏆</span> Personal Records</button>
     <button class="nav-btn" onclick="showPage('monthly',this)"><span class="ni">📅</span> Monthly Log</button>
+    <button class="nav-btn" onclick="showPage('calendar',this)"><span class="ni">📆</span> Calendar</button>
+    <button class="nav-btn" onclick="showPage('race',this)"><span class="ni">🏅</span> Race Goal</button>
   </div>
   <div class="nav-group">
     <div class="nav-label">Health</div>
@@ -791,6 +844,8 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
     <button class="mob-drawer-btn" onclick="showPage('form',null);closeMobMore()"><span>📐</span>Form</button>
     <button class="mob-drawer-btn" onclick="showPage('gym',null);closeMobMore()"><span>💪</span>Gym</button>
     <button class="mob-drawer-btn" onclick="showPage('sleep',null);closeMobMore()"><span>🌙</span>Sleep</button>
+    <button class="mob-drawer-btn" onclick="showPage('calendar',null);closeMobMore()"><span>📆</span>Calendar</button>
+    <button class="mob-drawer-btn" onclick="showPage('race',null);closeMobMore()"><span>🏅</span>Race Goal</button>
     <button class="mob-drawer-btn" onclick="openSettings();closeMobMore()"><span>⚙️</span>Settings</button>
     <button class="mob-drawer-btn" onclick="closeMobMore()"><span>✕</span>Close</button>
   </div>
@@ -1087,6 +1142,28 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
   <div id="sleep-content"></div>
 </div>
 
+<div class="page" id="page-calendar">
+  <div class="top-nav">
+    <div class="page-title-wrap">
+      <div class="breadcrumb">Training</div>
+      <h1 class="page-title">Calendar</h1>
+      <p class="page-sub">Your run history at a glance</p>
+    </div>
+  </div>
+  <div id="cal-container"></div>
+</div>
+
+<div class="page" id="page-race">
+  <div class="top-nav">
+    <div class="page-title-wrap">
+      <div class="breadcrumb">Training</div>
+      <h1 class="page-title">Race Goal</h1>
+      <p class="page-sub">Track your progress toward your next race</p>
+    </div>
+  </div>
+  <div id="race-goal-container"></div>
+</div>
+
 </div><!-- /pages-wrap -->
 </main>
 
@@ -1121,7 +1198,7 @@ function showPage(id, btn, pushHistory=true) {
   document.querySelectorAll('.nav-btn').forEach(b=>{
     if(b.getAttribute('onclick')?.includes("'"+id+"'")) b.classList.add('active');
   });
-  const morePages = ['next','prs','monthly','form','gym','sleep'];
+  const morePages = ['next','prs','monthly','form','gym','sleep','calendar','race'];
   document.querySelectorAll('.mob-btn').forEach(b=>{
     const attr = b.getAttribute('onclick')||'';
     if(attr.includes("'"+id+"'")) b.classList.add('active');
@@ -1870,6 +1947,347 @@ async function fetchWeather(r){
   }catch(e){el.innerHTML='';}
 }
 
+// ══ CALENDAR ══════════════════════════════════════════════════════════════
+let _calYear = new Date().getFullYear();
+let _calMonth = new Date().getMonth(); // 0-indexed
+
+function renderCalendar(runs) {
+  const container = document.getElementById('cal-container');
+  if (!container) return;
+  _calRuns = runs;
+  _drawCalendar();
+}
+
+let _calRuns = [];
+function _drawCalendar() {
+  const container = document.getElementById('cal-container');
+  if (!container) return;
+
+  const year = _calYear, month = _calMonth;
+  const today = new Date();
+  const firstDay = new Date(year, month, 1);
+  const lastDay = new Date(year, month + 1, 0);
+  const startDow = firstDay.getDay(); // 0=Sun
+  const monthName = firstDay.toLocaleDateString('en-US', {month:'long', year:'numeric'});
+
+  // Build run map for this month
+  const runMap = {};
+  _calRuns.forEach(r => {
+    const d = r.startTimeLocal?.slice(0,10);
+    if (!d) return;
+    const [y,m] = d.split('-').map(Number);
+    if (y === year && m-1 === month) {
+      if (!runMap[d]) runMap[d] = [];
+      runMap[d].push(r);
+    }
+  });
+
+  // Monthly stats
+  const monthRuns = Object.values(runMap).flat();
+  const monthMi = monthRuns.reduce((s,r) => s + mi(r.distance||0), 0);
+  const monthTime = monthRuns.reduce((s,r) => s + (r.duration||0), 0);
+  const runDays = Object.keys(runMap).length;
+
+  // Color by distance relative to avg
+  const allRuns = _calRuns.slice(0,60);
+  const avgDist = allRuns.length ? allRuns.reduce((s,r)=>s+(r.distance||0),0)/allRuns.length : 8000;
+
+  function runColor(dist) {
+    const ratio = dist / avgDist;
+    if (ratio > 1.5) return {bg:'#8b5cf6',text:'#fff'}; // long
+    if (ratio > 1.1) return {bg:'#00c4b0',text:'#000'}; // above avg
+    if (ratio > 0.7) return {bg:'rgba(0,196,176,.6)',text:'#000'}; // normal
+    return {bg:'rgba(0,196,176,.35)',text:'#000'}; // short
+  }
+
+  // Build grid cells
+  const dows = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+  let cells = '';
+  // Day-of-week headers
+  dows.forEach(d => { cells += `<div class="cal-dow">${d}</div>`; });
+
+  // Empty cells before month start
+  for (let i = 0; i < startDow; i++) cells += `<div class="cal-cell other-month"></div>`;
+
+  // Day cells
+  for (let day = 1; day <= lastDay.getDate(); day++) {
+    const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    const dayRuns = runMap[dateStr] || [];
+    const isToday = dateStr === today.toISOString().slice(0,10);
+    const totalDist = dayRuns.reduce((s,r) => s+(r.distance||0), 0);
+
+    if (dayRuns.length) {
+      const c = runColor(totalDist);
+      const distMi = mi(totalDist);
+      cells += `<div class="cal-cell has-run${isToday?' today':''}" style="background:${c.bg};color:${c.text}" onclick="_calDayClick('${dateStr}')" title="${distMi.toFixed(1)} mi · ${dayRuns.length} run${dayRuns.length>1?'s':''}">
+        <span class="cal-day-num">${day}</span>
+        <span class="cal-dist">${distMi.toFixed(1)}</span>
+      </div>`;
+    } else {
+      cells += `<div class="cal-cell rest${isToday?' today':''}"><span class="cal-day-num">${day}</span></div>`;
+    }
+  }
+
+  // Fill remaining cells
+  const totalCells = startDow + lastDay.getDate();
+  const remainder = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+  for (let i = 0; i < remainder; i++) cells += `<div class="cal-cell other-month"></div>`;
+
+  const isCurrentOrFuture = (year > today.getFullYear() || (year===today.getFullYear()&&month>=today.getMonth()));
+  container.innerHTML = `
+    <div class="chart-card" style="margin-bottom:12px">
+      <div class="cal-nav">
+        <button class="cal-arrow" onclick="_calNav(-1)">&#8249;</button>
+        <h3>${monthName}</h3>
+        <button class="cal-arrow" onclick="_calNav(1)" ${isCurrentOrFuture ? 'disabled style="opacity:.3;cursor:default"':''}>&#8250;</button>
+      </div>
+      <div class="cal-grid">${cells}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;font-size:.6rem;color:var(--muted)">
+        <span>Distance key: </span>
+        <span style="background:rgba(0,196,176,.35);border-radius:4px;padding:2px 7px;color:#000">Short</span>
+        <span style="background:rgba(0,196,176,.6);border-radius:4px;padding:2px 7px;color:#000">Normal</span>
+        <span style="background:#00c4b0;border-radius:4px;padding:2px 7px;color:#000">Long</span>
+        <span style="background:#8b5cf6;border-radius:4px;padding:2px 7px;color:#fff">Very long</span>
+      </div>
+      <div class="cal-month-stats">
+        <div class="cal-stat"><div class="cal-stat-val">${monthMi.toFixed(1)}</div><div class="cal-stat-lbl">Miles</div></div>
+        <div class="cal-stat"><div class="cal-stat-val">${runDays}</div><div class="cal-stat-lbl">Run Days</div></div>
+        <div class="cal-stat"><div class="cal-stat-val">${monthRuns.length}</div><div class="cal-stat-lbl">Runs</div></div>
+        <div class="cal-stat"><div class="cal-stat-val">${fmtDur(monthTime)}</div><div class="cal-stat-lbl">Time</div></div>
+        <div class="cal-stat"><div class="cal-stat-val">${runDays>0?(monthMi/runDays).toFixed(1):'—'}</div><div class="cal-stat-lbl">Avg/Run</div></div>
+      </div>
+    </div>
+    <div id="cal-day-detail"></div>
+  `;
+}
+
+function _calNav(dir) {
+  _calMonth += dir;
+  if (_calMonth < 0) { _calMonth = 11; _calYear--; }
+  if (_calMonth > 11) { _calMonth = 0; _calYear++; }
+  _drawCalendar();
+}
+
+function _calDayClick(dateStr) {
+  const detail = document.getElementById('cal-day-detail');
+  if (!detail) return;
+  const dayRuns = _calRuns.filter(r => r.startTimeLocal?.slice(0,10) === dateStr);
+  if (!dayRuns.length) return;
+  const d = new Date(dateStr+'T12:00:00');
+  const label = d.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  detail.innerHTML = `<div class="chart-card">
+    <div class="cc-top"><div class="cc-title">${label}</div></div>
+    ${dayRuns.map(r => `<div class="strava-card" onclick="showRunDetail(${_calRuns.indexOf(r)})">
+      <div class="sc-left">
+        <div class="sc-name">${r.activityName||'Run'}</div>
+        <div class="sc-meta">${fmtDur(r.duration)} · ${r.averageHR?Math.round(r.averageHR)+' bpm avg':''}${r.averageSpeed?' · '+fmtPace(r.averageSpeed)+'/mi':''}</div>
+      </div>
+      <div class="sc-dist"><div>${mi(r.distance||0).toFixed(2)}</div><div class="sc-dist-lbl">mi</div></div>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ══ RACE GOAL ═════════════════════════════════════════════════════════════
+const RACE_DISTS = {
+  '5K': 3.107, '10K': 6.214, 'Half Marathon': 13.1, 'Marathon': 26.2
+};
+
+function renderRaceGoal(runs, wellness) {
+  const container = document.getElementById('race-goal-container');
+  if (!container) return;
+  _rgRuns = runs;
+  _rgWellness = wellness;
+  _drawRaceGoal();
+}
+
+let _rgRuns=[], _rgWellness=[];
+function _drawRaceGoal() {
+  const container = document.getElementById('race-goal-container');
+  if (!container) return;
+  const saved = JSON.parse(localStorage.getItem('race_goal')||'null');
+  if (!saved || !saved.date) {
+    _rgShowForm(container, null);
+    return;
+  }
+  // Compute stats
+  const today = new Date(); today.setHours(0,0,0,0);
+  const raceDate = new Date(saved.date+'T12:00:00');
+  const daysLeft = Math.max(0, Math.round((raceDate-today)/864e5));
+  const weeksLeft = daysLeft / 7;
+
+  // Training phase
+  let phase, phaseColor;
+  if (weeksLeft > 12) { phase='Base Building'; phaseColor='#3b82f6'; }
+  else if (weeksLeft > 8) { phase='Building'; phaseColor='#00c4b0'; }
+  else if (weeksLeft > 3) { phase='Peak Training'; phaseColor='#f59e0b'; }
+  else if (weeksLeft > 1) { phase='Taper'; phaseColor='#8b5cf6'; }
+  else { phase='Race Week!'; phaseColor='#22c55e'; }
+
+  const distMi = RACE_DISTS[saved.distance] || parseFloat(saved.distance_custom||'0') || 13.1;
+
+  // Current fitness prediction
+  const last5 = _rgRuns.slice(0,5).filter(r=>r.averageSpeed&&r.distance>3000);
+  const avgMps = last5.length ? last5.reduce((s,r)=>s+r.averageSpeed,0)/last5.length : 0;
+  const predictedMin = avgMps > 0 ? (distMi / (avgMps * 0.000621371)) / 60 * 1.04 : null;
+  const predictedFmt = predictedMin ? `${Math.floor(predictedMin)}:${String(Math.round((predictedMin%1)*60)).padStart(2,'0')}` : '—';
+
+  // Goal time
+  const goalMin = saved.goal_time ? (()=>{ const [h,m,s]=(saved.goal_time+':00').split(':').map(Number); return h*60+m+(s||0)/60; })() : null;
+  const goalFmt = goalMin ? `${Math.floor(goalMin/60)}:${String(Math.round(goalMin%60)).padStart(2,'0')}` : 'Not set';
+
+  // Weekly mileage
+  const wkMap = {};
+  _rgRuns.forEach(r=>{ const wk=getWeekKey(new Date(r.startTimeLocal)); wkMap[wk]=(wkMap[wk]||0)+mi(r.distance||0); });
+  const wkKeys = Object.keys(wkMap).sort().slice(-8,-1);
+  const currentBase = wkKeys.length ? wkKeys.reduce((s,k)=>s+wkMap[k],0)/wkKeys.length : 15;
+  const peakMi = Math.min(distMi * (distMi>20?5:distMi>10?5.5:6), Math.max(currentBase*1.5, distMi*3));
+
+  // 6-week plan
+  const planWeeks = Math.min(6, Math.ceil(weeksLeft));
+  const planRows = Array.from({length:planWeeks},(_,i)=>{
+    const wkNum = i+1;
+    const progress = planWeeks > 1 ? i/(planWeeks-1) : 1;
+    let target;
+    if (weeksLeft <= 3) {
+      target = currentBase * (1 - wkNum*0.15);
+    } else {
+      target = currentBase + (peakMi-currentBase)*Math.pow(progress,0.7);
+      if (wkNum % 3 === 0) target *= 0.85;
+    }
+    target = Math.max(10, +target.toFixed(1));
+    return {label:`Wk ${wkNum}`, mi:target};
+  });
+  const maxPlanMi = Math.max(...planRows.map(w=>w.mi),1);
+
+  const now = new Date();
+  const currentWmi = _rgRuns.filter(r=>(now-new Date(r.startTimeLocal))<7*864e5).reduce((s,r)=>s+mi(r.distance||0),0);
+
+  container.innerHTML = `
+    <div class="rg-countdown">
+      <div class="rg-race-name">${saved.name||'My Race'}</div>
+      <div class="rg-days-num">${daysLeft}</div>
+      <div class="rg-days-lbl">days until race day · ${distMi} miles · ${raceDate.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</div>
+      <div class="rg-phase" style="background:${phaseColor}22;color:${phaseColor};border:1px solid ${phaseColor}44">${phase}</div>
+    </div>
+
+    <div class="rg-metrics">
+      <div class="rg-metric">
+        <div class="rg-metric-val">${currentWmi.toFixed(1)} mi</div>
+        <div class="rg-metric-lbl">This Week</div>
+      </div>
+      <div class="rg-metric">
+        <div class="rg-metric-val" style="color:${predictedMin&&goalMin?(predictedMin<=goalMin?'#22c55e':'#f59e0b'):'var(--teal)'}">${predictedFmt}</div>
+        <div class="rg-metric-lbl">Predicted Finish</div>
+      </div>
+      <div class="rg-metric">
+        <div class="rg-metric-val">${goalFmt}</div>
+        <div class="rg-metric-lbl">Goal Time</div>
+      </div>
+    </div>
+
+    ${predictedMin&&goalMin ? `<div class="chart-card" style="margin-bottom:12px;padding:14px 18px">
+      <div style="font-size:.72rem;color:var(--muted);line-height:1.6">
+        ${predictedMin <= goalMin
+          ? `&#9989; <strong style="color:#22c55e">On track!</strong> Your current fitness projects a ${predictedFmt} finish — that's ${Math.round((goalMin-predictedMin))} minutes faster than your ${goalFmt} goal.`
+          : `&#128200; <strong style="color:#f59e0b">Keep building.</strong> You're projecting ${predictedFmt} but targeting ${goalFmt} — a gap of ${Math.round(predictedMin-goalMin)} minutes. With ${Math.round(weeksLeft)} weeks of consistent training, that gap can close.`}
+        Your predicted time is based on your recent average pace adjusted for race distance fatigue.
+      </div>
+    </div>` : ''}
+
+    ${planRows.length ? `<div class="rg-plan">
+      <h4>Suggested weekly mileage — next ${planRows.length} weeks</h4>
+      ${planRows.map(w=>`<div class="rg-week-row">
+        <div class="rg-week-label">${w.label}</div>
+        <div class="rg-week-bar"><div class="rg-week-bar-fill" style="width:${(w.mi/maxPlanMi*100).toFixed(0)}%;background:${w.mi<currentBase*0.9?'#8b5cf6':'var(--teal)'}"></div></div>
+        <div class="rg-week-mi" style="color:${w.mi<currentBase*0.9?'#8b5cf6':'var(--teal)'}">${w.mi} mi</div>
+      </div>`).join('')}
+      <div style="font-size:.65rem;color:var(--muted);margin-top:10px;line-height:1.6">
+        Purple = recovery/taper week. Based on your current base of ~${currentBase.toFixed(1)} mi/week.
+      </div>
+    </div>` : ''}
+
+    <div class="chart-card" style="margin-bottom:12px;padding:14px 18px">
+      <div style="font-size:.72rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px">Training phases explained</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:.72rem;color:var(--muted);line-height:1.6">
+        <div><strong style="color:#3b82f6">Base Building (12+ weeks out)</strong> — Easy, high-volume running to build your aerobic engine. Run slow, run often. No speedwork yet.</div>
+        <div><strong style="color:#00c4b0">Building (8-12 weeks out)</strong> — Start adding one harder workout per week. Mileage still climbing.</div>
+        <div><strong style="color:#f59e0b">Peak Training (3-8 weeks out)</strong> — Highest mileage weeks. Long runs approaching race distance.</div>
+        <div><strong style="color:#8b5cf6">Taper (1-3 weeks out)</strong> — Cut mileage 20-40%. Your body absorbs all the training. Trust the process.</div>
+        <div><strong style="color:#22c55e">Race Week</strong> — Run very easy, sleep well, carb load 2 days before. You're ready.</div>
+      </div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px">
+      <button class="rg-edit-btn" onclick="_rgShowFormInline()">&#9999;&#65039; Edit Race Goal</button>
+    </div>
+    <div id="rg-form-inline"></div>
+  `;
+}
+
+function _rgShowForm(container, existingGoal) {
+  const g = existingGoal || {};
+  container.innerHTML = `
+    <div class="rg-setup">
+      <h3>${existingGoal ? 'Edit your race goal' : 'Set your race goal'}</h3>
+      <p style="font-size:.72rem;color:var(--muted);margin-bottom:16px;line-height:1.6">Enter your upcoming race details and this page will build you a personalized training plan, predict your finish time, and track your progress week by week.</p>
+      <div class="rg-form">
+        <div class="rg-field" style="grid-column:1/-1">
+          <label>Race Name</label>
+          <input id="rg-name" placeholder="e.g. Chicago Marathon, Local 5K" value="${g.name||''}">
+        </div>
+        <div class="rg-field">
+          <label>Race Date</label>
+          <input id="rg-date" type="date" value="${g.date||''}">
+        </div>
+        <div class="rg-field">
+          <label>Distance</label>
+          <select id="rg-dist">
+            ${['5K','10K','Half Marathon','Marathon'].map(d=>`<option${g.distance===d?' selected':''}>${d}</option>`).join('')}
+            <option value="custom"${g.distance==='custom'?' selected':''}>Custom</option>
+          </select>
+        </div>
+        <div class="rg-field" id="rg-custom-wrap" style="display:${g.distance==='custom'?'flex':'none'}">
+          <label>Custom Distance (miles)</label>
+          <input id="rg-custom" type="number" step="0.1" placeholder="e.g. 10.0" value="${g.distance_custom||''}">
+        </div>
+        <div class="rg-field">
+          <label>Goal Finish Time (optional)</label>
+          <input id="rg-goal-time" placeholder="h:mm:ss e.g. 2:00:00" value="${g.goal_time||''}">
+        </div>
+      </div>
+      <button class="rg-save" onclick="_rgSave()">Save Race Goal</button>
+    </div>
+  `;
+  document.getElementById('rg-dist').addEventListener('change', function(){
+    document.getElementById('rg-custom-wrap').style.display = this.value==='custom'?'flex':'none';
+  });
+}
+
+function _rgShowFormInline() {
+  const g = JSON.parse(localStorage.getItem('race_goal')||'null');
+  const wrap = document.getElementById('rg-form-inline');
+  if (!wrap) return;
+  const dummy = document.createElement('div');
+  _rgShowForm(dummy, g);
+  wrap.innerHTML = dummy.innerHTML;
+  document.getElementById('rg-dist').addEventListener('change', function(){
+    document.getElementById('rg-custom-wrap').style.display = this.value==='custom'?'flex':'none';
+  });
+}
+
+function _rgSave() {
+  const goal = {
+    name: document.getElementById('rg-name')?.value?.trim()||'My Race',
+    date: document.getElementById('rg-date')?.value||'',
+    distance: document.getElementById('rg-dist')?.value||'Half Marathon',
+    distance_custom: document.getElementById('rg-custom')?.value||'',
+    goal_time: document.getElementById('rg-goal-time')?.value?.trim()||''
+  };
+  if (!goal.date) { alert('Please enter a race date.'); return; }
+  localStorage.setItem('race_goal', JSON.stringify(goal));
+  _drawRaceGoal();
+}
+
 function load(){
   updateTopNav('overview');
   const data=GARMIN_DATA;
@@ -1897,6 +2315,8 @@ function load(){
   _try('shoetracker',()=>renderShoeTracker(runs));
   _try('compareselects',()=>populateCompareSelects(runs));
   _try('sleepcorr',()=>renderSleepCorrelation(wellness,runs));
+  _try('calendar',()=>renderCalendar(runs));
+  _try('racegoal',()=>renderRaceGoal(runs,wellness));
   _try('sectiondrag',()=>initSectionDrag());
   // Init quick toggle icon
   const _qtb=document.getElementById('quick-dark-btn');

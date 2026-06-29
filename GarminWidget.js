@@ -347,30 +347,34 @@ async function buildWidget(result) {
 }
 
 // ── run ───────────────────────────────────────────────────────────────────────
+// Wrap in async IIFE — required for home screen widgets in Scriptable
 
-try {
-  const result = await fetchData()
-  const widget = await buildWidget(result)
-  if (config.runInWidget) {
-    Script.setWidget(widget)
-  } else {
-    widget.presentLarge()
+async function run() {
+  try {
+    const result = await fetchData()
+    const widget = await buildWidget(result)
+    if (config.runInWidget) {
+      Script.setWidget(widget)
+    } else {
+      await widget.presentLarge()
+    }
+  } catch (err) {
+    // Show error so it's never just white
+    const w = new ListWidget()
+    w.backgroundColor = new Color("#0d1117", 1)
+    w.setPadding(14, 16, 14, 16)
+    const t1 = w.addText("Script error")
+    t1.textColor = new Color("#ef4444", 1)
+    t1.font = Font.boldSystemFont(13)
+    w.addSpacer(6)
+    const t2 = w.addText(String(err))
+    t2.textColor = new Color("#6b7280", 1)
+    t2.font = Font.systemFont(10)
+    t2.lineLimit = 5
+    if (config.runInWidget) Script.setWidget(w)
+    else await w.presentLarge()
   }
-} catch (err) {
-  // Show error in a fallback widget so it's never just white
-  const w = new ListWidget()
-  w.backgroundColor = new Color("#0d1117", 1)
-  w.setPadding(14, 16, 14, 16)
-  const t1 = w.addText("Script error")
-  t1.textColor = new Color("#ef4444", 1)
-  t1.font = Font.boldSystemFont(13)
-  w.addSpacer(6)
-  const t2 = w.addText(String(err))
-  t2.textColor = new Color("#6b7280", 1)
-  t2.font = Font.systemFont(10)
-  t2.lineLimit = 5
-  if (config.runInWidget) Script.setWidget(w)
-  else w.presentLarge()
+  Script.complete()
 }
 
-Script.complete()
+run()

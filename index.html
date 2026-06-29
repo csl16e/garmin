@@ -1355,6 +1355,50 @@ function buildFakeRoute(seed, w, h) {
 }
 
 // ══ RUN DETAIL ═════════════════════════════════════════════════
+// Recovery estimate helper — returns {hours, label, color, explanation}
+function calcRecovery(r) {
+  const load = r.activityTrainingLoad || 0;
+  const aerobic = r.aerobicTrainingEffect || 0;
+  const anaerobic = r.anaerobicTrainingEffect || 0;
+  const durationH = (r.duration || 0) / 3600;
+  const distMiles = mi(r.distance || 0);
+
+  // Base from training load (most reliable); fallback from duration if no load
+  let base = load > 0 ? load * 0.32 : durationH * 9;
+
+  // Anaerobic work (intervals, tempo) is harder to recover from
+  if (anaerobic > 3) base *= 1.35;
+  else if (anaerobic > 2) base *= 1.15;
+
+  // Long runs (>10 mi) add extra glycogen depletion recovery
+  if (distMiles > 15) base += 12;
+  else if (distMiles > 10) base += 6;
+
+  const hours = Math.round(Math.max(6, Math.min(72, base)));
+  const readyTime = new Date(Date.now() + hours * 3600000);
+  const readyStr = readyTime.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) +
+                   ' at ' + readyTime.toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'});
+
+  let label, color, explanation;
+  if (hours <= 12) {
+    label = 'Quick recovery'; color = '#22c55e';
+    explanation = `This was an easy effort — your muscles will be ready again in about ${hours} hours. You can run tomorrow without issue.`;
+  } else if (hours <= 24) {
+    label = 'Moderate recovery'; color = '#00c4b0';
+    explanation = `A solid workout. Give your body ${hours} hours to repair muscle fibers and replenish glycogen (your fuel). An easy run or rest tomorrow is ideal.`;
+  } else if (hours <= 36) {
+    label = 'Full day needed'; color = '#f59e0b';
+    explanation = `This run created meaningful stress on your body — that's a good thing, but it needs time to adapt. Rest or easy activity for the next ${hours} hours will let you come back stronger.`;
+  } else if (hours <= 48) {
+    label = 'Hard effort — rest up'; color = '#f97316';
+    explanation = `You pushed hard. Deep muscle fatigue and glycogen depletion take ${hours} hours to fully clear. Don't try to run hard again before then — you'll just dig a deeper hole.`;
+  } else {
+    label = 'Major effort — full recovery'; color = '#ef4444';
+    explanation = `This was a big training load (long run or hard workout). Your body needs up to ${hours} hours to fully rebuild. Easy movement is fine, but save the next hard effort until you're ready.`;
+  }
+  return { hours, readyStr, label, color, explanation };
+}
+
 function showRunDetail(r){
   // Push 'running' to history so back goes back to the list
   if(_currentPage === 'running') _navStack.push('running');
@@ -1420,6 +1464,15 @@ function showRunDetail(r){
       ${dynHtml}
       ${zones?`<hr class="divider"><div style="font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:10px">HR Zones — Over Distance</div>${zones}`:''}
 
+      ${(()=>{ const rec=calcRecovery(r); const hoursAgo=r.startTimeLocal?(Date.now()-new Date(r.startTimeLocal))/3600000:0; const alreadyPast=hoursAgo>=rec.hours; return `<div style="background:${rec.color}12;border:1px solid ${rec.color}33;border-radius:10px;padding:14px 16px;margin:12px 0">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span style="font-size:1rem">⏱️</span>
+          <span style="font-size:.78rem;font-weight:800;color:${rec.color}">${alreadyPast?'Fully recovered':'Estimated Recovery: '+rec.hours+'h'}</span>
+          <span style="font-size:.65rem;font-weight:700;background:${rec.color}22;color:${rec.color};border-radius:20px;padding:2px 9px;margin-left:auto">${rec.label}</span>
+        </div>
+        <div style="font-size:.7rem;color:var(--muted);line-height:1.6;margin-bottom:${alreadyPast?'0':'8px'}">${rec.explanation}</div>
+        ${alreadyPast?'':`<div style="font-size:.68rem;font-weight:700;color:var(--text)">Ready for next hard effort: <span style="color:${rec.color}">${rec.readyStr}</span></div>`}
+      </div>`; })()}
       <div class="run-notes">
         <div class="run-notes-label">📝 Notes</div>
         <div id="rd-notes-${r.activityId}">${loadEdits()[String(r.activityId)]?._notes ? `<div class="run-notes-text">${(loadEdits()[String(r.activityId)]._notes||'').replace(/</g,'&lt;')}</div>` : '<div class="run-notes-empty">No notes yet — tap Edit to add something about this run.</div>'}</div>
@@ -2484,6 +2537,12 @@ async function renderNextRun(today,wellness,runs){
   const chronic = runs.filter(r=>(now-new Date(r.startTimeLocal))<28*864e5).reduce((s,r)=>s+(r.activityTrainingLoad||0),0)/4;
   const acr     = chronic>0 ? acute/chronic : 1.0;
 
+  // Recovery estimate from last run
+  const lastRunRec = runs[0] ? calcRecovery(runs[0]) : null;
+  const hoursRested = runs[0] ? (now-new Date(runs[0].startTimeLocal))/3600000 : 999*24;
+  const recoveryPct = lastRunRec ? Math.min(100, Math.round(hoursRested/lastRunRec.hours*100)) : 100;
+  const fullyRecovered = recoveryPct >= 100;
+
   // Days since last run + consecutive days running
   const daysSince = runs[0] ? (now-new Date(runs[0].startTimeLocal))/864e5 : 999;
   let consecDays = 0;
@@ -2532,6 +2591,16 @@ async function renderNextRun(today,wellness,runs){
   else if(acr>1.3){score-=15;factors.push({l:'Training Load Ratio',v:`${acr.toFixed(2)} (elevated)`,note:'Your recent training is outpacing your body\'s ability to absorb it. The "10% rule" exists for a reason — too much too soon causes stress fractures, tendinitis, and burnout.',c:'#f97316',dir:'down'});}
   else if(acr<0.7){score-=5;factors.push({l:'Training Load Ratio',v:`${acr.toFixed(2)} (low)`,note:'You\'ve been training below your usual level. Your body is fresh, but go easy ramping back up — deconditioning happens faster than you think and your connective tissue needs time to re-adapt.',c:'#8b5cf6',dir:'up'});}
   else{score+=5;factors.push({l:'Training Load Ratio',v:`${acr.toFixed(2)} (optimal)`,note:'Perfect balance. Your recent training matches your fitness base, which means you\'re absorbing the work and getting stronger without overloading your body. This is the sweet spot.',c:'#00c4b0',dir:'up'});}
+
+  // Recovery from last run
+  if(lastRunRec && !fullyRecovered && recoveryPct < 70){
+    score -= Math.round((1 - recoveryPct/100) * 25);
+    factors.push({l:'Recovery from Last Run',v:`${recoveryPct}% recovered`,note:`Your last run created ${lastRunRec.label.toLowerCase()} — you're only ${recoveryPct}% through your estimated ${lastRunRec.hours}h recovery window. Running hard before full recovery leads to accumulated fatigue and injury over time.`,c:'#f97316',dir:'down'});
+  } else if(lastRunRec && !fullyRecovered){
+    factors.push({l:'Recovery from Last Run',v:`${recoveryPct}% recovered`,note:`Almost there — you've completed ${recoveryPct}% of your estimated ${lastRunRec.hours}h recovery from the last run. You can run today but keep the effort easy.`,c:'#f59e0b',dir:'flat'});
+  } else if(lastRunRec){
+    factors.push({l:'Recovery from Last Run',v:'Fully recovered',note:`You've had more than ${lastRunRec.hours} hours since your last run — your muscles have fully repaired and your glycogen stores are topped off. You're ready to go.`,c:'#22c55e',dir:'up'});
+  }
 
   // Consecutive days
   if(consecDays>=4){score-=20;factors.push({l:'Days Running in a Row',v:`${consecDays} days straight`,note:'Running every day without a break prevents your muscles from fully repairing. Rest days aren\'t laziness — they\'re when your body actually gets stronger. You\'ve earned a break.',c:'#ef4444',dir:'down'});}
@@ -2661,6 +2730,16 @@ async function renderNextRun(today,wellness,runs){
         <div style="font-size:.55rem;font-weight:700;color:${scoreColor};margin-top:4px;letter-spacing:.03em">${scoreLabel}</div>
       </div>
     </div>
+    ${lastRunRec ? `<div style="background:${fullyRecovered?'#22c55e':lastRunRec.color}12;border:1px solid ${fullyRecovered?'#22c55e':lastRunRec.color}30;border-radius:9px;padding:10px 14px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <span style="font-size:.7rem;font-weight:700;color:var(--text)">⏱️ Recovery from last run</span>
+        <span style="font-size:.7rem;font-weight:800;color:${fullyRecovered?'#22c55e':lastRunRec.color}">${fullyRecovered?'Ready to go':''+recoveryPct+'% ('+Math.round(lastRunRec.hours-hoursRested)+'h left)'}</span>
+      </div>
+      <div style="height:6px;background:var(--surface);border-radius:3px;overflow:hidden">
+        <div style="width:${recoveryPct}%;height:100%;background:${fullyRecovered?'#22c55e':lastRunRec.color};border-radius:3px;transition:width .4s"></div>
+      </div>
+      ${!fullyRecovered?`<div style="font-size:.65rem;color:var(--muted);margin-top:5px">Full recovery est. ${lastRunRec.readyStr}</div>`:''}
+    </div>` : ''}
     ${weatherHTML}
     <div class="nr-desc">${workout.desc}</div>
 

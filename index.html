@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chris's Garmin Dashboard</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f0f0f;
+      color: #e8e8e8;
+      min-height: 100vh;
+      padding: 24px 16px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 0.85rem;
+      color: #666;
+      margin-bottom: 28px;
+    }
+
+    .section-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #555;
+      margin: 28px 0 12px;
+    }
+
+    /* Wellness cards */
+    .wellness-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 12px;
+    }
+
+    .stat-card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .stat-label {
+      font-size: 0.72rem;
+      color: #666;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1;
+    }
+
+    .stat-unit {
+      font-size: 0.75rem;
+      color: #555;
+      margin-top: 4px;
+    }
+
+    .stat-bar {
+      height: 4px;
+      background: #2a2a2a;
+      border-radius: 2px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+
+    .stat-bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.6s ease;
+    }
+
+    /* Activity cards */
+    .activity-card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .activity-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 14px;
+    }
+
+    .activity-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .activity-date {
+      font-size: 0.75rem;
+      color: #555;
+    }
+
+    .activity-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .act-stat-label {
+      font-size: 0.68rem;
+      color: #555;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 3px;
+    }
+
+    .act-stat-value {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #e0e0e0;
+    }
+
+    .pill {
+      display: inline-block;
+      font-size: 0.68rem;
+      padding: 2px 8px;
+      border-radius: 20px;
+      background: #1f2e1f;
+      color: #4caf50;
+      border: 1px solid #2a3e2a;
+      margin-top: 2px;
+    }
+
+    /* Readiness trend */
+    .trend-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+      height: 60px;
+      margin-top: 4px;
+    }
+
+    .trend-bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100%;
+      justify-content: flex-end;
+    }
+
+    .trend-bar-bg {
+      width: 100%;
+      background: #2a2a2a;
+      border-radius: 4px 4px 0 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .trend-bar-inner {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-radius: 4px 4px 0 0;
+      transition: height 0.6s ease;
+    }
+
+    .trend-label {
+      font-size: 0.6rem;
+      color: #444;
+      margin-top: 4px;
+      text-align: center;
+    }
+
+    .trend-value {
+      font-size: 0.65rem;
+      color: #888;
+      margin-bottom: 2px;
+    }
+
+    .no-data { color: #444; font-size: 0.85rem; }
+
+    /* HR zones */
+    .zone-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .zone-label { font-size: 0.72rem; color: #666; width: 48px; flex-shrink: 0; }
+    .zone-bar-bg { flex: 1; height: 8px; background: #2a2a2a; border-radius: 4px; overflow: hidden; }
+    .zone-bar-fill { height: 100%; border-radius: 4px; }
+    .zone-pct { font-size: 0.7rem; color: #555; width: 34px; text-align: right; flex-shrink: 0; }
+  </style>
+</head>
+<body>
+
+<h1>Chris's Training Dashboard</h1>
+<p class="subtitle" id="last-updated">Loading…</p>
+
+<div class="section-title">Training Readiness — Last 7 Days</div>
+<div class="activity-card" style="padding: 16px 16px 8px;">
+  <div class="trend-row" id="readiness-trend"></div>
+</div>
+
+<div class="section-title">Today's Wellness</div>
+<div class="wellness-grid" id="wellness-grid"></div>
+
+<div class="section-title">Recent Runs</div>
+<div id="activities-list"></div>
+
+<script>
+const DATA_URL = "garmin/data.json";
+
+function fmtPace(mps) {
+  if (!mps || mps <= 0) return "—";
+  const mpk = 1000 / mps / 60;
+  const m = Math.floor(mpk);
+  const s = Math.round((mpk - m) * 60);
+  return `${m}:${String(s).padStart(2, "0")}`;
+}
+
+function fmtDist(m) {
+  if (!m) return "—";
+  return (m / 1000).toFixed(2) + " km";
+}
+
+function fmtDuration(s) {
+  if (!s) return "—";
+  const m = Math.round(s / 60);
+  if (m < 60) return `${m} min`;
+  return `${Math.floor(m/60)}h ${m%60}m`;
+}
+
+function fmtSleep(s) {
+  if (!s) return "—";
+  return (s / 3600).toFixed(1) + " h";
+}
+
+function readinessColor(v) {
+  if (v >= 80) return "#4caf50";
+  if (v >= 60) return "#ff9800";
+  return "#f44336";
+}
+
+function statBar(value, max, color) {
+  const pct = Math.min(100, Math.round((value / max) * 100));
+  return `<div class="stat-bar"><div class="stat-bar-fill" style="width:${pct}%;background:${color}"></div></div>`;
+}
+
+function renderWellness(today) {
+  const grid = document.getElementById("wellness-grid");
+  const cards = [];
+
+  if (today.training_readiness != null) {
+    const c = readinessColor(today.training_readiness);
+    cards.push(`
+      <div class="stat-card">
+        <div class="stat-label">Readiness</div>
+        <div class="stat-value" style="color:${c}">${today.training_readiness}</div>
+        <div class="stat-unit">/ 100</div>
+        ${statBar(today.training_readiness, 100, c)}
+      </div>`);
+  }
+
+  if (today.resting_hr) {
+    cards.push(`
+      <div class="stat-card">
+        <div class="stat-label">Resting HR</div>
+        <div class="stat-value">${today.resting_hr}</div>
+        <div class="stat-unit">bpm</div>
+      </div>`);
+  }
+
+  if (today.hrv_nightly_avg) {
+    cards.push(`
+      <div class="stat-card">
+        <div class="stat-label">HRV</div>
+        <div class="stat-value">${today.hrv_nightly_avg}</div>
+        <div class="stat-unit">ms overnight</div>
+      </div>`);
+  }
+
+  if (today.sleep_seconds) {
+    const scoreStr = today.sleep_score ? ` · score ${today.sleep_score}` : "";
+    cards.push(`
+      <div class="stat-card">
+        <div class="stat-label">Sleep</div>
+        <div class="stat-value">${fmtSleep(today.sleep_seconds)}</div>
+        <div class="stat-unit">${scoreStr}</div>
+        ${today.sleep_score ? statBar(today.sleep_score, 100, "#5c9cf5") : ""}
+      </div>`);
+  }
+
+  if (today.body_battery_high != null) {
+    cards.push(`
+      <div class="stat-card">
+        <div class="stat-label">Body Battery</div>
+        <div class="stat-value">${today.body_battery_low ?? "—"} → ${today.body_battery_high}</div>
+        <div class="stat-unit">drained → charged</div>
+      </div>`);
+  }
+
+  if (today.stress_avg) {
+    cards.push(`
+      <div class="stat-card">
+        <div class="stat-label">Avg Stress</div>
+        <div class="stat-value">${today.stress_avg}</div>
+        <div class="stat-unit">/ 100</div>
+      </div>`);
+  }
+
+  if (today.steps) {
+    cards.push(`
+      <div class="stat-card">
+        <div class="stat-label">Steps</div>
+        <div class="stat-value">${today.steps.toLocaleString()}</div>
+        <div class="stat-unit">today</div>
+      </div>`);
+  }
+
+  if (cards.length === 0) {
+    grid.innerHTML = `<p class="no-data">No wellness data yet for today — check back after wearing your watch tonight.</p>`;
+  } else {
+    grid.innerHTML = cards.join("");
+  }
+}
+
+function renderReadinessTrend(wellness) {
+  const sorted = [...wellness].sort((a, b) => a.date.localeCompare(b.date)).slice(-7);
+  const container = document.getElementById("readiness-trend");
+  if (!sorted.length) { container.innerHTML = `<p class="no-data">No data</p>`; return; }
+
+  container.innerHTML = sorted.map(w => {
+    const v = w.training_readiness ?? 0;
+    const color = readinessColor(v);
+    const pct = Math.round(v);
+    const day = w.date.slice(5); // MM-DD
+    return `
+      <div class="trend-bar-wrap">
+        <div class="trend-value">${v || ""}</div>
+        <div class="trend-bar-bg" style="height:48px">
+          <div class="trend-bar-inner" style="height:${pct}%;background:${color}"></div>
+        </div>
+        <div class="trend-label">${day}</div>
+      </div>`;
+  }).join("");
+}
+
+function renderActivities(activities) {
+  const list = document.getElementById("activities-list");
+  const runs = activities
+    .filter(a => a.activityType?.typeKey === "running")
+    .sort((a, b) => b.startTimeLocal.localeCompare(a.startTimeLocal))
+    .slice(0, 10);
+
+  if (!runs.length) {
+    list.innerHTML = `<p class="no-data">No runs yet.</p>`;
+    return;
+  }
+
+  list.innerHTML = runs.map(a => {
+    const date = a.startTimeLocal?.slice(0, 10) ?? "—";
+    const totalSecs = (a.hrTimeInZone_1||0) + (a.hrTimeInZone_2||0) + (a.hrTimeInZone_3||0) + (a.hrTimeInZone_4||0) + (a.hrTimeInZone_5||0);
+    const zones = totalSecs > 0 ? `
+      <div style="margin-top:14px">
+        <div class="act-stat-label" style="margin-bottom:8px">HR Zones</div>
+        ${[
+          ["Z1 Easy",   a.hrTimeInZone_1, "#5c9cf5"],
+          ["Z2 Fat",    a.hrTimeInZone_2, "#4caf50"],
+          ["Z3 Tempo",  a.hrTimeInZone_3, "#ff9800"],
+          ["Z4 Hard",   a.hrTimeInZone_4, "#f44336"],
+          ["Z5 Max",    a.hrTimeInZone_5, "#cc00cc"],
+        ].map(([label, t, color]) => {
+          const pct = totalSecs > 0 ? Math.round((t / totalSecs) * 100) : 0;
+          return `<div class="zone-row">
+            <div class="zone-label">${label}</div>
+            <div class="zone-bar-bg"><div class="zone-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+            <div class="zone-pct">${pct}%</div>
+          </div>`;
+        }).join("")}
+      </div>` : "";
+
+    return `
+      <div class="activity-card">
+        <div class="activity-header">
+          <div>
+            <div class="activity-name">${a.activityName}</div>
+            <div class="activity-date">${date}</div>
+          </div>
+          <span class="pill">${a.trainingEffectLabel ?? "Run"}</span>
+        </div>
+        <div class="activity-stats">
+          <div>
+            <div class="act-stat-label">Distance</div>
+            <div class="act-stat-value">${fmtDist(a.distance)}</div>
+          </div>
+          <div>
+            <div class="act-stat-label">Duration</div>
+            <div class="act-stat-value">${fmtDuration(a.duration)}</div>
+          </div>
+          <div>
+            <div class="act-stat-label">Avg Pace</div>
+            <div class="act-stat-value">${fmtPace(a.averageSpeed)} /km</div>
+          </div>
+          <div>
+            <div class="act-stat-label">Avg HR</div>
+            <div class="act-stat-value">${a.averageHR ? Math.round(a.averageHR) + " bpm" : "—"}</div>
+          </div>
+          <div>
+            <div class="act-stat-label">Calories</div>
+            <div class="act-stat-value">${a.calories ? Math.round(a.calories) : "—"}</div>
+          </div>
+          <div>
+            <div class="act-stat-label">VO2 Max</div>
+            <div class="act-stat-value">${a.vO2MaxValue ?? "—"}</div>
+          </div>
+        </div>
+        ${zones}
+      </div>`;
+  }).join("");
+}
+
+async function load() {
+  try {
+    const res = await fetch(DATA_URL + "?t=" + Date.now());
+    const data = await res.json();
+
+    const wellness = data.wellness ?? [];
+    const activities = data.activities ?? [];
+
+    const sorted = [...wellness].sort((a, b) => b.date.localeCompare(a.date));
+    const today = sorted[0] ?? {};
+
+    document.getElementById("last-updated").textContent =
+      "Last synced: " + (sorted[0]?.date ?? "unknown");
+
+    renderReadinessTrend(wellness);
+    renderWellness(today);
+    renderActivities(activities);
+  } catch (e) {
+    document.getElementById("last-updated").textContent = "Could not load data.json";
+  }
+}
+
+load();
+</script>
+</body>
+</html>

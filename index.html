@@ -180,7 +180,7 @@
     <div class="cg" id="overview-cards"></div>
     <div class="chart-card">
       <div class="cc-title">Weekly Mileage</div>
-      <div class="cc-sub">km per week over last 8 weeks</div>
+      <div class="cc-sub">miles per week over last 8 weeks</div>
       <div class="chart-wrap"><canvas id="chart-weekly"></canvas></div>
     </div>
     <div class="chart-card">
@@ -228,12 +228,12 @@
     <div class="section-sub">All your key metrics over time.</div>
     <div class="chart-card">
       <div class="cc-title">Pace Over Time</div>
-      <div class="cc-sub">Min/km — lower is faster</div>
+      <div class="cc-sub">Min/mile — lower is faster</div>
       <div class="chart-wrap" style="height:220px"><canvas id="chart-pace-all"></canvas></div>
     </div>
     <div class="chart-card">
       <div class="cc-title">Distance Per Run</div>
-      <div class="cc-sub">km per activity</div>
+      <div class="cc-sub">miles per activity</div>
       <div class="chart-wrap" style="height:220px"><canvas id="chart-dist-all"></canvas></div>
     </div>
     <div class="chart-card">
@@ -315,9 +315,9 @@ function showPage(id, btn) {
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
-const fmtPace=mps=>{ if(!mps||mps<=0) return '—'; const mpk=1000/mps/60,m=Math.floor(mpk),s=Math.round((mpk-m)*60); return `${m}:${String(s).padStart(2,'0')}`; };
-const paceNum=mps=>mps?1000/mps/60:null;
-const fmtDist=m=>m?(m/1000).toFixed(2)+' km':'—';
+const fmtPace=mps=>{ if(!mps||mps<=0) return '—'; const mpm=1609.34/mps/60,m=Math.floor(mpm),s=Math.round((mpm-m)*60); const mpk=1000/mps/60,mk=Math.floor(mpk),sk=Math.round((mpk-mk)*60); return `${m}:${String(s).padStart(2,'0')} /mi`; };
+const paceNum=mps=>mps?1609.34/mps/60:null;
+const fmtDist=m=>m?`${(m/1609.34).toFixed(2)} mi (${(m/1000).toFixed(2)} km)`:'—';
 const fmtDur=s=>{ if(!s)return'—'; const m=Math.round(s/60); return m<60?`${m}m`:`${Math.floor(m/60)}h${m%60}m`; };
 const fmtSleep=s=>s?(s/3600).toFixed(1)+' h':'—';
 const sd=d=>d?d.slice(5):'—';
@@ -406,16 +406,16 @@ function renderOverview(today, wellness, runs) {
 
   // Weekly stats
   const week7 = runs.filter(r=>(new Date()-new Date(r.startTimeLocal))<7*864e5);
-  const wkm = week7.reduce((s,r)=>s+(r.distance||0),0)/1000;
+  const wkm = week7.reduce((s,r)=>s+(r.distance||0),0)/1609.34;
   const wmins = week7.reduce((s,r)=>s+(r.duration||0),0)/60;
   const avgPace = runs.slice(0,5).filter(r=>r.averageSpeed).reduce((s,r)=>s+paceNum(r.averageSpeed),0) / (runs.slice(0,5).filter(r=>r.averageSpeed).length||1);
 
   document.getElementById('overview-cards').innerHTML = [
-    {l:'Weekly Distance',v:wkm.toFixed(1),u:'km this week',c:'c1',bar:Math.min(100,wkm/30*100)},
+    {l:'Weekly Distance',v:wkm.toFixed(1),u:'mi this week',c:'c1',bar:Math.min(100,wkm/30*100)},
     {l:'Weekly Runs',v:week7.length,u:'runs this week',c:'c2',bar:Math.min(100,week7.length/5*100)},
     {l:'Weekly Time',v:Math.round(wmins),u:'minutes',c:'c3',bar:Math.min(100,wmins/200*100)},
     {l:'Readiness',v:tr??'—',u:tr?rl(tr):'wear watch',c:'c4',bar:tr||0},
-    {l:'Avg Pace (5 runs)',v:avgPace?fmtPace(1000/avgPace/60*1000/60):'—',u:'min/km',c:'c5',bar:0},
+    {l:'Avg Pace (5 runs)',v:avgPace?fmtPace(1000/avgPace/60*1000/60):'—',u:'min/mi',c:'c5',bar:0},
     {l:'Total Runs',v:runs.length,u:'all time',c:'c6',bar:Math.min(100,runs.length/100*100)},
   ].map(c=>`<div class="sc ${c.c}"><div class="sc-label">${c.l}</div><div class="sc-val ${c.c}">${c.v}</div><div class="sc-sub">${c.u}</div><div class="sc-bar"><div class="sc-bar-fill" style="width:${c.bar}%;background:var(--${c.c.replace('c','t')})"></div></div></div>`).join('');
 
@@ -423,7 +423,7 @@ function renderOverview(today, wellness, runs) {
   const weekBuckets={};
   runs.forEach(r=>{
     const d=new Date(r.startTimeLocal); const wk=getWeekKey(d);
-    weekBuckets[wk]=(weekBuckets[wk]||0)+(r.distance||0)/1000;
+    weekBuckets[wk]=(weekBuckets[wk]||0)+(r.distance||0)/1609.34;
   });
   const wks=Object.keys(weekBuckets).sort().slice(-8);
   barChart('chart-weekly', wks.map(w=>'W/'+w.slice(5)), wks.map(w=>+weekBuckets[w].toFixed(1)), '#4a9e8e');
@@ -454,7 +454,7 @@ function renderNextRun(today, wellness, runs) {
   const last5 = runs.slice(0,5);
   const avgHR = last5.filter(r=>r.averageHR).reduce((s,r)=>s+r.averageHR,0)/(last5.filter(r=>r.averageHR).length||1);
   const avgPaceMin = last5.filter(r=>r.averageSpeed).reduce((s,r)=>s+paceNum(r.averageSpeed),0)/(last5.filter(r=>r.averageSpeed).length||1);
-  const avgDist = last5.reduce((s,r)=>s+(r.distance||0),0)/(last5.length||1)/1000;
+  const avgDist = last5.reduce((s,r)=>s+(r.distance||0),0)/(last5.length||1)/1609.34;
   const avgCad = last5.filter(r=>r.averageRunningCadenceInStepsPerMinute).reduce((s,r)=>s+r.averageRunningCadenceInStepsPerMinute,0)/(last5.filter(r=>r.averageRunningCadenceInStepsPerMinute).length||1);
   const daysSinceLast = lr ? Math.round((new Date()-new Date(lr.startTimeLocal))/864e5) : 999;
 
@@ -468,33 +468,33 @@ function renderNextRun(today, wellness, runs) {
   if (tr!=null && tr<50) {
     type='Rest or Walk 🚶';
     desc='Your training readiness is low — your body is telling you it needs more time to recover. A rest day or a short easy walk will do more for your fitness than pushing through a run today.';
-    targetDist='0–2 km'; targetPace='Easy walk'; targetHR='<100 bpm';
+    targetDist='0–1 mi'; targetPace='Easy walk'; targetHR='<100 bpm';
     reasons.push(`Readiness score is ${tr}/100`);
     if(daysSinceLast<2) reasons.push('You ran recently — less than 2 days ago');
-  } else if (tr!=null && tr>=80 && wkm<15 && daysSinceLast>=1) {
+  } else if (tr!=null && tr>=80 && wkm<9.3 && daysSinceLast>=1) {
     type='Quality Run — Tempo 🔥';
     const tPace = avgPaceMin ? (avgPaceMin*0.88).toFixed(2) : null;
     desc='You\'re well recovered and your weekly volume is manageable. This is a great day for a tempo run — push to Zone 3–4 and build your speed.';
-    targetDist = avgDist<3 ? '3–5 km' : `${(avgDist*1.1).toFixed(1)} km`;
+    targetDist = avgDist<3 ? '2–3 mi' : `${(avgDist*1.1).toFixed(1)} mi`;
     targetPace = tPace ? `~${Math.floor(tPace)}:${String(Math.round((tPace%1)*60)).padStart(2,'0')} /km` : 'Comfortably hard';
     targetHR = '145–165 bpm';
     reasons.push(`High readiness (${tr}/100)`);
     reasons.push('Weekly volume is low — room to push');
     if(avgHR) reasons.push(`Your avg HR has been ${Math.round(avgHR)} bpm — you can handle more`);
-  } else if (wkm>20) {
+  } else if (wkm>12.4) {
     type='Easy Recovery Run 🌿';
     const tPace = avgPaceMin ? (avgPaceMin*1.12).toFixed(2) : null;
     desc='Your weekly volume is high. Back off the intensity today — an easy Zone 2 run will build your aerobic base without digging a deeper recovery hole.';
-    targetDist = `${(avgDist*0.8).toFixed(1)} km`;
+    targetDist = `${(avgDist*0.8).toFixed(1)} mi`;
     targetPace = tPace ? `~${Math.floor(tPace)}:${String(Math.round((tPace%1)*60)).padStart(2,'0')} /km (easy)` : 'Conversational pace';
     targetHR = '120–140 bpm';
-    reasons.push(`Weekly mileage is ${wkm.toFixed(1)} km — high load`);
+    reasons.push(`Weekly mileage is ${wkm.toFixed(1)} mi — high load`);
     reasons.push('Zone 2 runs build your aerobic base');
   } else {
     type='Base Building Run 🏃';
     const tPace = avgPaceMin ? (avgPaceMin*1.05).toFixed(2) : null;
     desc='A steady aerobic run at conversational pace. Focus on staying in Zone 2 — you should be able to hold a full conversation. This is how you build your engine.';
-    targetDist = avgDist<2 ? '3–4 km' : `${(avgDist*1.05).toFixed(1)} km`;
+    targetDist = avgDist<2 ? '2–2.5 mi' : `${(avgDist*1.05).toFixed(1)} mi`;
     targetPace = tPace ? `~${Math.floor(tPace)}:${String(Math.round((tPace%1)*60)).padStart(2,'0')} /km` : 'Comfortable pace';
     targetHR = '130–150 bpm';
     reasons.push('Steady consistent training builds the most fitness');
@@ -524,7 +524,7 @@ function renderNextRun(today, wellness, runs) {
   // Trend charts for next run page
   const last10 = runs.slice(0,10).reverse();
   const labels10 = last10.map(r=>sd(r.startTimeLocal?.slice(0,10)));
-  lineChart('chart-pace-trend', labels10, [{label:'Pace (min/km)',data:last10.map(r=>r.averageSpeed?+paceNum(r.averageSpeed).toFixed(2):null),borderColor:'#8b5e9e',backgroundColor:'rgba(139,94,158,.1)',fill:true}], {reverse:true, yMin: Math.min(...last10.map(r=>r.averageSpeed?paceNum(r.averageSpeed):99).filter(v=>v<99))*0.95});
+  lineChart('chart-pace-trend', labels10, [{label:'Pace (min/mi)',data:last10.map(r=>r.averageSpeed?+paceNum(r.averageSpeed).toFixed(2):null),borderColor:'#8b5e9e',backgroundColor:'rgba(139,94,158,.1)',fill:true}], {reverse:true, yMin: Math.min(...last10.map(r=>r.averageSpeed?paceNum(r.averageSpeed):99).filter(v=>v<99))*0.95});
   lineChart('chart-hr-trend', labels10, [{label:'Avg HR (bpm)',data:last10.map(r=>r.averageHR?Math.round(r.averageHR):null),borderColor:'#e05a5a',backgroundColor:'rgba(224,90,90,.1)',fill:true}]);
   lineChart('chart-cadence-trend', labels10, [{label:'Cadence (spm)',data:last10.map(r=>r.averageRunningCadenceInStepsPerMinute?Math.round(r.averageRunningCadenceInStepsPerMinute):null),borderColor:'#e07b3a',backgroundColor:'rgba(224,123,58,.1)',fill:true}], {yMin:150,yMax:185});
 }
@@ -544,8 +544,8 @@ function renderRuns(runs) {
 function renderCharts(runs, wellness) {
   const rev = [...runs].reverse();
   const labels = rev.map(r=>sd(r.startTimeLocal?.slice(0,10)));
-  lineChart('chart-pace-all', labels, [{label:'Pace (min/km)',data:rev.map(r=>r.averageSpeed?+paceNum(r.averageSpeed).toFixed(2):null),borderColor:'#8b5e9e'}], {reverse:true});
-  barChart('chart-dist-all', labels, rev.map(r=>+((r.distance||0)/1000).toFixed(2)), '#5a8ee0');
+  lineChart('chart-pace-all', labels, [{label:'Pace (min/mi)',data:rev.map(r=>r.averageSpeed?+paceNum(r.averageSpeed).toFixed(2):null),borderColor:'#8b5e9e'}], {reverse:true});
+  barChart('chart-dist-all', labels, rev.map(r=>+((r.distance||0)/1609.34).toFixed(2)), '#5a8ee0');
   lineChart('chart-hr-all', labels, [{label:'Avg HR',data:rev.map(r=>r.averageHR?Math.round(r.averageHR):null),borderColor:'#e05a5a'}]);
   lineChart('chart-cad-all', labels, [{label:'Cadence (spm)',data:rev.map(r=>r.averageRunningCadenceInStepsPerMinute?Math.round(r.averageRunningCadenceInStepsPerMinute):null),borderColor:'#e07b3a'}], {yMin:150,yMax:185});
   lineChart('chart-vo2-all', labels, [{label:'VO2 Max',data:rev.map(r=>r.vO2MaxValue||null),borderColor:'#4a9e8e',backgroundColor:'rgba(74,158,142,.1)',fill:true}]);

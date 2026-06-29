@@ -283,10 +283,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
   .two-col,.three-col{grid-template-columns:1fr}
   .sum-grid{grid-template-columns:repeat(2,1fr)}
 }
-.mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);z-index:200;padding:5px 0 max(8px,env(safe-area-inset-bottom))}
-.mob-nav-inner{display:flex}
-.mob-btn{flex:1;background:none;border:none;cursor:pointer;font-size:.52rem;font-weight:600;color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:2px;padding:4px 2px}
+.mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);z-index:200;padding:6px 0 max(16px,env(safe-area-inset-bottom));display:none}
+.mob-nav{display:flex;justify-content:space-around;align-items:stretch}
+.mob-btn{flex:1;background:none;border:none;cursor:pointer;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:6px 4px 4px;min-height:52px;transition:color .15s;-webkit-tap-highlight-color:transparent}
+.mob-btn span{font-size:.6rem;font-weight:600;letter-spacing:.01em}
 .mob-btn.active{color:var(--teal)}
+.mob-btn.active svg{filter:drop-shadow(0 0 6px var(--teal-glow))}
+.mob-drawer-btn{background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;color:var(--text);font-size:.65rem;font-weight:600;-webkit-tap-highlight-color:transparent}
+.mob-drawer-btn span{font-size:1.3rem;line-height:1}
+.mob-drawer-btn:active{background:var(--teal-bg);color:var(--teal)}
 .mob-icon{font-size:1rem;line-height:1}
 
 .page{display:none}.page.active{display:block}
@@ -505,27 +510,38 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 @media (max-width:768px) {
   :root { --sw:0px; }
   .sidebar { display:none !important; }
-  .main { margin-left:0 !important; padding:0 0 70px 0 !important; }
-  .top-nav { padding:10px 14px !important; }
-  .page { padding:12px 14px 14px !important; }
+  .main { margin-left:0 !important; padding:0 0 80px 0 !important; }
+  .top-nav { padding:10px 16px !important; min-height:48px; }
+  .page { padding:12px 12px 16px !important; }
   .two-col, .three-col { grid-template-columns:1fr !important; gap:10px !important; }
-  .chart-card { border-radius:10px !important; }
+  .chart-card { border-radius:14px !important; padding:14px !important; }
   .chart-wrap { height:140px !important; }
-  .mini-card { padding:12px 14px !important; }
-  .mc-val { font-size:1.4rem !important; }
+  .mini-card { padding:14px !important; border-radius:12px !important; }
+  .mc-val { font-size:1.5rem !important; }
+  .mc-label { font-size:.65rem !important; }
   .oh-right { display:none !important; }
-  .rps { padding:10px 14px !important; }
-  .rps-val { font-size:1.3rem !important; }
-  .sc-stats { gap:12px; }
-  .sc-stat-val { font-size:.9rem; }
-  .sc-dist { font-size:1.2rem; margin-right:10px; }
+  .overview-hero { padding:14px !important; border-radius:14px !important; }
+  .rps { padding:12px 14px !important; border-radius:12px !important; }
+  .rps-val { font-size:1.4rem !important; }
+  .rps-label { font-size:.6rem !important; }
+  .sc-stats { gap:10px; }
+  .sc-stat-val { font-size:.88rem; font-weight:700; }
+  .sc-stat-lbl { font-size:.55rem; }
+  .sc-dist { font-size:1.2rem; margin-right:8px; }
+  .sc-name { font-size:.85rem; }
+  .sc-meta { font-size:.68rem; }
+  .strava-card { padding:12px 14px; }
   .cc-title { font-size:.82rem !important; }
+  .cc-sub { font-size:.65rem !important; }
   .mob-nav { display:flex !important; }
   .run-detail .rd-grid { grid-template-columns:repeat(2,1fr) !important; }
-  .settings-panel { width:100% !important; }
-  .global-top-nav-inner { padding:8px 14px !important; }
-  #overview-cards { grid-template-columns:repeat(2,1fr) !important; }
-  .overview-hero { padding:12px 14px !important; }
+  .settings-panel { width:100% !important; border-radius:20px 20px 0 0; top:auto; height:85vh; }
+  #overview-cards { grid-template-columns:repeat(2,1fr) !important; gap:8px !important; }
+  .settings-trigger { bottom:82px !important; right:14px !important; width:40px !important; height:40px !important; }
+  .top-nav { background:var(--bg) !important; border-bottom:1px solid var(--border) !important; }
+  .oh-chips { flex-wrap:wrap; gap:5px; }
+  .chip { font-size:.62rem !important; padding:3px 8px !important; }
+  #global-back-btn { font-size:.75rem !important; padding:6px 10px !important; }
 }
 @media (min-width:769px) and (max-width:1100px) {
   :root { --sw:200px; }
@@ -585,14 +601,43 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
   </div>
 </aside>
 
-<nav class="mob-nav">
-  <div class="mob-nav-inner">
-    <button class="mob-btn active" onclick="showPage('overview',this)"><span class="mob-icon">🏠</span>Home</button>
-    <button class="mob-btn" onclick="showPage('running',this)"><span class="mob-icon">🏃</span>Running</button>
-    <button class="mob-btn" onclick="showPage('next',this)"><span class="mob-icon">🎯</span>Next Run</button>
-    <button class="mob-btn" onclick="showPage('heart',this)"><span class="mob-icon">❤️</span>Health</button>
-    <button class="mob-btn" onclick="showPage('sleep',this)"><span class="mob-icon">🌙</span>Sleep</button>
+<!-- Mobile More Drawer -->
+<div id="mob-more-overlay" onclick="closeMobMore()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:299"></div>
+<div id="mob-more-drawer" style="display:none;position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);border-radius:20px 20px 0 0;z-index:300;padding:12px 0 max(28px,env(safe-area-inset-bottom))">
+  <div style="width:36px;height:4px;background:var(--border2);border-radius:2px;margin:0 auto 16px"></div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:0 12px">
+    <button class="mob-drawer-btn" onclick="showPage('next',null);closeMobMore()"><span>🎯</span>Next Run</button>
+    <button class="mob-drawer-btn" onclick="showPage('prs',null);closeMobMore()"><span>🏆</span>PRs</button>
+    <button class="mob-drawer-btn" onclick="showPage('monthly',null);closeMobMore()"><span>📅</span>Monthly</button>
+    <button class="mob-drawer-btn" onclick="showPage('form',null);closeMobMore()"><span>📐</span>Form</button>
+    <button class="mob-drawer-btn" onclick="showPage('gym',null);closeMobMore()"><span>💪</span>Gym</button>
+    <button class="mob-drawer-btn" onclick="showPage('sleep',null);closeMobMore()"><span>🌙</span>Sleep</button>
+    <button class="mob-drawer-btn" onclick="openSettings();closeMobMore()"><span>⚙️</span>Settings</button>
+    <button class="mob-drawer-btn" onclick="closeMobMore()"><span>✕</span>Close</button>
   </div>
+</div>
+
+<nav class="mob-nav" id="mob-nav">
+  <button class="mob-btn active" id="mob-home" onclick="showPage('overview',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    <span>Home</span>
+  </button>
+  <button class="mob-btn" id="mob-running" onclick="showPage('running',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><circle cx="12" cy="5" r="1.5"/><path d="M7 18l2-4 3 2 2-6"/><path d="M8 14l-2 4"/><path d="M16 8l1 4-3 1"/></svg>
+    <span>Running</span>
+  </button>
+  <button class="mob-btn" id="mob-heart" onclick="showPage('heart',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+    <span>Health</span>
+  </button>
+  <button class="mob-btn" id="mob-gym" onclick="showPage('gym',this)">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><path d="M6 4v16M18 4v16M3 8h4M17 8h4M3 16h4M17 16h4M7 12h10"/></svg>
+    <span>Gym</span>
+  </button>
+  <button class="mob-btn" id="mob-more" onclick="openMobMore()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:20px;height:20px"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+    <span>More</span>
+  </button>
 </nav>
 
 <main class="main">
@@ -791,8 +836,11 @@ function showPage(id, btn, pushHistory=true) {
   document.querySelectorAll('.nav-btn').forEach(b=>{
     if(b.getAttribute('onclick')?.includes("'"+id+"'")) b.classList.add('active');
   });
+  const morePages = ['next','prs','monthly','form','gym','sleep'];
   document.querySelectorAll('.mob-btn').forEach(b=>{
-    if(b.getAttribute('onclick')?.includes("'"+id+"'")) b.classList.add('active');
+    const attr = b.getAttribute('onclick')||'';
+    if(attr.includes("'"+id+"'")) b.classList.add('active');
+    else if(b.id==='mob-more' && morePages.includes(id)) b.classList.add('active');
   });
 
   if(pushHistory && id !== _currentPage) {
@@ -813,6 +861,15 @@ function updateTopNav(id) {
   if(ps) ps.textContent = meta.sub || '';
   const canGoBack = _navStack.length > 0;
   if(backBtn) backBtn.classList.toggle('visible', canGoBack);
+}
+
+function openMobMore() {
+  document.getElementById('mob-more-overlay').style.display = 'block';
+  document.getElementById('mob-more-drawer').style.display = 'block';
+}
+function closeMobMore() {
+  document.getElementById('mob-more-overlay').style.display = 'none';
+  document.getElementById('mob-more-drawer').style.display = 'none';
 }
 
 function goBack() {

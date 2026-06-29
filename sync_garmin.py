@@ -334,6 +334,7 @@ def main():
     parser = argparse.ArgumentParser(description="Sync Garmin Connect data")
     parser.add_argument("--login", action="store_true", help="Authenticate and save token")
     parser.add_argument("--days", type=int, default=1, help="How many days back to sync (default 1)")
+    parser.add_argument("--since", help="Backfill from date YYYY-MM-DD (overrides --days)")
     parser.add_argument("--sink", choices=["files", "supabase"], default="files")
     parser.add_argument("--out", default="./garmin", help="Output folder (--sink files)")
     parser.add_argument("--dry-run", action="store_true", help="Print instead of writing")
@@ -346,7 +347,11 @@ def main():
     client = get_client()
 
     today = date.today()
-    days = [today - timedelta(days=i) for i in range(args.days)]
+    if args.since:
+        start = date.fromisoformat(args.since)
+        days = [start + timedelta(days=i) for i in range((today - start).days + 1)]
+    else:
+        days = [today - timedelta(days=i) for i in range(args.days)]
 
     all_wellness = []
     all_activities = []

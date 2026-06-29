@@ -289,6 +289,63 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .page{display:none}.page.active{display:block}
 .no-data{color:var(--muted);font-size:.75rem;padding:8px 0}
 .divider{border:none;border-top:1px solid var(--border);margin:10px 0}
+
+/* ── GLOW EFFECTS ─────────────────────────── */
+body { background-image: radial-gradient(ellipse at 20% 50%, rgba(0,196,176,.04) 0%, transparent 60%), radial-gradient(ellipse at 80% 20%, rgba(0,150,255,.03) 0%, transparent 60%); }
+
+.chart-card, .mini-card, .run-detail, .rps, .pr-card, .wp-card, .sleep-tip { box-shadow: 0 4px 24px rgba(0,0,0,.5), 0 0 0 1px rgba(0,196,176,.06); transition: box-shadow .2s, border-color .2s; }
+.chart-card:hover, .mini-card:hover { box-shadow: 0 4px 32px rgba(0,0,0,.6), 0 0 0 1px rgba(0,196,176,.18), 0 0 20px rgba(0,196,176,.08); border-color: rgba(0,196,176,.25); }
+
+.oh-stat { box-shadow: 0 0 24px rgba(0,196,176,.2), inset 0 0 20px rgba(0,196,176,.05); }
+.oh-stat-val { text-shadow: 0 0 20px rgba(0,196,176,.8), 0 0 40px rgba(0,196,176,.4); }
+.overview-hero { box-shadow: 0 0 60px rgba(0,196,176,.1), 0 0 120px rgba(0,100,255,.05); }
+
+.mc-val { text-shadow: 0 0 16px currentColor; }
+.rli-dist { text-shadow: 0 0 12px rgba(0,196,176,.7); }
+.rps-val, .vo2-num { text-shadow: 0 0 30px rgba(0,196,176,.8), 0 0 60px rgba(0,196,176,.4); }
+.nr-type { text-shadow: 0 0 20px rgba(255,255,255,.2); }
+.acr-num { text-shadow: 0 0 30px currentColor; }
+
+.next-run-card { box-shadow: 0 0 40px rgba(0,196,176,.15), 0 0 80px rgba(0,196,176,.05); border-color: rgba(0,196,176,.3); }
+.run-detail { box-shadow: 0 0 40px rgba(0,0,0,.8); }
+
+/* Teal glow on sidebar active */
+.nav-btn.active { box-shadow: inset 3px 0 0 var(--teal), 0 0 16px rgba(0,196,176,.15); }
+
+/* Glow on key numbers */
+.sg-val.accent { text-shadow: 0 0 16px rgba(0,196,176,.8); }
+.dyn-val { color: var(--text); }
+
+/* Section glows */
+.run-list-item:hover { background: rgba(0,196,176,.04); box-shadow: inset 0 0 20px rgba(0,196,176,.05); }
+.rli-icon { box-shadow: 0 0 12px rgba(0,196,176,.25); }
+
+/* Chart glow line */
+canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
+
+/* ── CADENCE COACH ────────────────────────── */
+.cadence-score { display:flex; align-items:center; gap:20px; margin-bottom:18px; }
+.cs-ring { flex-shrink:0; }
+.cs-info h2 { font-size:1.2rem; font-weight:900; }
+.cs-info p { font-size:.72rem; color:var(--muted); margin-top:4px; line-height:1.5; }
+.cadence-drills { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px; margin-bottom:14px; }
+.drill-card { background:var(--card2); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; border-top:3px solid rgba(0,196,176,.4); box-shadow:0 0 12px rgba(0,196,176,.08); }
+.drill-num { font-size:.58rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--teal); margin-bottom:6px; }
+.drill-title { font-size:.85rem; font-weight:700; color:var(--text); margin-bottom:5px; }
+.drill-desc { font-size:.68rem; color:var(--muted); line-height:1.5; }
+.bpm-calc { background:linear-gradient(135deg,rgba(0,196,176,.08),rgba(0,100,255,.05)); border:1px solid rgba(0,196,176,.2); border-radius:var(--radius); padding:16px 20px; margin-bottom:14px; box-shadow:0 0 20px rgba(0,196,176,.1); }
+.bpm-row { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; }
+.bpm-item { text-align:center; }
+.bpm-num { font-size:2rem; font-weight:900; color:var(--teal); text-shadow:0 0 20px rgba(0,196,176,.8); line-height:1; }
+.bpm-label { font-size:.6rem; color:var(--muted); margin-top:3px; text-transform:uppercase; letter-spacing:.06em; }
+.bpm-arrow { font-size:1.2rem; color:var(--muted); }
+.week-plan { margin-bottom:14px; }
+.wp-row { display:flex; align-items:flex-start; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); }
+.wp-row:last-child { border-bottom:none; }
+.wp-week { font-size:.65rem; font-weight:700; text-transform:uppercase; letter-spacing:.07em; color:var(--teal); width:60px; flex-shrink:0; }
+.wp-body { flex:1; }
+.wp-goal { font-size:.8rem; font-weight:700; color:var(--text); }
+.wp-how { font-size:.67rem; color:var(--muted); margin-top:2px; line-height:1.4; }
 </style>
 </head>
 <body>
@@ -852,18 +909,92 @@ function renderForm(runs){
   const r=runs[0];const tip=document.getElementById('form-tip');
   if(!r){tip.textContent='Sync a run to see form data.';return;}
   const cad=r.averageRunningCadenceInStepsPerMinute?Math.round(r.averageRunningCadenceInStepsPerMinute):null;
-  tip.innerHTML=`<strong style="color:var(--teal)">Form tip:</strong> ${cad>=170?`Cadence ${cad} spm — great form, keep the quick light steps.`:`Cadence is ${cad??'unknown'} spm. Target 170+. Run to a 170 bpm metronome — feels weird at first, natural in a few weeks.`}`;
+  const allCads=runs.filter(x=>x.averageRunningCadenceInStepsPerMinute).map(x=>Math.round(x.averageRunningCadenceInStepsPerMinute));
+  const avgCad=allCads.length?Math.round(allCads.reduce((s,c)=>s+c,0)/allCads.length):null;
+  const trend=allCads.length>=6?allCads.slice(-5).reduce((s,c)=>s+c,0)/5-allCads.slice(0,5).reduce((s,c)=>s+c,0)/5:0;
+  const[cadCol,cadMsg]=cad>=172?['#00c4b0','Elite range — your cadence is excellent. Maintain this.']:cad>=168?['#10b981','Very good — nearly at the ideal range. Keep focusing on quick steps.']:cad>=163?['#f59e0b','Getting there — you\'re 5–7 spm away from the sweet spot. This is fixable in 3–4 weeks.']:['#ef4444','This is your biggest form improvement opportunity. Raising cadence will reduce injury risk and improve pace.'];
+  tip.innerHTML=`<strong style="color:var(--teal)">Cadence Analysis:</strong> Your average is <strong style="color:${cadCol};text-shadow:0 0 12px ${cadCol}">${avgCad??cad} spm</strong> — ${cadMsg} ${trend>1?`<span style="color:var(--green)">↑ Trending up +${trend.toFixed(1)} spm.</span>`:trend<-1?`<span style="color:var(--red)">↓ Slightly declining.</span>`:''}`;
   const rows=[];const gct=r.avgGroundContactTime,vo=r.avgVerticalOscillation,vr=r.avgVerticalRatio;
-  if(cad){const[t,c]=cad>=170?['Excellent ✓','great']:cad>=165?['Good','good']:cad>=158?['Average','ok']:['Low — aim for 170+','warn'];rows.push(['Cadence',`${cad} spm`,t,c,'Quick light footstrike. Target 170–180 spm. Lower injury risk.']);}
-  if(gct){const v=Math.round(gct);const[t,c]=v<=200?['Excellent ✓','great']:v<=240?['Good','good']:v<=280?['Average','ok']:['High','warn'];rows.push(['Ground Contact Time',`${v} ms`,t,c,'Time foot contacts ground. Lower = stiffer, more efficient.']);}
+  if(cad){const[t,c]=cad>=170?['Excellent ✓','great']:cad>=165?['Good','good']:cad>=158?['Average','ok']:['Low — aim for 170+','warn'];rows.push(['Cadence',`${cad} spm`,t,c,'Quick light footstrike. Target 170–180 spm.']);}
+  if(gct){const v=Math.round(gct);const[t,c]=v<=200?['Excellent ✓','great']:v<=240?['Good','good']:v<=280?['Average','ok']:['High','warn'];rows.push(['Ground Contact',`${v} ms`,t,c,'Lower = stiffer, more efficient. Train explosive leg spring.']);}
   if(vo){const v=vo.toFixed(1);const[t,c]=v<=7?['Excellent ✓','great']:v<=9?['Good','good']:v<=11?['Average','ok']:['High','warn'];rows.push(['Vertical Oscillation',`${v} cm`,t,c,'Bounce per stride. Think forward, not up.']);}
   if(vr){const v=vr.toFixed(1);const[t,c]=v<=6.5?['Excellent ✓','great']:v<=8.5?['Good','good']:['High','warn'];rows.push(['Vertical Ratio',`${v}%`,t,c,'Oscillation ÷ stride length. Target <8.5%.']);}
   if(r.avgStrideLength)rows.push(['Stride Length',`${(r.avgStrideLength/100).toFixed(2)} m`,'','','Improves naturally with fitness.']);
-  if(r.avgPower)rows.push(['Running Power',`${Math.round(r.avgPower)} W`,'','','Good for comparing effort on any terrain.']);
+  if(r.avgPower)rows.push(['Running Power',`${Math.round(r.avgPower)} W`,'','','Useful for comparing effort on any terrain.']);
   document.getElementById('form-metrics').innerHTML=`<div style="font-size:.82rem;font-weight:700;margin-bottom:12px">Latest Run: ${r.activityName} · ${r.startTimeLocal?.slice(0,10)}</div>`+rows.map(([l,v,t,c,note])=>`<div class="metric-row"><div class="mr-left"><div class="mr-label">${l}</div><div class="mr-note">${note}</div></div><div class="mr-right"><div class="mr-val">${v}</div>${t?`<span class="rating r-${c}">${t}</span>`:''}</div></div>`).join('');
+
   const last15=runs.slice(0,15).filter(r=>r.averageRunningCadenceInStepsPerMinute).reverse();
   lineChart('chart-cad-form',last15.map(r=>sd(r.startTimeLocal?.slice(0,10))),[{label:'Cadence (spm)',data:last15.map(r=>Math.round(r.averageRunningCadenceInStepsPerMinute)),borderColor:'#f97316',backgroundColor:'rgba(249,115,22,.08)',fill:true},{label:'Goal (170)',data:last15.map(()=>170),borderColor:'#00c4b0',borderDash:[4,4],borderWidth:1.5,pointRadius:0}],{yMin:155,yMax:185});
-  document.getElementById('form-guide').innerHTML=`<div style="font-size:.82rem;font-weight:700;margin-bottom:12px">How to Improve</div>`+[['Cadence — Aim for 170+ spm','Run to a 170 bpm metronome app. Quick light steps, like running on hot coals. Takes 4–6 weeks.'],['Ground Contact — Aim for <240 ms','Calf raises, box jumps, hill sprints. Stiffer legs = shorter contact = faster pace.'],['Vertical Oscillation — Aim for <9 cm','Visualize a low ceiling. Push forward, not up. Engage core and glutes.'],['Vertical Ratio — Aim for <8.5%','Fix cadence first — higher cadence naturally reduces bounce and improves this metric.']].map(([t,d])=>`<div class="metric-row"><div class="mr-left"><div class="mr-label">${t}</div><div class="mr-note">${d}</div></div></div>`).join('');
+
+  // ── CADENCE COACHING SECTION ──────────────────────────────────────────
+  const gap170=Math.max(0,170-(avgCad||cad||0));
+  const R=42,circ=2*Math.PI*R,pct=Math.min(100,(avgCad||0)/180*100);
+  const dash=circ*(pct/100),gapD=circ-dash;
+  const scoreCol=(avgCad||0)>=170?'#00c4b0':(avgCad||0)>=165?'#10b981':(avgCad||0)>=160?'#f59e0b':'#ef4444';
+  const cadGuide=document.getElementById('form-guide');
+  cadGuide.innerHTML=`
+  <div style="font-size:.82rem;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:8px"><span style="color:var(--teal)">⚡</span> Cadence Coach</div>
+
+  <div class="cadence-score">
+    <div class="cs-ring">
+      <svg width="100" height="100" viewBox="0 0 100 100" style="transform:rotate(-90deg)">
+        <circle cx="50" cy="50" r="${R}" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="7"/>
+        <circle cx="50" cy="50" r="${R}" fill="none" stroke="${scoreCol}" stroke-width="7" stroke-dasharray="${dash.toFixed(1)} ${gapD.toFixed(1)}" stroke-linecap="round" style="filter:drop-shadow(0 0 6px ${scoreCol})"/>
+        <text x="50" y="46" text-anchor="middle" fill="${scoreCol}" font-size="16" font-weight="900" style="font-family:-apple-system,sans-serif;transform:rotate(90deg);transform-origin:50px 50px">${avgCad??'—'}</text>
+        <text x="50" y="59" text-anchor="middle" fill="#6b7280" font-size="8" style="font-family:-apple-system,sans-serif;transform:rotate(90deg);transform-origin:50px 50px">spm avg</text>
+      </svg>
+    </div>
+    <div class="cs-info">
+      <h2>Your average: <span style="color:${scoreCol};text-shadow:0 0 16px ${scoreCol}">${avgCad??'—'} spm</span></h2>
+      <p>${gap170>0?`You need <strong style="color:var(--yellow)">${gap170} more steps per minute</strong> to reach the elite 170 spm target.<br>At your current pace, that takes 3–5 weeks of focused practice.`:'You\'re in or above the ideal range. Focus on maintaining this at all paces and on tired legs.'}</p>
+    </div>
+  </div>
+
+  <div class="bpm-calc">
+    <div style="font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--teal);margin-bottom:10px">🎵 Run to Music — Tempo Calculator</div>
+    <div class="bpm-row">
+      <div class="bpm-item"><div class="bpm-num">${avgCad??165}</div><div class="bpm-label">Your avg (spm)</div></div>
+      <div class="bpm-arrow">→</div>
+      <div class="bpm-item"><div class="bpm-num">168</div><div class="bpm-label">Week 2 target</div></div>
+      <div class="bpm-arrow">→</div>
+      <div class="bpm-item"><div class="bpm-num">170</div><div class="bpm-label">Goal (170 bpm)</div></div>
+      <div class="bpm-arrow">→</div>
+      <div class="bpm-item"><div class="bpm-num">174</div><div class="bpm-label">Elite range</div></div>
+    </div>
+    <div style="font-size:.65rem;color:var(--muted);margin-top:10px">Search Spotify for "<strong style="color:var(--text)">170 BPM running playlist</strong>" — match your footstrike to the beat. Takes 10–15 min of conscious effort per run before it becomes automatic.</div>
+  </div>
+
+  <div style="font-size:.75rem;font-weight:700;color:var(--text);margin-bottom:10px">4-Week Improvement Plan <span style="font-size:.65rem;font-weight:400;color:var(--muted)">(starting from ${avgCad??165} spm)</span></div>
+  <div class="chart-card week-plan" style="padding:14px 16px">
+    ${[
+      ['Week 1',`Target ${Math.min(170,(avgCad||165)+2)} spm`,'Use a metronome app at your target BPM. Only focus on it for the first 10 min of each run. Don\'t force it the whole time — just plant the seed.'],
+      ['Week 2',`Target ${Math.min(170,(avgCad||165)+4)} spm`,'First 20 min metronome. Think "quick light feet." Imagine running on hot coals — no time to linger on each step.'],
+      ['Week 3',`Target ${Math.min(172,(avgCad||165)+6)} spm`,'Run the whole run at target cadence. Do 4×30-second "fast feet" pickups mid-run — exaggerate the high cadence for 30 sec, then relax.'],
+      ['Week 4',`Maintain ${Math.min(174,(avgCad||165)+8)} spm`,'Cadence should start feeling natural now. Check your Garmin after runs to confirm. If it dips, increase your lean slightly (lean from the ankles, not waist).'],
+    ].map(([w,g,h])=>`<div class="wp-row"><div class="wp-week">${w}</div><div class="wp-body"><div class="wp-goal">${g}</div><div class="wp-how">${h}</div></div></div>`).join('')}
+  </div>
+
+  <div style="font-size:.75rem;font-weight:700;color:var(--text);margin-bottom:10px">Drills to Run Between Workouts</div>
+  <div class="cadence-drills">
+    ${[
+      ['Drill 01','High Knees','30 sec · 3 sets','Drive knees to hip height quickly. Focus on fast ground contact, not height. This is the most direct drill for cadence.'],
+      ['Drill 02','A-Skip','20m · 4 reps','Skip forward, driving one knee up and pushing off the back foot hard. Builds leg stiffness and rhythm.'],
+      ['Drill 03','Butt Kicks','30 sec · 3 sets','Kick heels to your glutes while jogging in place. Trains your hamstrings to fire quickly for faster leg turnover.'],
+      ['Drill 04','Fast Feet Pickup','30 sec on/off × 6','Mid-run: sprint at 180+ spm for 30 sec, then jog easy 30 sec. Teaches your nervous system the faster rhythm.'],
+      ['Drill 05','Metronome Intervals','10 min at start of run','Set phone to 170 bpm. Match each beat to a footstrike. Even 10 min/day compounds fast.'],
+      ['Drill 06','Downhill Running','Once/week on gentle slope','Running downhill naturally forces higher cadence. Use a slight hill to feel what 170+ spm feels like without effort.'],
+    ].map(([n,t,sets,d])=>`<div class="drill-card"><div class="drill-num">${n}</div><div class="drill-title">${t} <span style="font-size:.62rem;color:var(--muted);font-weight:400">${sets}</span></div><div class="drill-desc">${d}</div></div>`).join('')}
+  </div>
+
+  <div class="chart-card" style="padding:14px 16px;margin-top:0">
+    <div style="font-size:.75rem;font-weight:700;margin-bottom:8px">Why Cadence Is the Most Important Form Metric</div>
+    ${[
+      ['Reduces impact force by 20%','Each step at 170 spm hits the ground with 20% less force than 160 spm — because shorter stride = softer landing. This is why higher cadence runners get injured less.'],
+      ['Improves running economy','Efficient cadence means less energy wasted bouncing up and down (vertical oscillation). Every bit of energy goes forward.'],
+      ['Faster without more effort','At the same heart rate, you run faster at 170 spm vs 160 spm. It\'s free speed.'],
+      ['Protects your knees and hips','Overstriding (long slow strides) is the #1 cause of IT band, knee, and hip injuries. Cadence is the fix.'],
+    ].map(([t,d])=>`<div class="metric-row"><div class="mr-left"><div class="mr-label">${t}</div><div class="mr-note">${d}</div></div></div>`).join('')}
+  </div>`;
 }
 
 // ══ GYM ════════════════════════════════════════════════════════

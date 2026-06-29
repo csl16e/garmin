@@ -1,0 +1,50 @@
+name: Garmin Backfill
+
+on:
+  workflow_dispatch:
+    inputs:
+      since:
+        description: 'Start date YYYY-MM-DD (e.g. 2024-01-01 for 2 years)'
+        required: true
+        default: '2024-01-01'
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Restore token
+        run: echo "${{ secrets.GARMIN_TOKEN_B64 }}" | base64 -d > ~/.garmin_tokens
+
+      - name: Backfill from ${{ github.event.inputs.since }}
+        run: python sync_garmin.py --since ${{ github.event.inputs.since }} --sink files --out ./garmin
+
+      - name: Rebuild dashboard
+        run: |
+          python3 - <<'EOF'
+          import json, re
+          data = json.load(open('garmin/data.json'))
+          html = open('index.html').read()
+          new_js = 'const GARMIN_DATA = ' + json.dumps(data) + ';'
+          html = re.sub(r'(// DATA_START\n)[\s\S]*?(// DATA_END)', r'\g<1>' + new_js + r'\n// DATA_END', html, count=1)
+          open('index.html', 'w').write(html)
+          print(f"Rebuilt with {len(data['activities'])} activities, {len(data['wellness'])} wellness days")
+          EOF
+
+      - name: Commit and push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add garmin/ index.html
+          git diff --staged --quiet || git commit -m "Backfill Garmin data since ${{ github.event.inputs.since }}"
+          git push

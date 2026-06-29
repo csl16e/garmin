@@ -754,6 +754,7 @@ function showRunDetail(r){
           <div class="route-speed-bar">${fmtPace(r.averageSpeed)} <span style="display:inline-block;width:40px;height:3px;background:linear-gradient(90deg,#00c4b0,#f59e0b);border-radius:2px;margin:0 4px"></span> faster →</div>
         </div>
         <div class="sum-grid">
+          ${r.locationName?`<div class="sg-item" style="grid-column:1/-1;background:rgba(0,196,176,.06);border-color:rgba(0,196,176,.2)"><div class="sg-label">📍 Location</div><div class="sg-val" style="font-size:.88rem">${r.locationName}</div></div>`:''}
           <div class="sg-item"><div class="sg-label">Distance</div><div class="sg-val accent">${fmtMi(r.distance)}</div></div>
           <div class="sg-item"><div class="sg-label">Time</div><div class="sg-val">${fmtDur(r.duration)}</div></div>
           <div class="sg-item"><div class="sg-label">Avg Pace</div><div class="sg-val">${fmtPace(r.averageSpeed)}</div></div>
@@ -783,7 +784,7 @@ function runItem(r,showIcon=true){
     <div class="rli-icon${isWalk?' walk':''}">🏃</div>
     <div class="rli-main">
       <div class="rli-top">${r.activityName} ${badges}</div>
-      <div class="rli-meta">${r.startTimeLocal?.slice(0,10)} · ${fmtDur(r.duration)} · ${r.averageHR?Math.round(r.averageHR)+' bpm ·':''} ${r.elevationGain!=null?Math.round(r.elevationGain)+' ft':''}</div>
+      <div class="rli-meta">${r.locationName?'📍 '+r.locationName+' · ':''}${r.startTimeLocal?.slice(0,10)} · ${fmtDur(r.duration)} · ${r.averageHR?Math.round(r.averageHR)+' bpm':''}</div>
     </div>
     <div class="rli-right">
       <div class="rli-dist">${fmtMi(r.distance,2)}</div>
@@ -863,7 +864,7 @@ function renderOverview(today,wellness,runs){
     const dr=runs.filter(r=>r.startTimeLocal?.slice(0,10)===d);
     const w=wellness.find(x=>x.date===d),tr2=w?.training_readiness;
     if(!dr.length)return`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)"><div style="font-size:.7rem;font-weight:700;color:var(--muted);width:28px">${dn(d)}</div><div style="flex:1;font-size:.8rem;color:var(--dim)">Rest</div>${tr2?`<div style="font-size:.7rem;font-weight:700;color:${rc(tr2)}">${tr2}</div>`:''}</div>`;
-    return dr.map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)"><div style="font-size:.7rem;font-weight:700;color:var(--muted);width:28px">${dn(d)}</div><div style="flex:1"><div style="font-size:.8rem;font-weight:600">${r.activityName}</div><div style="font-size:.65rem;color:var(--muted);margin-top:1px">${fmtDur(r.duration)} · ${fmtPace(r.averageSpeed)} · ${r.averageHR?Math.round(r.averageHR)+' bpm':''}</div></div><div style="font-size:.85rem;font-weight:800;color:var(--teal)">${fmtMi(r.distance)}</div></div>`).join('');
+    return dr.map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)"><div style="font-size:.7rem;font-weight:700;color:var(--muted);width:28px">${dn(d)}</div><div style="flex:1"><div style="font-size:.8rem;font-weight:600">${r.activityName}</div><div style="font-size:.65rem;color:var(--muted);margin-top:1px">${r.locationName?'📍 '+r.locationName+' · ':''}${fmtDur(r.duration)} · ${fmtPace(r.averageSpeed)} · ${r.averageHR?Math.round(r.averageHR)+' bpm':''}</div></div><div style="font-size:.85rem;font-weight:800;color:var(--teal)">${fmtMi(r.distance)}</div></div>`).join('');
   }).join('');
 }
 function calcStreak(runs){

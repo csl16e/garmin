@@ -413,7 +413,8 @@ function load() {
 }
 
 // ─── OVERVIEW ─────────────────────────────────────────────────────────────────
-function renderOverview(today, wellness, runs, activities) {
+function renderOverview(today, wellness, runs) {
+  const latestRun = runs[0];
   // Readiness hero
   const tr = today.training_readiness;
   const heroEl = document.getElementById('readiness-hero-card');

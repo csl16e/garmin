@@ -1014,15 +1014,23 @@ function load(){
   const today=wellness[0]||{};const lr=runs[0];
   const lastDate=allActs[0]?.startTimeLocal?.slice(0,10)||'';
   document.getElementById('last-sync').textContent=sd(lastDate);
-  try{renderOverview(today,wellness,runs);}catch(e){console.error('overview',e);}
-  try{renderNextRun(today,wellness,runs);}catch(e){console.error('next',e);}
-  try{renderRunning(today,wellness,runs);}catch(e){console.error('running',e);}
-  try{renderPRs(runs);}catch(e){console.error('prs',e);}
-  try{renderMonthly(runs);}catch(e){console.error('monthly',e);}
-  try{renderHeart(today,wellness,lr);}catch(e){console.error('heart',e);}
-  try{renderForm(runs);}catch(e){console.error('form',e);}
-  try{renderGym(runs,wellness);}catch(e){console.error('gym',e);}
-  try{renderSleep(today,wellness,runs);}catch(e){console.error('sleep',e);}
+  const _errs=[];
+  function _try(name,fn){try{fn();}catch(e){console.error(name,e);_errs.push(name+': '+e.message);}}
+  _try('overview',()=>renderOverview(today,wellness,runs));
+  _try('next',()=>renderNextRun(today,wellness,runs));
+  _try('running',()=>renderRunning(today,wellness,runs));
+  _try('prs',()=>renderPRs(runs));
+  _try('monthly',()=>renderMonthly(runs));
+  _try('heart',()=>renderHeart(today,wellness,lr));
+  _try('form',()=>renderForm(runs));
+  _try('gym',()=>renderGym(runs,wellness));
+  _try('sleep',()=>renderSleep(today,wellness,runs));
+  if(_errs.length){
+    const d=document.createElement('div');
+    d.style.cssText='position:fixed;top:10px;right:10px;background:#1e0000;border:1px solid #ef4444;border-radius:8px;padding:14px 18px;z-index:9999;max-width:420px;font-size:.75rem;color:#ef4444;font-family:monospace';
+    d.innerHTML='<b>⚠️ Render errors (share with dev):</b><br>'+_errs.map(e=>'• '+e).join('<br>');
+    document.body.appendChild(d);
+  }
 }
 
 // ══ OVERVIEW ═══════════════════════════════════════════════════

@@ -97,6 +97,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .cc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:2px;gap:6px}
 .cc-title{font-size:.82rem;font-weight:700;color:var(--text)}
 .cc-badge{font-size:.58rem;padding:2px 8px;border-radius:10px;background:var(--teal-bg);color:var(--teal);font-weight:700}
+.ctb-bar{display:flex;gap:4px;margin:6px 0 4px;flex-wrap:wrap}
+.ctb-btn{font-size:.6rem;font-weight:700;padding:3px 8px;border-radius:20px;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;transition:all .15s;letter-spacing:.02em}
+.ctb-btn:hover{border-color:var(--teal);color:var(--teal)}
+.ctb-btn.active{background:var(--teal);color:#000;border-color:var(--teal)}
 .drag-handle{color:var(--dim);cursor:grab;font-size:1rem;margin-left:auto;padding:0 2px;user-select:none;line-height:1;opacity:.5;transition:opacity .15s}
 .drag-handle:hover{opacity:1}
 .ov-section{margin-top:12px;transition:opacity .2s}
@@ -1140,8 +1144,35 @@ Chart.defaults.color='#6b7280';
 
 function mkChart(id,type,labels,datasets,opts={}){
   const ctx=document.getElementById(id);if(!ctx)return;
-  return new Chart(ctx,{type,data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,animation:{duration:600},...opts}});
+  Chart.getChart(id)?.destroy();
+  return new Chart(ctx,{type,data:{labels,datasets},options:{responsive:true,maintainAspectRatio:false,animation:{duration:400},...opts}});
 }
+
+// ── Time toggle system ───────────────────────────────────────────────────────
+const _CTB={};
+function timeToggle(canvasId,buildFn,defaultDays=180){
+  const canvas=document.getElementById(canvasId);if(!canvas)return;
+  const card=canvas.closest('.chart-card');if(!card)return;
+  card.querySelector(`.ctb-bar[data-for="${canvasId}"]`)?.remove();
+  const ranges=[{l:'1W',d:7},{l:'1M',d:30},{l:'6M',d:180},{l:'1Y',d:365},{l:'All',d:null}];
+  const bar=document.createElement('div');
+  bar.className='ctb-bar';bar.setAttribute('data-for',canvasId);
+  bar.innerHTML=ranges.map(r=>{
+    const active=(r.d===defaultDays)||(r.d===null&&defaultDays===null);
+    return`<button class="ctb-btn${active?' active':''}" onclick="activateCTB(this,'${canvasId}')" data-days="${r.d??'all'}">${r.l}</button>`;
+  }).join('');
+  const ccTop=card.querySelector('.cc-top');
+  if(ccTop)ccTop.after(bar); else card.prepend(bar);
+  _CTB[canvasId]=buildFn;
+  buildFn(defaultDays);
+}
+function activateCTB(btn,canvasId){
+  btn.closest('.ctb-bar').querySelectorAll('.ctb-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const days=btn.dataset.days==='all'?null:parseInt(btn.dataset.days);
+  _CTB[canvasId]?.(days);
+}
+function cutoff(days){return days?Date.now()-days*864e5:0;}
 function lineChart(id,labels,datasets,extra={}){
   return mkChart(id,'line',labels,datasets.map(d=>({tension:.4,pointRadius:3,pointHoverRadius:5,borderWidth:2,fill:d.fill||false,...d})),{plugins:{legend:{display:datasets.length>1,labels:{color:'#6b7280',boxWidth:10}},tooltip:{mode:'index',intersect:false}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{maxTicksLimit:8,color:'#6b7280'}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#6b7280'},reverse:extra.reverse||false,...(extra.yMin!=null?{min:extra.yMin}:{}),...(extra.yMax!=null?{max:extra.yMax}:{})}},...extra.opts});
 }
@@ -1622,8 +1653,14 @@ function renderTrainingLoad(runs) {
   const atl = loads[loads.length-1]||0;
   const ratio = atl/ctl;
   const status = ratio>1.3?'High load':ratio<0.8?'Easy week':'Optimal';
-  setTimeout(()=>barChart('chart-training-load',weeks.map(w=>sd(w)),loads,
-    loads.map((_,i)=>i===loads.length-1?'rgba(0,196,176,1)':'rgba(0,196,176,.5)')),50);
+  timeToggle('chart-training-load',(days)=>{
+    const now2=new Date();
+    const nWeeks=days?Math.min(Math.ceil(days/7),52):104;
+    const wks2=Array.from({length:nWeeks},(_,i)=>{const d=new Date(now2);d.setDate(d.getDate()-((nWeeks-1-i)*7));return getWeekKey(d);});
+    const wm2={};runsWithLoad.forEach(r=>{const wk=getWeekKey(new Date(r.startTimeLocal));wm2[wk]=(wm2[wk]||0)+r.activityTrainingLoad;});
+    const lds=wks2.map(w=>+(wm2[w]||0).toFixed(0));
+    barChart('chart-training-load',wks2.map(w=>sd(w)),lds,lds.map((_,i)=>i===lds.length-1?'rgba(0,196,176,1)':'rgba(0,196,176,.5)'));
+  },180);
 }
 
 // ══ SLEEP CORRELATION ════════════════════════════════════════════════════════
@@ -1649,10 +1686,14 @@ function renderSleepCorrelation(wellness, runs) {
 
   // Sleep score trend
   const last30 = scored.slice(0,30).reverse();
-  lineChart('chart-sleep-score-trend',last30.map(w=>sd(w.date)),[{label:'Sleep Score',data:last30.map(w=>w.sleep_score),borderColor:'#a855f7',backgroundColor:'rgba(168,85,247,.08)',fill:true}],{yMin:0,yMax:100});
-  // Sleep duration trend
-  const hasDur = wellness.filter(w=>w.sleep_seconds).slice(0,30).reverse();
-  lineChart('chart-sleep-dur-trend',hasDur.map(w=>sd(w.date)),[{label:'Hours',data:hasDur.map(w=>+(w.sleep_seconds/3600).toFixed(1)),borderColor:'#67e8f9',backgroundColor:'rgba(103,232,249,.08)',fill:true}],{yMin:4,yMax:10});
+  timeToggle('chart-sleep-score-trend',(days)=>{
+    const ws=wellness.filter(w=>w.sleep_score!=null&&new Date(w.date)>=cutoff(days)).sort((a,b)=>a.date.localeCompare(b.date));
+    lineChart('chart-sleep-score-trend',ws.map(w=>sd(w.date)),[{label:'Sleep Score',data:ws.map(w=>w.sleep_score),borderColor:'#a855f7',backgroundColor:'rgba(168,85,247,.08)',fill:true}],{yMin:0,yMax:100});
+  },90);
+  timeToggle('chart-sleep-dur-trend',(days)=>{
+    const wd=wellness.filter(w=>w.sleep_seconds&&new Date(w.date)>=cutoff(days)).sort((a,b)=>a.date.localeCompare(b.date));
+    lineChart('chart-sleep-dur-trend',wd.map(w=>sd(w.date)),[{label:'Hours',data:wd.map(w=>+(w.sleep_seconds/3600).toFixed(1)),borderColor:'#67e8f9',backgroundColor:'rgba(103,232,249,.08)',fill:true}],{yMin:4,yMax:10});
+  },90);
 }
 
 // ══ SHOE TRACKER ════════════════════════════════════════════════════════════
@@ -1854,13 +1895,18 @@ function renderOverview(today,wellness,runs){
     {l:'All-Time Runs',ic:'🗂',v:runs.length,u:'activities',c:'var(--pink)',bar:Math.min(100,runs.length/100*100)},
   ].map(c=>`<div class="mini-card" style="border-top:3px solid ${c.c}20;"><div class="mc-label"><span class="mc-icon">${c.ic}</span>${c.l}</div><div class="mc-val" style="color:${c.c}">${c.v}</div><div class="mc-sub">${c.u}</div>${c.bar?`<div style="height:2px;background:rgba(255,255,255,.06);border-radius:2px;margin-top:10px;overflow:hidden"><div style="width:${c.bar}%;height:100%;background:${c.c};border-radius:2px"></div></div>`:''}</div>`).join('');
 
-  const wkBuckets={};
-  runs.forEach(r=>{const wk=getWeekKey(new Date(r.startTimeLocal));wkBuckets[wk]=(wkBuckets[wk]||0)+mi(r.distance||0);});
-  const wks=Object.keys(wkBuckets).sort().slice(-10);
-  barChart('chart-weekly',wks.map(w=>sd(w)),wks.map(w=>+wkBuckets[w].toFixed(2)),wks.map(w=>wkBuckets[w]===Math.max(...Object.values(wkBuckets))?'rgba(0,196,176,1)':'rgba(0,196,176,.45)'));
+  timeToggle('chart-weekly',(days)=>{
+    const wkB={};
+    runs.filter(r=>new Date(r.startTimeLocal)>=cutoff(days)).forEach(r=>{const wk=getWeekKey(new Date(r.startTimeLocal));wkB[wk]=(wkB[wk]||0)+mi(r.distance||0);});
+    const wks=Object.keys(wkB).sort();
+    const maxV=Math.max(...Object.values(wkB),1);
+    barChart('chart-weekly',wks.map(w=>sd(w)),wks.map(w=>+wkB[w].toFixed(2)),wks.map(w=>wkB[w]===maxV?'rgba(0,196,176,1)':'rgba(0,196,176,.45)'));
+  },180);
 
-  const rw=wellness.filter(w=>w.training_readiness!=null).slice(0,14).reverse();
-  lineChart('chart-readiness',rw.map(w=>sd(w.date)),[{label:'Readiness',data:rw.map(w=>w.training_readiness),borderColor:'#00c4b0',backgroundColor:'rgba(0,196,176,.08)',fill:true}],{yMin:0,yMax:100});
+  timeToggle('chart-readiness',(days)=>{
+    const rw=wellness.filter(w=>w.training_readiness!=null&&new Date(w.date)>=cutoff(days)).sort((a,b)=>a.date.localeCompare(b.date));
+    lineChart('chart-readiness',rw.map(w=>sd(w.date)),[{label:'Readiness',data:rw.map(w=>w.training_readiness),borderColor:'#00c4b0',backgroundColor:'rgba(0,196,176,.08)',fill:true}],{yMin:0,yMax:100});
+  },90);
 
   const last7=[...Array(7)].map((_,i)=>{const d=new Date();d.setDate(d.getDate()-i);return d.toISOString().slice(0,10);}).reverse();
   document.getElementById('week-badge').textContent=`${week7.length} run${week7.length!==1?'s':''} · ${wmi.toFixed(1)} mi`;
@@ -1914,18 +1960,20 @@ function renderRunning(today,wellness,runs){
   const easyMps=easyRuns.length?easyRuns.reduce((s,r)=>s+r.averageSpeed,0)/easyRuns.length:null;
   document.getElementById('rps-easy').textContent=easyMps?fmtPace(easyMps):'—';
 
-  const rev=[...runs].reverse();
-  // VO2 trend
-  const vo2Runs=rev.filter(r=>r.vO2MaxValue);
-  lineChart('chart-vo2-trend',vo2Runs.map(r=>sd(r.startTimeLocal?.slice(0,10))),[{label:'VO2 Max',data:vo2Runs.map(r=>r.vO2MaxValue),borderColor:'#00c4b0',backgroundColor:'rgba(0,196,176,.08)',fill:true}]);
-  // Easy pace trend
-  const epRuns=rev.filter(r=>r.averageHR&&r.averageHR<150&&r.averageSpeed);
-  lineChart('chart-easy-pace',epRuns.map(r=>sd(r.startTimeLocal?.slice(0,10))),[{label:'Pace (min/mi)',data:epRuns.map(r=>r.averageSpeed?+paceNum(r.averageSpeed).toFixed(2):null),borderColor:'#00c4b0',backgroundColor:'rgba(0,196,176,.06)',fill:true}],{reverse:true});
-  // Weekly vol
-  const wkBuckets={};
-  runs.forEach(r=>{const wk=getWeekKey(new Date(r.startTimeLocal));wkBuckets[wk]=(wkBuckets[wk]||0)+mi(r.distance||0);});
-  const wks=Object.keys(wkBuckets).sort().slice(-12);
-  barChart('chart-weekly2',wks.map(w=>sd(w)),wks.map(w=>+wkBuckets[w].toFixed(2)),'rgba(0,196,176,.55)');
+  timeToggle('chart-vo2-trend',(days)=>{
+    const v=runs.filter(r=>r.vO2MaxValue&&new Date(r.startTimeLocal)>=cutoff(days)).sort((a,b)=>a.startTimeLocal.localeCompare(b.startTimeLocal));
+    lineChart('chart-vo2-trend',v.map(r=>sd(r.startTimeLocal?.slice(0,10))),[{label:'VO2 Max',data:v.map(r=>r.vO2MaxValue),borderColor:'#00c4b0',backgroundColor:'rgba(0,196,176,.08)',fill:true}]);
+  },365);
+  timeToggle('chart-easy-pace',(days)=>{
+    const ep=runs.filter(r=>r.averageHR&&r.averageHR<150&&r.averageSpeed&&new Date(r.startTimeLocal)>=cutoff(days)).sort((a,b)=>a.startTimeLocal.localeCompare(b.startTimeLocal));
+    lineChart('chart-easy-pace',ep.map(r=>sd(r.startTimeLocal?.slice(0,10))),[{label:'Pace (min/mi)',data:ep.map(r=>+paceNum(r.averageSpeed).toFixed(2)),borderColor:'#00c4b0',backgroundColor:'rgba(0,196,176,.06)',fill:true}],{reverse:true});
+  },180);
+  timeToggle('chart-weekly2',(days)=>{
+    const wkB={};
+    runs.filter(r=>new Date(r.startTimeLocal)>=cutoff(days)).forEach(r=>{const wk=getWeekKey(new Date(r.startTimeLocal));wkB[wk]=(wkB[wk]||0)+mi(r.distance||0);});
+    const wks=Object.keys(wkB).sort();
+    barChart('chart-weekly2',wks.map(w=>sd(w)),wks.map(w=>+wkB[w].toFixed(2)),'rgba(0,196,176,.55)');
+  },180);
 
   // Recent runs (7 days)
   const recent=runs.filter(r=>(new Date()-new Date(r.startTimeLocal))<7*864e5);
@@ -2176,11 +2224,14 @@ async function renderNextRun(today,wellness,runs){
     </div>
   </div>`;
 
-  // Charts
-  const last10r=runs.slice(0,10).reverse();
-  const lb=last10r.map(r=>sd(r.startTimeLocal?.slice(0,10)));
-  lineChart('chart-pace-trend',lb,[{label:'Pace',data:last10r.map(r=>r.averageSpeed?+paceNum(r.averageSpeed).toFixed(2):null),borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.08)',fill:true}],{reverse:true});
-  lineChart('chart-hr-trend',lb,[{label:'HR',data:last10r.map(r=>r.averageHR?Math.round(r.averageHR):null),borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.08)',fill:true}]);
+  timeToggle('chart-pace-trend',(days)=>{
+    const r=runs.filter(r=>r.averageSpeed&&new Date(r.startTimeLocal)>=cutoff(days)).sort((a,b)=>a.startTimeLocal.localeCompare(b.startTimeLocal));
+    lineChart('chart-pace-trend',r.map(x=>sd(x.startTimeLocal?.slice(0,10))),[{label:'Pace',data:r.map(x=>+paceNum(x.averageSpeed).toFixed(2)),borderColor:'#8b5cf6',backgroundColor:'rgba(139,92,246,.08)',fill:true}],{reverse:true});
+  },90);
+  timeToggle('chart-hr-trend',(days)=>{
+    const r=runs.filter(x=>x.averageHR&&new Date(x.startTimeLocal)>=cutoff(days)).sort((a,b)=>a.startTimeLocal.localeCompare(b.startTimeLocal));
+    lineChart('chart-hr-trend',r.map(x=>sd(x.startTimeLocal?.slice(0,10))),[{label:'HR',data:r.map(x=>Math.round(x.averageHR)),borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,.08)',fill:true}]);
+  },90);
 
   // ACR display
   const acrCol=acr>1.5?'#ef4444':acr>1.3?'#f97316':acr<0.8?'#8b5cf6':'#00c4b0';
@@ -2209,18 +2260,24 @@ function renderPRs(runs){
     ...(miSplits[0]?[{l:'Fastest 1-Mile Split',v:fmtSecs(miSplits[0].fastestSplit_1609)+'/mi',d:miSplits[0].startTimeLocal?.slice(0,10),sub:'your fastest mile'}]:[]),
   ];
   document.getElementById('pr-grid').innerHTML=prs.map(p=>`<div class="pr-card"><div class="pr-label">🏆 ${p.l}</div><div class="pr-val">${p.v}</div><div class="pr-date">${sd(p.d)} · ${p.sub}</div></div>`).join('');
-  const sr=runs.filter(r=>r.fastestSplit_1609).slice(0,20).reverse();
-  lineChart('chart-mile-splits',sr.map(r=>sd(r.startTimeLocal?.slice(0,10))),[{label:'Best 1-mi split (min)',data:sr.map(r=>+(r.fastestSplit_1609/60).toFixed(2)),borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.08)',fill:true}],{reverse:true});
+  timeToggle('chart-mile-splits',(days)=>{
+    const sr=runs.filter(r=>r.fastestSplit_1609&&new Date(r.startTimeLocal)>=cutoff(days)).sort((a,b)=>a.startTimeLocal.localeCompare(b.startTimeLocal));
+    lineChart('chart-mile-splits',sr.map(r=>sd(r.startTimeLocal?.slice(0,10))),[{label:'Best 1-mi split (min)',data:sr.map(r=>+(r.fastestSplit_1609/60).toFixed(2)),borderColor:'#f59e0b',backgroundColor:'rgba(245,158,11,.08)',fill:true}],{reverse:true});
+  },365);
 }
 
 // ══ MONTHLY ════════════════════════════════════════════════════
 function renderMonthly(runs){
   const months={};
   runs.forEach(r=>{const mo=r.startTimeLocal?.slice(0,7);if(!mo)return;if(!months[mo])months[mo]={mi:0,count:0,mins:0};months[mo].mi+=mi(r.distance||0);months[mo].count++;months[mo].mins+=(r.duration||0)/60;});
-  const keys=Object.keys(months).sort();
-  const vals=keys.map(k=>+months[k].mi.toFixed(2));
-  const maxV=Math.max(...vals);
-  barChart('chart-monthly',keys.map(k=>{const[y,m]=k.split('-');return['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][+m-1];/*+' '+y.slice(2)*/}),vals,vals.map(v=>v===maxV?'rgba(0,196,176,1)':'rgba(0,196,176,.45)'));
+  timeToggle('chart-monthly',(days)=>{
+    const mb={};
+    runs.filter(r=>new Date(r.startTimeLocal)>=cutoff(days)).forEach(r=>{const mo=r.startTimeLocal?.slice(0,7);if(!mo)return;if(!mb[mo])mb[mo]=0;mb[mo]+=mi(r.distance||0);});
+    const ks=Object.keys(mb).sort();
+    const mv=Math.max(...Object.values(mb),1);
+    const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    barChart('chart-monthly',ks.map(k=>{const[,m]=k.split('-');return MN[+m-1];}),ks.map(k=>+mb[k].toFixed(2)),ks.map(k=>mb[k]===mv?'rgba(0,196,176,1)':'rgba(0,196,176,.45)'));
+  },null);
   document.getElementById('monthly-table').innerHTML=`<div style="font-size:.82rem;font-weight:700;margin-bottom:14px">Month by Month</div>`+[...keys].reverse().map(k=>{const{mi:miles,count,mins}=months[k];const[y,m]=k.split('-');const mn=['January','February','March','April','May','June','July','August','September','October','November','December'][+m-1]+' '+y;return`<div class="month-row"><div class="month-name">${mn}</div><div class="month-bar-bg"><div class="month-bar-fill" style="width:${maxV>0?miles/maxV*100:0}%"></div></div><div class="month-stats">${miles.toFixed(1)} mi · ${count} run${count!==1?'s':''}</div></div>`;}).join('');
 }
 
@@ -2260,8 +2317,10 @@ function renderForm(runs){
   if(r.avgPower)rows.push(['Running Power',`${Math.round(r.avgPower)} W`,'','','Useful for comparing effort on any terrain.']);
   document.getElementById('form-metrics').innerHTML=`<div style="font-size:.82rem;font-weight:700;margin-bottom:12px">Latest Run: ${r.activityName} · ${r.startTimeLocal?.slice(0,10)}</div>`+rows.map(([l,v,t,c,note])=>`<div class="metric-row"><div class="mr-left"><div class="mr-label">${l}</div><div class="mr-note">${note}</div></div><div class="mr-right"><div class="mr-val">${v}</div>${t?`<span class="rating r-${c}">${t}</span>`:''}</div></div>`).join('');
 
-  const last15=runs.slice(0,15).filter(r=>r.averageRunningCadenceInStepsPerMinute).reverse();
-  lineChart('chart-cad-form',last15.map(r=>sd(r.startTimeLocal?.slice(0,10))),[{label:'Cadence (spm)',data:last15.map(r=>Math.round(r.averageRunningCadenceInStepsPerMinute)),borderColor:'#f97316',backgroundColor:'rgba(249,115,22,.08)',fill:true},{label:'Goal (170)',data:last15.map(()=>170),borderColor:'#00c4b0',borderDash:[4,4],borderWidth:1.5,pointRadius:0}],{yMin:155,yMax:185});
+  timeToggle('chart-cad-form',(days)=>{
+    const cc=runs.filter(r=>r.averageRunningCadenceInStepsPerMinute&&new Date(r.startTimeLocal)>=cutoff(days)).sort((a,b)=>a.startTimeLocal.localeCompare(b.startTimeLocal));
+    lineChart('chart-cad-form',cc.map(r=>sd(r.startTimeLocal?.slice(0,10))),[{label:'Cadence (spm)',data:cc.map(r=>Math.round(r.averageRunningCadenceInStepsPerMinute)),borderColor:'#f97316',backgroundColor:'rgba(249,115,22,.08)',fill:true},{label:'Goal (170)',data:cc.map(()=>170),borderColor:'#00c4b0',borderDash:[4,4],borderWidth:1.5,pointRadius:0}],{yMin:155,yMax:185});
+  },180);
 
   // ── CADENCE COACHING SECTION ──────────────────────────────────────────
   const gap170=Math.max(0,170-(avgCad||cad||0));
@@ -2437,7 +2496,10 @@ function renderSleep(today,wellness,runs){
   // Sleep chart — needs to run after DOM is updated
   setTimeout(()=>{
     const sw=sleepDays.filter(w=>w.sleep_seconds).slice(0,14).reverse();
-    barChart('chart-sleep-bar',sw.map(w=>sd(w.date)),sw.map(w=>+(w.sleep_seconds/3600).toFixed(1)),sw.map(w=>w.sleep_seconds>=25200?'rgba(0,196,176,.8)':w.sleep_seconds>=21600?'rgba(245,158,11,.8)':'rgba(239,68,68,.8)'),{yMin:0});
+    timeToggle('chart-sleep-bar',(days)=>{
+      const sb=wellness.filter(w=>w.sleep_seconds&&new Date(w.date)>=cutoff(days)).sort((a,b)=>a.date.localeCompare(b.date));
+      barChart('chart-sleep-bar',sb.map(w=>sd(w.date)),sb.map(w=>+(w.sleep_seconds/3600).toFixed(1)),sb.map(w=>w.sleep_seconds>=25200?'rgba(0,196,176,.8)':w.sleep_seconds>=21600?'rgba(245,158,11,.8)':'rgba(239,68,68,.8)'),{yMin:0});
+    },90);
   },50);
 }
 

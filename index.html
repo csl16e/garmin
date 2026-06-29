@@ -480,6 +480,62 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 
 /* Accent preview bar */
 .accent-preview { height:4px; border-radius:2px; margin-top:8px; background:linear-gradient(90deg, var(--teal), var(--teal2)); box-shadow:0 0 8px var(--teal-glow); }
+
+/* ── Strava-style run cards ─────────────────────────────── */
+.strava-card { display:flex; align-items:center; gap:0; padding:14px 18px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .15s; }
+.strava-card:last-child { border-bottom:none; }
+.strava-card:hover { background:rgba(255,255,255,.03); }
+.strava-card:active { background:rgba(255,255,255,.06); }
+.sc-left { display:flex; flex-direction:column; gap:2px; flex:1; min-width:0; }
+.sc-name { font-size:.88rem; font-weight:700; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sc-meta { font-size:.7rem; color:var(--muted); margin-top:1px; }
+.sc-stats { display:flex; gap:18px; margin-top:8px; flex-shrink:0; }
+.sc-stat { text-align:center; }
+.sc-stat-val { font-size:1rem; font-weight:800; color:var(--text); line-height:1.1; }
+.sc-stat-lbl { font-size:.58rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-top:1px; }
+.sc-arrow { color:var(--dim); font-size:.75rem; margin-left:10px; flex-shrink:0; }
+.sc-dist { font-size:1.4rem; font-weight:900; color:var(--teal); line-height:1; margin-right:18px; text-align:right; flex-shrink:0; }
+.sc-dist-lbl { font-size:.58rem; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; }
+
+/* ── Month group headers ─────────────────────────────────── */
+.month-group-hdr { padding:10px 18px 6px; font-size:.65rem; font-weight:800; text-transform:uppercase; letter-spacing:.12em; color:var(--teal); background:rgba(0,196,176,.04); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.month-group-hdr .mgh-count { font-size:.62rem; color:var(--muted); font-weight:600; letter-spacing:0; text-transform:none; }
+
+/* ── Mobile-first responsive overhaul ───────────────────── */
+@media (max-width:768px) {
+  :root { --sw:0px; }
+  .sidebar { display:none !important; }
+  .main { margin-left:0 !important; padding:0 0 70px 0 !important; }
+  .top-nav { padding:10px 14px !important; }
+  .page { padding:12px 14px 14px !important; }
+  .two-col, .three-col { grid-template-columns:1fr !important; gap:10px !important; }
+  .chart-card { border-radius:10px !important; }
+  .chart-wrap { height:140px !important; }
+  .mini-card { padding:12px 14px !important; }
+  .mc-val { font-size:1.4rem !important; }
+  .oh-right { display:none !important; }
+  .rps { padding:10px 14px !important; }
+  .rps-val { font-size:1.3rem !important; }
+  .sc-stats { gap:12px; }
+  .sc-stat-val { font-size:.9rem; }
+  .sc-dist { font-size:1.2rem; margin-right:10px; }
+  .cc-title { font-size:.82rem !important; }
+  .mob-nav { display:flex !important; }
+  .run-detail .rd-grid { grid-template-columns:repeat(2,1fr) !important; }
+  .settings-panel { width:100% !important; }
+  .global-top-nav-inner { padding:8px 14px !important; }
+  #overview-cards { grid-template-columns:repeat(2,1fr) !important; }
+  .overview-hero { padding:12px 14px !important; }
+}
+@media (min-width:769px) and (max-width:1100px) {
+  :root { --sw:200px; }
+  .nav-label { font-size:.72rem; }
+  .three-col { grid-template-columns:1fr 1fr !important; }
+}
+@media (min-width:1400px) {
+  .main { max-width:1200px; margin-left:calc(var(--sw) + max(0px,(100vw - var(--sw) - 1200px)/2)); }
+}
+
 </style>
 </head>
 <body>
@@ -616,10 +672,21 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
       <div class="cc-sub">Click any run for details</div>
       <div id="recent-runs-list"></div>
     </div>
-    <div class="chart-card">
-      <div class="cc-top"><div class="cc-title">All Runs</div><span class="cc-badge" id="all-runs-badge"></span></div>
-      <div class="cc-sub"></div>
+    <div class="chart-card" id="all-runs-card">
+      <div class="cc-top">
+        <div class="cc-title">All Runs</div>
+        <span class="cc-badge" id="all-runs-badge"></span>
+        <div style="display:flex;gap:6px;margin-left:auto">
+          <button class="mt-btn active" id="view-btn-month" onclick="setRunView('month')">By Month</button>
+          <button class="mt-btn" id="view-btn-list" onclick="setRunView('list')">List</button>
+        </div>
+      </div>
       <div id="all-runs-list"></div>
+      <div id="all-runs-pagination" style="display:flex;align-items:center;justify-content:center;gap:10px;padding:14px 0;display:none">
+        <button class="mt-btn" id="runs-prev" onclick="runsPage(-1)">← Prev</button>
+        <span id="runs-page-label" style="font-size:.75rem;color:var(--muted)"></span>
+        <button class="mt-btn" id="runs-next" onclick="runsPage(1)">Next →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -928,22 +995,89 @@ function hideRunDetail(){
 }
 
 let _RUNS_CACHE = [];
-function runItem(r,showIcon=true){ r=applyEdits(r);
+let _runView = 'month'; // 'month' or 'list'
+let _runPage = 0;
+const _RUNS_PER_PAGE = 50;
+
+function runItem(r){ r=applyEdits(r);
   const idx = _RUNS_CACHE.findIndex(x=>x.activityId===r.activityId);
   const ref = idx>=0 ? idx : (_RUNS_CACHE.push(r)-1);
-  const isWalk=r.activityType?.typeKey==='walking'||r.activityType?.typeKey==='treadmill_running';
-  const badges=[r.pr?'<span class="badge b-yellow">PR</span>':'',mi(r.distance||0)>4?'<span class="badge b-purple">Long</span>':''].filter(Boolean).join(' ');
-  return`<div class="run-list-item" onclick="showRunDetail(_RUNS_CACHE[${ref}])">
-    <div class="rli-icon${isWalk?' walk':''}">🏃</div>
-    <div class="rli-main">
-      <div class="rli-top">${r.activityName} ${badges}</div>
-      <div class="rli-meta">${r.locationName?'📍 '+r.locationName+' · ':''}${r.startTimeLocal?.slice(0,10)} · ${fmtDur(r.duration)} · ${r.averageHR?Math.round(r.averageHR)+' bpm':''}</div>
+  const isPR = r.pr;
+  const isLong = mi(r.distance||0) >= 6;
+  const badges = [isPR?'<span class="badge b-yellow">PR</span>':'', isLong?'<span class="badge b-purple">Long</span>':''].filter(Boolean).join('');
+  const dateStr = r.startTimeLocal ? new Date(r.startTimeLocal).toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric'}) : '';
+  return`<div class="strava-card" onclick="showRunDetail(_RUNS_CACHE[${ref}])">
+    <div class="sc-left">
+      <div class="sc-name">${r.activityName||'Run'} ${badges}</div>
+      <div class="sc-meta">${dateStr}${r.locationName?' · 📍 '+r.locationName:''}</div>
+      <div class="sc-stats">
+        <div class="sc-stat"><div class="sc-stat-val">${fmtPace(r.averageSpeed)}</div><div class="sc-stat-lbl">Pace</div></div>
+        <div class="sc-stat"><div class="sc-stat-val">${fmtDur(r.duration)}</div><div class="sc-stat-lbl">Time</div></div>
+        ${r.averageHR?`<div class="sc-stat"><div class="sc-stat-val">${Math.round(r.averageHR)}</div><div class="sc-stat-lbl">Avg HR</div></div>`:''}
+        ${r.elevationGain>5?`<div class="sc-stat"><div class="sc-stat-val">${Math.round(r.elevationGain*3.281)}ft</div><div class="sc-stat-lbl">Elev</div></div>`:''}
+      </div>
     </div>
-    <div class="rli-right">
-      <div class="rli-dist">${fmtMi(r.distance,2)}</div>
-      <div class="rli-pace">${fmtPace(r.averageSpeed)}</div>
+    <div style="text-align:right;flex-shrink:0;margin-left:14px">
+      <div class="sc-dist">${mi(r.distance||0).toFixed(2)}</div>
+      <div class="sc-dist-lbl">miles</div>
     </div>
+    <div class="sc-arrow">›</div>
   </div>`;
+}
+
+function setRunView(v) {
+  _runView = v;
+  _runPage = 0;
+  document.getElementById('view-btn-month').classList.toggle('active', v==='month');
+  document.getElementById('view-btn-list').classList.toggle('active', v==='list');
+  renderAllRuns(_RUNS_CACHE);
+}
+
+function runsPage(dir) {
+  const total = Math.ceil(_RUNS_CACHE.length / _RUNS_PER_PAGE);
+  _runPage = Math.max(0, Math.min(_runPage + dir, total - 1));
+  renderAllRuns(_RUNS_CACHE);
+  document.getElementById('all-runs-card')?.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function renderAllRuns(runs) {
+  const list = document.getElementById('all-runs-list');
+  const pag = document.getElementById('all-runs-pagination');
+  if(!list) return;
+
+  if(_runView === 'month') {
+    // Group by YYYY-MM
+    const groups = {};
+    runs.forEach(r => {
+      const key = (r.startTimeLocal||'').slice(0,7);
+      if(!groups[key]) groups[key] = [];
+      groups[key].push(r);
+    });
+    const keys = Object.keys(groups).sort().reverse();
+    list.innerHTML = keys.map(k => {
+      const [y,m] = k.split('-');
+      const label = new Date(+y, +m-1, 1).toLocaleDateString('en-US',{month:'long',year:'numeric'});
+      const totalMi = groups[k].reduce((s,r)=>s+mi(r.distance||0),0);
+      return `<div class="month-group-hdr"><span>${label}</span><span class="mgh-count">${groups[k].length} runs · ${totalMi.toFixed(1)} mi</span></div>` +
+        groups[k].map(r=>runItem(r)).join('');
+    }).join('');
+    if(pag) pag.style.display = 'none';
+  } else {
+    // Paginated list
+    const total = Math.ceil(runs.length / _RUNS_PER_PAGE);
+    const start = _runPage * _RUNS_PER_PAGE;
+    const page = runs.slice(start, start + _RUNS_PER_PAGE);
+    list.innerHTML = page.map(r=>runItem(r)).join('');
+    if(pag) {
+      pag.style.display = runs.length > _RUNS_PER_PAGE ? 'flex' : 'none';
+      const lbl = document.getElementById('runs-page-label');
+      if(lbl) lbl.textContent = `Page ${_runPage+1} of ${total} · runs ${start+1}–${Math.min(start+_RUNS_PER_PAGE, runs.length)}`;
+      const prev = document.getElementById('runs-prev');
+      const next = document.getElementById('runs-next');
+      if(prev) prev.disabled = _runPage === 0;
+      if(next) next.disabled = _runPage >= total-1;
+    }
+  }
 }
 
 // ══ LOAD ═══════════════════════════════════════════════════════
@@ -1119,11 +1253,11 @@ function renderRunning(today,wellness,runs){
 
   // Recent runs (7 days)
   const recent=runs.filter(r=>(new Date()-new Date(r.startTimeLocal))<7*864e5);
-  document.getElementById('recent-runs-list').innerHTML=recent.length?recent.map(r=>runItem(r)).join(''):'<div class="no-data">No runs in the last 7 days.</div>';
+  document.getElementById('recent-runs-list').innerHTML=recent.length?recent.map(r=>runItem(r)).join(''):'<div class="no-data" style="padding:18px;color:var(--muted);font-size:.8rem">No runs in the last 7 days.</div>';
   // All runs
   document.getElementById('all-runs-badge').textContent=`${runs.length} runs`;
   _RUNS_CACHE=runs.map(r=>applyEdits(r));
-  document.getElementById('all-runs-list').innerHTML=runs.slice(0,25).map(r=>runItem(r)).join('');
+  renderAllRuns(_RUNS_CACHE);
 }
 
 // ══ NEXT RUN ═══════════════════════════════════════════════════

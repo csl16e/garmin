@@ -89,6 +89,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;backgrou
 .card-p{padding:18px 20px}
 .grid-auto{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px}
 .mini-card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;position:relative;overflow:hidden}
+.ov-pill{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:5px 12px;font-size:.78rem;color:var(--muted);white-space:nowrap}
 .mc-label{font-size:.58rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:5px}
 .mc-icon{font-size:.7rem}
 .mc-val{font-size:1.55rem;font-weight:900;line-height:1;color:var(--text)}
@@ -764,6 +765,11 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 .shoe-bar-fill{height:100%;border-radius:2px;background:var(--teal)}
 .shoe-bar-fill.warn{background:#f59e0b}
 .shoe-bar-fill.danger{background:#ef4444}
+.route-thumb{background:var(--surface);border-radius:10px;padding:8px;cursor:pointer;transition:transform .15s,box-shadow .15s;border:1px solid var(--border)}
+.route-thumb:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.route-thumb svg{display:block;width:100%;height:auto}
+.route-thumb .rt-meta{margin-top:6px;font-size:.72rem;color:var(--muted);text-align:center;line-height:1.4}
+.route-thumb .rt-date{font-size:.68rem;color:var(--dim)}
 
 /* ── Pin / Share ─────────────────────────────────── */
 .pin-btn{background:none;border:none;cursor:pointer;font-size:.9rem;opacity:.4;transition:opacity .15s,transform .15s;padding:2px 4px}
@@ -819,6 +825,11 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
     <button class="nav-btn" onclick="showPage('monthly',this)"><span class="ni">📅</span> Monthly Log</button>
     <button class="nav-btn" onclick="showPage('calendar',this)"><span class="ni">📆</span> Calendar</button>
     <button class="nav-btn" onclick="showPage('race',this)"><span class="ni">🏅</span> Race Goal</button>
+    <button class="nav-btn" onclick="showPage('routes',this)"><span class="ni">🗺️</span> Route Gallery</button>
+  </div>
+  <div class="nav-group">
+    <div class="nav-label">Analysis</div>
+    <button class="nav-btn" onclick="showPage('weather',this)"><span class="ni">🌡️</span> Weather & Pace</button>
   </div>
   <div class="nav-group">
     <div class="nav-label">Health</div>
@@ -829,7 +840,9 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
   </div>
   <div class="sidebar-foot">
     <div><span class="sync-dot"></span>Last sync: <span id="last-sync">—</span></div>
+    <div style="margin-top:4px">Sleep/readiness data: <span id="last-wellness-sync">—</span></div>
     <div style="margin-top:4px">Auto-sync daily · 6am CT</div>
+    <a href="https://github.com/csl16e/garmin/actions/workflows/garmin-sync.yml" target="_blank" rel="noopener" style="display:block;margin-top:8px;text-align:center;background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--teal);text-decoration:none;font-size:.72rem;font-weight:600">↻ Force Sync Now</a>
   </div>
 </aside>
 
@@ -846,6 +859,8 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
     <button class="mob-drawer-btn" onclick="showPage('sleep',null);closeMobMore()"><span>🌙</span>Sleep</button>
     <button class="mob-drawer-btn" onclick="showPage('calendar',null);closeMobMore()"><span>📆</span>Calendar</button>
     <button class="mob-drawer-btn" onclick="showPage('race',null);closeMobMore()"><span>🏅</span>Race Goal</button>
+    <button class="mob-drawer-btn" onclick="showPage('routes',null);closeMobMore()"><span>🗺️</span>Routes</button>
+    <button class="mob-drawer-btn" onclick="showPage('weather',null);closeMobMore()"><span>🌡️</span>Weather</button>
     <button class="mob-drawer-btn" onclick="openSettings();closeMobMore()"><span>⚙️</span>Settings</button>
     <button class="mob-drawer-btn" onclick="closeMobMore()"><span>✕</span>Close</button>
   </div>
@@ -891,55 +906,58 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 <div class="pages-wrap" id="pages-wrap">
 <!-- ═══ OVERVIEW ═══════════════════════════════════════════════════════ -->
 <div class="page active" id="page-overview">
+  <div id="shoe-alerts"></div>
   <div class="overview-hero" id="hero"></div>
-  <div class="grid-auto" id="overview-cards"></div>
 
-  <!-- Draggable overview sections -->
+  <!-- Compact stats row — always visible -->
+  <div id="overview-cards" style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px"></div>
+
+  <!-- Collapsible sections -->
   <div id="overview-sections">
 
     <div class="ov-section" data-section="thisweek">
       <div class="chart-card">
-        <div class="cc-top">
-          <div class="cc-title">This Week</div><span class="cc-badge" id="week-badge"></span>
-          <span class="drag-handle" title="Drag to reorder">⠿</span>
+        <div class="cc-top" onclick="toggleOvSection('thisweek')" style="cursor:pointer">
+          <div class="cc-title">This Week</div>
+          <span class="cc-badge" id="week-badge"></span>
+          <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="thisweek-chevron">▼ show</span>
         </div>
-        <div id="week-log"></div>
-      </div>
-    </div>
-
-    <div class="ov-section" data-section="goalring">
-      <div class="two-col">
-        <div class="chart-card">
-          <div class="cc-top"><div class="cc-title">Weekly Mileage Goal</div><span class="drag-handle" title="Drag to reorder">⠿</span></div>
-          <div id="goal-ring-section"></div>
-        </div>
-        <div class="chart-card">
-          <div class="cc-top"><div class="cc-title">Year in Review</div><span id="year-review-label" class="cc-badge"></span></div>
-          <div id="year-stats-section"></div>
-        </div>
+        <div id="week-log" style="display:none"></div>
       </div>
     </div>
 
     <div class="ov-section" data-section="charts">
-      <div class="two-col">
-        <div class="chart-card">
-          <div class="cc-top"><div class="cc-title">Weekly Mileage</div><span class="cc-badge">Last 10 wks</span></div>
-          <div class="cc-sub">Miles per week</div>
-          <div class="chart-wrap" style="height:160px"><canvas id="chart-weekly"></canvas></div>
+      <div class="chart-card">
+        <div class="cc-top" onclick="toggleOvSection('charts')" style="cursor:pointer">
+          <div class="cc-title">Charts</div>
+          <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="charts-chevron">▼ show</span>
         </div>
-        <div class="chart-card">
-          <div class="cc-top"><div class="cc-title">Training Readiness</div></div>
-          <div class="cc-sub">Daily score — last 14 days</div>
-          <div class="chart-wrap" style="height:160px"><canvas id="chart-readiness"></canvas></div>
+        <div id="ov-charts-body" style="display:none">
+          <div class="two-col" style="margin-top:12px">
+            <div>
+              <div class="cc-sub">Weekly Mileage</div>
+              <div class="chart-wrap" style="height:140px"><canvas id="chart-weekly"></canvas></div>
+            </div>
+            <div>
+              <div class="cc-sub">Training Readiness</div>
+              <div class="chart-wrap" style="height:140px"><canvas id="chart-readiness"></canvas></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
 
     <div class="ov-section" data-section="heatmap">
       <div class="chart-card">
-        <div class="cc-top"><div class="cc-title">Activity Heatmap</div><span class="cc-badge">Last 12 months</span><span class="drag-handle" title="Drag to reorder">⠿</span></div>
-        <div class="cc-sub">Each square = one day · darker = more miles</div>
-        <div class="heatmap-wrap"><div id="heatmap-grid"></div></div>
+        <div class="cc-top" onclick="toggleOvSection('heatmap')" style="cursor:pointer">
+          <div class="cc-title">Activity Heatmap</div>
+          <span class="cc-badge">Last 12 months</span>
+          <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="heatmap-chevron">▼ show</span>
+        </div>
+        <div id="ov-heatmap-body" style="display:none">
+          <div class="cc-sub" style="margin-top:4px">Each square = one day · darker = more miles</div>
+          <div class="heatmap-wrap"><div id="heatmap-grid"></div></div>
+        </div>
       </div>
     </div>
 
@@ -948,23 +966,32 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 
 <!-- ═══ NEXT RUN ═══════════════════════════════════════════════════════ -->
 <div class="page" id="page-next">
+  <div id="next-run-date" style="font-size:.78rem;color:var(--muted);margin-bottom:10px"></div>
   <div id="next-run-card"></div>
-  <div class="two-col">
-    <div class="chart-card">
-      <div class="cc-top"><div class="cc-title">Recent Pace</div></div>
-      <div class="cc-sub">Min/mile — last 10 runs</div>
-      <div class="chart-wrap" style="height:150px"><canvas id="chart-pace-trend"></canvas></div>
+  <div class="chart-card" style="margin-top:12px">
+    <div class="cc-top" onclick="toggleSection('next-charts')" style="cursor:pointer">
+      <div class="cc-title">Trends &amp; Load</div>
+      <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="next-charts-chevron">▼ show</span>
     </div>
-    <div class="chart-card">
-      <div class="cc-top"><div class="cc-title">Heart Rate Trend</div></div>
-      <div class="cc-sub">Avg bpm — last 10 runs</div>
-      <div class="chart-wrap" style="height:150px"><canvas id="chart-hr-trend"></canvas></div>
+    <div id="next-charts-body" style="display:none">
+      <div class="two-col" style="margin-top:12px">
+        <div class="chart-card">
+          <div class="cc-top"><div class="cc-title">Recent Pace</div></div>
+          <div class="cc-sub">Min/mile — last 10 runs</div>
+          <div class="chart-wrap" style="height:150px"><canvas id="chart-pace-trend"></canvas></div>
+        </div>
+        <div class="chart-card">
+          <div class="cc-top"><div class="cc-title">Heart Rate Trend</div></div>
+          <div class="cc-sub">Avg bpm — last 10 runs</div>
+          <div class="chart-wrap" style="height:150px"><canvas id="chart-hr-trend"></canvas></div>
+        </div>
+      </div>
+      <div class="chart-card" style="margin-top:12px">
+        <div class="cc-top"><div class="cc-title">Training Load</div><span class="cc-badge" id="acr-badge"></span></div>
+        <div class="cc-sub">Acute (7-day) vs chronic (28-day) — industry-standard injury risk metric</div>
+        <div id="load-display"></div>
+      </div>
     </div>
-  </div>
-  <div class="chart-card">
-    <div class="cc-top"><div class="cc-title">Training Load</div><span class="cc-badge" id="acr-badge"></span></div>
-    <div class="cc-sub">Acute (7-day) vs chronic (28-day) — industry-standard injury risk metric</div>
-    <div id="load-display"></div>
   </div>
 </div>
 
@@ -977,90 +1004,129 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
       <div class="rps"><div class="rps-label">Easy Pace</div><div class="rps-val" id="rps-easy">—</div><div class="rps-sub">at &lt;145 bpm</div></div>
     </div>
     <div class="chart-card" style="margin-bottom:12px">
-      <div class="cc-top"><div class="cc-title">Running Fitness — VO2 Max Trend</div></div>
-      <div class="cc-sub">Predicted by Garmin · improving trend = fitness gains</div>
-      <div class="chart-wrap" style="height:180px"><canvas id="chart-vo2-trend"></canvas></div>
-    </div>
-    <div class="two-col">
-      <div class="chart-card">
-        <div class="cc-top"><div class="cc-title">Aerobic Engine · Easy Pace</div></div>
-        <div class="cc-sub">Your comfortable pace over time</div>
-        <div class="chart-wrap" style="height:150px"><canvas id="chart-easy-pace"></canvas></div>
+      <div class="cc-top" onclick="toggleSection('run-vo2')" style="cursor:pointer">
+        <div class="cc-title">Running Fitness — VO2 Max Trend</div>
+        <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="run-vo2-chevron">▼ show</span>
       </div>
-      <div class="chart-card">
-        <div class="cc-top"><div class="cc-title">Weekly Run Volume</div></div>
-        <div class="cc-sub">Miles per week · last 90 days</div>
-        <div class="chart-wrap" style="height:150px"><canvas id="chart-weekly2"></canvas></div>
+      <div id="run-vo2-body" style="display:none">
+        <div class="cc-sub">Predicted by Garmin · improving trend = fitness gains</div>
+        <div class="chart-wrap" style="height:180px"><canvas id="chart-vo2-trend"></canvas></div>
       </div>
     </div>
-    <div class="chart-card">
-      <div class="cc-top"><div class="cc-title">Recent Runs · Last 7 Days</div></div>
-      <div class="cc-sub">Click any run for details</div>
-      <div id="recent-runs-list"></div>
+    <div class="chart-card" style="margin-bottom:12px">
+      <div class="cc-top" onclick="toggleSection('run-charts')" style="cursor:pointer">
+        <div class="cc-title">Pace &amp; Volume Charts</div>
+        <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="run-charts-chevron">▼ show</span>
+      </div>
+      <div id="run-charts-body" style="display:none">
+        <div class="two-col" style="margin-top:12px">
+          <div class="chart-card">
+            <div class="cc-top"><div class="cc-title">Aerobic Engine · Easy Pace</div></div>
+            <div class="cc-sub">Your comfortable pace over time</div>
+            <div class="chart-wrap" style="height:150px"><canvas id="chart-easy-pace"></canvas></div>
+          </div>
+          <div class="chart-card">
+            <div class="cc-top"><div class="cc-title">Weekly Run Volume</div></div>
+            <div class="cc-sub">Miles per week · last 90 days</div>
+            <div class="chart-wrap" style="height:150px"><canvas id="chart-weekly2"></canvas></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-card" style="margin-bottom:12px">
+      <div class="cc-top" onclick="toggleSection('run-recent')" style="cursor:pointer">
+        <div class="cc-title">Recent Runs · Last 7 Days</div>
+        <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="run-recent-chevron">▼ show</span>
+      </div>
+      <div id="run-recent-body" style="display:none">
+        <div class="cc-sub">Click any run for details</div>
+        <div id="recent-runs-list"></div>
+      </div>
     </div>
     <!-- Race Predictor -->
     <div class="chart-card" style="margin-bottom:12px">
-      <div class="cc-top"><div class="cc-title">🏁 Race Time Predictor</div></div>
-      <div class="cc-sub">Based on your VO2 Max and recent training</div>
-      <div id="race-predictor"></div>
+      <div class="cc-top" onclick="toggleSection('run-predictor')" style="cursor:pointer">
+        <div class="cc-title">🏁 Race Time Predictor</div>
+        <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="run-predictor-chevron">▼ show</span>
+      </div>
+      <div id="run-predictor-body" style="display:none">
+        <div class="cc-sub">Based on your VO2 Max and recent training</div>
+        <div id="race-predictor"></div>
+      </div>
     </div>
 
     <!-- Training Load -->
     <div class="chart-card" style="margin-bottom:12px">
-      <div class="cc-top"><div class="cc-title">Training Load</div><span class="cc-badge">Last 12 weeks</span></div>
-      <div class="cc-sub">Acute (7d) vs chronic (28d) load ratio — target 0.8–1.3</div>
-      <div class="chart-wrap" style="height:160px"><canvas id="chart-training-load"></canvas></div>
+      <div class="cc-top" onclick="toggleSection('run-load')" style="cursor:pointer">
+        <div class="cc-title">Training Load</div><span class="cc-badge">Last 12 weeks</span>
+        <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="run-load-chevron">▼ show</span>
+      </div>
+      <div id="run-load-body" style="display:none">
+        <div class="cc-sub">Acute (7d) vs chronic (28d) load ratio — target 0.8–1.3</div>
+        <div class="chart-wrap" style="height:160px"><canvas id="chart-training-load"></canvas></div>
+      </div>
     </div>
 
     <!-- Run Comparison -->
     <div class="chart-card" style="margin-bottom:12px">
-      <div class="cc-top"><div class="cc-title">Compare Runs</div></div>
-      <div class="cc-sub">Pick two runs to compare side-by-side</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
-        <div>
-          <div style="font-size:.62rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em">Run A</div>
-          <select id="compare-a" class="goal-input" style="width:100%" onchange="updateComparison()"><option value="">Select run…</option></select>
-        </div>
-        <div>
-          <div style="font-size:.62rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em">Run B</div>
-          <select id="compare-b" class="goal-input" style="width:100%" onchange="updateComparison()"><option value="">Select run…</option></select>
-        </div>
+      <div class="cc-top" onclick="toggleSection('run-compare')" style="cursor:pointer">
+        <div class="cc-title">Compare Runs</div>
+        <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="run-compare-chevron">▼ show</span>
       </div>
-      <div id="comparison-result" style="margin-top:12px"></div>
+      <div id="run-compare-body" style="display:none">
+        <div class="cc-sub">Pick two runs to compare side-by-side</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px">
+          <div>
+            <div style="font-size:.62rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em">Run A</div>
+            <select id="compare-a" class="goal-input" style="width:100%" onchange="updateComparison()"><option value="">Select run…</option></select>
+          </div>
+          <div>
+            <div style="font-size:.62rem;color:var(--muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:.08em">Run B</div>
+            <select id="compare-b" class="goal-input" style="width:100%" onchange="updateComparison()"><option value="">Select run…</option></select>
+          </div>
+        </div>
+        <div id="comparison-result" style="margin-top:12px"></div>
+      </div>
     </div>
 
     <!-- Shoe Tracker -->
     <div class="chart-card" style="margin-bottom:12px">
-      <div class="cc-top">
+      <div class="cc-top" onclick="toggleSection('run-shoes')" style="cursor:pointer">
         <div class="cc-title">👟 Shoe Tracker</div>
-        <button class="mt-btn" onclick="addShoe()" style="margin-left:auto">+ Add Shoe</button>
+        <button class="mt-btn" onclick="event.stopPropagation();addShoe()" style="margin-left:auto">+ Add Shoe</button>
+        <span style="color:var(--muted);font-size:.75rem;margin-left:8px" id="run-shoes-chevron">▼ show</span>
       </div>
-      <div class="cc-sub">Track mileage per pair · alert at 400 mi</div>
-      <div id="shoe-list" style="margin-top:10px;display:flex;flex-direction:column;gap:8px"></div>
+      <div id="run-shoes-body" style="display:none">
+        <div class="cc-sub">Track mileage per pair · alert at 400 mi</div>
+        <div id="shoe-list" style="margin-top:10px;display:flex;flex-direction:column;gap:8px"></div>
+      </div>
     </div>
 
         <div class="chart-card" id="all-runs-card">
-      <div class="cc-top" style="flex-wrap:wrap;gap:8px">
+      <div class="cc-top" onclick="toggleSection('run-all')" style="cursor:pointer;flex-wrap:wrap;gap:8px">
         <div class="cc-title">All Runs <span class="cc-badge" id="all-runs-badge" style="margin-left:6px"></span></div>
-        <div style="display:flex;gap:6px;align-items:center;margin-left:auto;flex-wrap:wrap">
+        <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap" onclick="event.stopPropagation()">
           <select id="runs-month-jump" onchange="runsJumpMonth(this.value)" style="background:var(--card2);border:1px solid var(--border2);color:var(--fg);border-radius:6px;padding:4px 8px;font-size:.75rem;cursor:pointer">
             <option value="">Jump to month…</option>
           </select>
         </div>
+        <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="run-all-chevron">▲ hide</span>
       </div>
-      <!-- Gmail-style toolbar -->
-      <div id="runs-toolbar" style="display:flex;align-items:center;justify-content:space-between;padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:2px">
-        <span id="runs-page-label" style="font-size:.75rem;color:var(--muted)"></span>
-        <div style="display:flex;gap:4px">
-          <button class="runs-nav-btn" id="runs-prev" onclick="runsPage(-1)" title="Previous page">&#8249;</button>
-          <button class="runs-nav-btn" id="runs-next" onclick="runsPage(1)" title="Next page">&#8250;</button>
+      <div id="run-all-body">
+        <!-- Gmail-style toolbar -->
+        <div id="runs-toolbar" style="display:flex;align-items:center;justify-content:space-between;padding:8px 0 6px;border-bottom:1px solid var(--border);margin-bottom:2px">
+          <span id="runs-page-label" style="font-size:.75rem;color:var(--muted)"></span>
+          <div style="display:flex;gap:4px">
+            <button class="runs-nav-btn" id="runs-prev" onclick="runsPage(-1)" title="Previous page">&#8249;</button>
+            <button class="runs-nav-btn" id="runs-next" onclick="runsPage(1)" title="Next page">&#8250;</button>
+          </div>
         </div>
-      </div>
-      <div id="all-runs-list"></div>
-      <div id="runs-toolbar-bottom" style="display:none;align-items:center;justify-content:flex-end;padding:8px 0 2px;border-top:1px solid var(--border);margin-top:4px;gap:4px">
-        <span id="runs-page-label-b" style="font-size:.75rem;color:var(--muted);margin-right:4px"></span>
-        <button class="runs-nav-btn" id="runs-prev-b" onclick="runsPage(-1)">&#8249;</button>
-        <button class="runs-nav-btn" id="runs-next-b" onclick="runsPage(1)">&#8250;</button>
+        <div id="all-runs-list"></div>
+        <div id="runs-toolbar-bottom" style="display:none;align-items:center;justify-content:flex-end;padding:8px 0 2px;border-top:1px solid var(--border);margin-top:4px;gap:4px">
+          <span id="runs-page-label-b" style="font-size:.75rem;color:var(--muted);margin-right:4px"></span>
+          <button class="runs-nav-btn" id="runs-prev-b" onclick="runsPage(-1)">&#8249;</button>
+          <button class="runs-nav-btn" id="runs-next-b" onclick="runsPage(1)">&#8250;</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1070,38 +1136,77 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
 <div class="page" id="page-prs">
   <div class="pr-grid" id="pr-grid"></div>
   <div class="chart-card">
-    <div class="cc-top"><div class="cc-title">Best Mile Split — History</div></div>
-    <div class="cc-sub">Fastest 1-mile split per run</div>
-    <div class="chart-wrap" style="height:180px"><canvas id="chart-mile-splits"></canvas></div>
+    <div class="cc-top" onclick="toggleSection('prs-splits')" style="cursor:pointer">
+      <div class="cc-title">Best Mile Split — History</div>
+      <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="prs-splits-chevron">▼ show</span>
+    </div>
+    <div id="prs-splits-body" style="display:none">
+      <div class="cc-sub">Fastest 1-mile split per run</div>
+      <div class="chart-wrap" style="height:180px"><canvas id="chart-mile-splits"></canvas></div>
+    </div>
   </div>
 </div>
 
 <!-- ═══ MONTHLY ══════════════════════════════════════════════════════════ -->
 <div class="page" id="page-monthly">
   <div class="chart-card" style="margin-bottom:12px" id="year-comparison-card">
-    <div class="cc-top"><div class="cc-title">This Year vs Last Year</div></div>
-    <div id="year-compare-section"></div>
+    <div class="cc-top" onclick="toggleSection('monthly-compare')" style="cursor:pointer">
+      <div class="cc-title">This Year vs Last Year</div>
+      <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="monthly-compare-chevron">▼ show</span>
+    </div>
+    <div id="monthly-compare-body" style="display:none">
+      <div id="year-compare-section"></div>
+    </div>
+  </div>
+  <div class="chart-card" style="margin-bottom:12px">
+    <div class="cc-top" onclick="toggleSection('monthly-chart')" style="cursor:pointer">
+      <div class="cc-title">Miles Per Month</div>
+      <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="monthly-chart-chevron">▼ show</span>
+    </div>
+    <div id="monthly-chart-body" style="display:none">
+      <div class="cc-sub"></div>
+      <div class="chart-wrap" style="height:200px"><canvas id="chart-monthly"></canvas></div>
+    </div>
   </div>
   <div class="chart-card">
-    <div class="cc-top"><div class="cc-title">Miles Per Month</div></div>
-    <div class="cc-sub"></div>
-    <div class="chart-wrap" style="height:200px"><canvas id="chart-monthly"></canvas></div>
+    <div class="cc-top" onclick="toggleSection('monthly-table-wrap')" style="cursor:pointer">
+      <div class="cc-title">Monthly Table</div>
+      <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="monthly-table-wrap-chevron">▲ hide</span>
+    </div>
+    <div id="monthly-table-wrap-body">
+      <div id="monthly-table"></div>
+    </div>
   </div>
-  <div class="chart-card" id="monthly-table"></div>
 </div>
 
 <!-- ═══ HEART ════════════════════════════════════════════════════════════ -->
 <div class="page" id="page-heart">
   <div class="grid-auto" id="heart-cards"></div>
-  <div class="two-col">
-    <div class="chart-card">
-      <div class="cc-top"><div class="cc-title">HR Zones — Latest Run</div></div>
-      <div class="cc-sub">Time in each zone</div>
-      <div class="chart-wrap" style="height:190px"><canvas id="chart-zones-doughnut"></canvas></div>
+  <div class="chart-card" style="margin-bottom:12px">
+    <div class="cc-top" onclick="toggleSection('heart-charts')" style="cursor:pointer">
+      <div class="cc-title">HR Zones &amp; VO2</div>
+      <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="heart-charts-chevron">▼ show</span>
     </div>
-    <div class="chart-card" id="vo2-section"></div>
+    <div id="heart-charts-body" style="display:none">
+      <div class="two-col" style="margin-top:12px">
+        <div class="chart-card">
+          <div class="cc-top"><div class="cc-title">HR Zones — Latest Run</div></div>
+          <div class="cc-sub">Time in each zone</div>
+          <div class="chart-wrap" style="height:190px"><canvas id="chart-zones-doughnut"></canvas></div>
+        </div>
+        <div class="chart-card" id="vo2-section"></div>
+      </div>
+    </div>
   </div>
-  <div class="chart-card" id="zone-guide"></div>
+  <div class="chart-card">
+    <div class="cc-top" onclick="toggleSection('heart-guide')" style="cursor:pointer">
+      <div class="cc-title">Zone Guide</div>
+      <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="heart-guide-chevron">▼ show</span>
+    </div>
+    <div id="heart-guide-body" style="display:none">
+      <div id="zone-guide"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══ FORM ════════════════════════════════════════════════════════════ -->
@@ -1109,11 +1214,24 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
   <div id="form-tip" style="background:rgba(0,196,176,.08);border:1px solid rgba(0,196,176,.2);border-radius:var(--radius);padding:12px 16px;font-size:.75rem;color:var(--text);line-height:1.6;margin-bottom:12px"></div>
   <div class="chart-card" id="form-metrics"></div>
   <div class="chart-card">
-    <div class="cc-top"><div class="cc-title">Cadence History</div></div>
-    <div class="cc-sub">Steps per minute — goal 170+ spm</div>
-    <div class="chart-wrap" style="height:160px"><canvas id="chart-cad-form"></canvas></div>
+    <div class="cc-top" onclick="toggleSection('form-cadence')" style="cursor:pointer">
+      <div class="cc-title">Cadence History</div>
+      <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="form-cadence-chevron">▼ show</span>
+    </div>
+    <div id="form-cadence-body" style="display:none">
+      <div class="cc-sub">Steps per minute — goal 170+ spm</div>
+      <div class="chart-wrap" style="height:160px"><canvas id="chart-cad-form"></canvas></div>
+    </div>
   </div>
-  <div class="chart-card" id="form-guide"></div>
+  <div class="chart-card">
+    <div class="cc-top" onclick="toggleSection('form-guide-wrap')" style="cursor:pointer">
+      <div class="cc-title">Form Guide</div>
+      <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="form-guide-wrap-chevron">▼ show</span>
+    </div>
+    <div id="form-guide-wrap-body" style="display:none">
+      <div id="form-guide"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ═══ GYM ══════════════════════════════════════════════════════════════ -->
@@ -1164,6 +1282,46 @@ canvas { filter: drop-shadow(0 0 6px rgba(0,196,176,.3)); }
   <div id="race-goal-container"></div>
 </div>
 
+<div class="page" id="page-routes">
+  <div class="page-header">
+    <div class="breadcrumb">Training</div>
+    <h1>Route Gallery</h1>
+    <p class="page-sub">Your run routes as GPS art</p>
+  </div>
+  <div id="route-filter" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+    <select id="route-year" onchange="renderRouteGallery()" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.82rem"></select>
+    <select id="route-month" onchange="renderRouteGallery()" style="background:var(--surface);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:6px 10px;font-size:.82rem">
+      <option value="">All months</option>
+      <option value="01">Jan</option><option value="02">Feb</option><option value="03">Mar</option>
+      <option value="04">Apr</option><option value="05">May</option><option value="06">Jun</option>
+      <option value="07">Jul</option><option value="08">Aug</option><option value="09">Sep</option>
+      <option value="10">Oct</option><option value="11">Nov</option><option value="12">Dec</option>
+    </select>
+    <label style="display:flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted)">
+      <input type="checkbox" id="route-gps-only" onchange="renderRouteGallery()" checked> GPS routes only
+    </label>
+  </div>
+  <div id="route-gallery" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px"></div>
+</div>
+
+<div class="page" id="page-weather">
+  <div class="page-header">
+    <div class="breadcrumb">Analysis</div>
+    <h1>Weather &amp; Conditions</h1>
+    <p class="page-sub">How temperature and effort affect your pace</p>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">Temperature vs Pace</div>
+    <p style="font-size:.78rem;color:var(--muted);margin:0 0 12px">Each dot is one run. Lower pace = faster. Only shows runs where Garmin recorded temperature.</p>
+    <div style="height:300px"><canvas id="chart-temp-pace"></canvas></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Heart Rate vs Pace (All Runs)</div>
+    <p style="font-size:.78rem;color:var(--muted);margin:0 0 12px">Shows the relationship between effort (HR) and speed across all runs. Dots closer to the bottom-right = faster at lower HR = better fitness.</p>
+    <div style="height:300px"><canvas id="chart-hr-pace"></canvas></div>
+  </div>
+</div>
+
 </div><!-- /pages-wrap -->
 </main>
 
@@ -1183,6 +1341,10 @@ const PAGE_META = {
   form:      { title:'Running Form',     sub:'Biomechanics + cadence coaching',                       breadcrumb:'Health' },
   gym:       { title:'Gym & Lifting',    sub:'Strength training program',                             breadcrumb:'Health' },
   sleep:     { title:'Sleep Analysis',   sub:'Sleep quality and how to improve it',                   breadcrumb:'Health' },
+  calendar:  { title:'Calendar',        sub:'Run calendar view',                                     breadcrumb:'Training' },
+  race:      { title:'Race Goal',        sub:'Track your goal race and training plan',                breadcrumb:'Training' },
+  routes:    { title:'Route Gallery',    sub:'Your run routes as GPS art',                            breadcrumb:'Training' },
+  weather:   { title:'Weather & Pace',   sub:'How temperature and effort affect your pace',            breadcrumb:'Analysis' },
 };
 
 let _navStack = [];
@@ -1198,7 +1360,7 @@ function showPage(id, btn, pushHistory=true) {
   document.querySelectorAll('.nav-btn').forEach(b=>{
     if(b.getAttribute('onclick')?.includes("'"+id+"'")) b.classList.add('active');
   });
-  const morePages = ['next','prs','monthly','form','gym','sleep','calendar','race'];
+  const morePages = ['next','prs','monthly','form','gym','sleep','calendar','race','routes','weather'];
   document.querySelectorAll('.mob-btn').forEach(b=>{
     const attr = b.getAttribute('onclick')||'';
     if(attr.includes("'"+id+"'")) b.classList.add('active');
@@ -1912,6 +2074,158 @@ function renderShoeTracker(runs){
       <button onclick="deleteShoe(${s.id})" style="background:none;border:none;cursor:pointer;color:var(--dim);font-size:.8rem;padding:4px">✕</button>
     </div>`;
   }).join('');
+  // Alert banner — shoes over 400mi
+  const alertEl = document.getElementById('shoe-alerts');
+  if (alertEl) {
+    const alerts = shoes.filter(s => {
+      const assigned = runs.filter(r => (s.assignedRuns||[]).includes(String(r.activityId)));
+      const miles = assigned.reduce((t,r)=>t+mi(r.distance||0),0);
+      return miles >= 400;
+    }).map(s => {
+      const assigned = runs.filter(r => (s.assignedRuns||[]).includes(String(r.activityId)));
+      const miles = assigned.reduce((t,r)=>t+mi(r.distance||0),0);
+      const pct = Math.min(miles/s.maxMi*100,100);
+      const icon = pct >= 100 ? '🔴' : '🟡';
+      const msg = pct >= 100 ? `${s.name} is past its limit (${miles.toFixed(0)} mi) — time to replace!` : `${s.name} is getting worn (${miles.toFixed(0)} / ${s.maxMi} mi)`;
+      return `<div style="display:flex;align-items:center;gap:8px;padding:8px 12px;background:${pct>=100?'rgba(239,68,68,.12)':'rgba(245,158,11,.12)'};border-radius:8px;font-size:.8rem;border-left:3px solid ${pct>=100?'#ef4444':'#f59e0b'}">${icon} ${msg}</div>`;
+    });
+    alertEl.innerHTML = alerts.length ? `<div style="display:flex;flex-direction:column;gap:6px;margin-bottom:12px">${alerts.join('')}</div>` : '';
+  }
+}
+
+function renderRouteGallery() {
+  const el = document.getElementById('route-gallery'); if (!el) return;
+  const yr = document.getElementById('route-year')?.value || '';
+  const mo = document.getElementById('route-month')?.value || '';
+  const gpsOnly = document.getElementById('route-gps-only')?.checked;
+
+  // Populate year select on first call
+  const yrSel = document.getElementById('route-year');
+  if (yrSel && !yrSel.options.length) {
+    const years = [...new Set(_RUNS_CACHE.map(r => r.startTimeLocal?.slice(0,4)).filter(Boolean))].sort((a,b)=>b-a);
+    yrSel.innerHTML = '<option value="">All years</option>' + years.map(y=>`<option value="${y}">${y}</option>`).join('');
+  }
+
+  let runs = _RUNS_CACHE.slice();
+  if (yr) runs = runs.filter(r => r.startTimeLocal?.startsWith(yr));
+  if (mo) runs = runs.filter(r => r.startTimeLocal?.slice(5,7) === mo);
+  if (gpsOnly) runs = runs.filter(r => r.gps_points && r.gps_points.length > 1);
+
+  if (!runs.length) { el.innerHTML = '<div style="color:var(--muted);padding:24px">No routes match this filter.</div>'; return; }
+
+  el.innerHTML = runs.slice(0, 200).map(r => {
+    const {d, real} = buildRouteSVG(r, 120, 100);
+    const strokeColor = real ? 'var(--teal)' : 'var(--muted)';
+    const date = r.startTimeLocal?.slice(0,10) || '';
+    const dist = fmtMi(r.distance);
+    return `<div class="route-thumb" onclick="showRunDetail(_RUNS_CACHE.find(x=>x.activityId===${JSON.stringify(r.activityId)}))">
+      <svg viewBox="0 0 120 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="${d}" stroke="${strokeColor}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      </svg>
+      <div class="rt-meta">${dist}</div>
+      <div class="rt-meta rt-date">${date}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderWeatherCorr(runs) {
+  const {grid, muted} = _cc();
+
+  // Temp vs pace — runs with temp data
+  const tempRuns = runs.filter(r => r.maxTemperature != null && r.averageSpeed > 0);
+  const tempData = tempRuns.map(r => ({
+    x: Math.round((r.maxTemperature + (r.minTemperature||r.maxTemperature)) / 2 * 9/5 + 32),
+    y: parseFloat((26.8224 / r.averageSpeed).toFixed(2)),
+    label: r.startTimeLocal?.slice(0,10)
+  }));
+
+  const ctxT = document.getElementById('chart-temp-pace');
+  if (ctxT) {
+    if (ctxT._chart) ctxT._chart.destroy();
+    ctxT._chart = new Chart(ctxT, {
+      type: 'scatter',
+      data: {
+        datasets: [{
+          label: 'Runs',
+          data: tempData,
+          backgroundColor: 'rgba(0,196,176,.6)',
+          pointRadius: 5,
+          pointHoverRadius: 7,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => `${ctx.parsed.x}°F → ${Math.floor(ctx.parsed.y)}:${String(Math.round((ctx.parsed.y%1)*60)).padStart(2,'0')} /mi on ${ctx.raw.label}`
+            }
+          }
+        },
+        scales: {
+          x: { title: { display: true, text: 'Temperature (°F)', color: muted }, grid: { color: grid }, ticks: { color: muted } },
+          y: {
+            title: { display: true, text: 'Pace (min/mile)', color: muted },
+            grid: { color: grid },
+            ticks: {
+              color: muted,
+              callback: v => `${Math.floor(v)}:${String(Math.round((v%1)*60)).padStart(2,'0')}`
+            },
+            reverse: true
+          }
+        }
+      }
+    });
+  }
+
+  // HR vs pace — all runs with both fields
+  const hrRuns = runs.filter(r => r.averageHR > 0 && r.averageSpeed > 0);
+  const hrData = hrRuns.map(r => ({
+    x: Math.round(r.averageHR),
+    y: parseFloat((26.8224 / r.averageSpeed).toFixed(2)),
+    label: r.startTimeLocal?.slice(0,10)
+  }));
+
+  const ctxH = document.getElementById('chart-hr-pace');
+  if (ctxH) {
+    if (ctxH._chart) ctxH._chart.destroy();
+    ctxH._chart = new Chart(ctxH, {
+      type: 'scatter',
+      data: {
+        datasets: [{
+          label: 'Runs',
+          data: hrData,
+          backgroundColor: 'rgba(239,68,68,.5)',
+          pointRadius: 4,
+          pointHoverRadius: 6,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            callbacks: {
+              label: ctx => `HR ${ctx.parsed.x} bpm → ${Math.floor(ctx.parsed.y)}:${String(Math.round((ctx.parsed.y%1)*60)).padStart(2,'0')} /mi on ${ctx.raw.label}`
+            }
+          }
+        },
+        scales: {
+          x: { title: { display: true, text: 'Avg Heart Rate (bpm)', color: muted }, grid: { color: grid }, ticks: { color: muted } },
+          y: {
+            title: { display: true, text: 'Pace (min/mile)', color: muted },
+            grid: { color: grid },
+            ticks: {
+              color: muted,
+              callback: v => `${Math.floor(v)}:${String(Math.round((v%1)*60)).padStart(2,'0')}`
+            },
+            reverse: true
+          }
+        }
+      }
+    });
+  }
 }
 
 // ══ RUN COMPARISON ══════════════════════════════════════════════════════════
@@ -2145,6 +2459,92 @@ const RACE_DISTS = {
   '5K': 3.107, '10K': 6.214, 'Half Marathon': 13.1, 'Marathon': 26.2
 };
 
+const WORKOUT_TYPES = {
+  rest:   { label:'Rest',     color:'var(--muted)', icon:'😴', desc:'Full rest or light stretching/mobility.' },
+  easy:   { label:'Easy Run', color:'#3b82f6',       icon:'🏃', desc:'Comfortable, conversational pace. Should feel easy.' },
+  tempo:  { label:'Tempo',    color:'#f59e0b',       icon:'⚡', desc:'Comfortably hard, sustained effort — "controlled discomfort."' },
+  speed:  { label:'Speed',    color:'#ef4444',       icon:'🔥', desc:'Intervals or fartlek — short, fast efforts with recovery jogs.' },
+  long:   { label:'Long Run', color:'#8b5cf6',       icon:'🛣️', desc:'Slow and steady — builds endurance. Don\'t race it.' },
+  race:   { label:'RACE DAY', color:'#22c55e',       icon:'🏁', desc:'This is it — trust your training!' },
+};
+
+function buildTrainingPlan(saved, currentBase, peakMi, weeksLeft, recentReadiness) {
+  const distMi = RACE_DISTS[saved.distance] || parseFloat(saved.distance_custom||'0') || 13.1;
+  const totalWeeks = Math.max(1, Math.min(16, Math.ceil(weeksLeft))); // cap at 16 weeks shown
+  const weeks = [];
+
+  // Long run distance scales toward race distance (capped) as race approaches
+  const maxLongRun = distMi <= 3.5 ? distMi * 1.5 : distMi <= 7 ? distMi * 1.3 : Math.min(distMi * 0.85, 20);
+
+  for (let w = 0; w < totalWeeks; w++) {
+    const weeksOut = totalWeeks - w; // weeks remaining after this week
+    const progress = totalWeeks > 1 ? w / (totalWeeks - 1) : 1;
+    const isTaperWeek = weeksOut <= (distMi >= 20 ? 3 : distMi >= 10 ? 2 : 1);
+    const isRecoveryWeek = !isTaperWeek && (w + 1) % 4 === 0; // every 4th week is a cutback
+    const isRaceWeek = weeksOut === 1;
+
+    let weekMi = currentBase + (peakMi - currentBase) * Math.pow(progress, 0.7);
+    if (isRecoveryWeek) weekMi *= 0.75;
+    if (isTaperWeek) {
+      const taperFactor = isRaceWeek ? 0.4 : weeksOut === 2 ? 0.6 : 0.8;
+      weekMi = peakMi * taperFactor;
+    }
+    weekMi = Math.max(8, +weekMi.toFixed(1));
+
+    const longRunMi = isRaceWeek ? Math.min(3, distMi) : Math.min(maxLongRun, weekMi * 0.35) * (isTaperWeek ? 0.7 : 1);
+
+    // Build 7 days: Mon=0...Sun=6. Long run on Saturday, quality workout Tuesday or Wednesday, rest Monday + one more.
+    const days = [
+      { day:'Mon', type:'rest' },
+      { day:'Tue', type: isRaceWeek ? 'easy' : (w % 2 === 0 ? 'speed' : 'tempo') },
+      { day:'Wed', type:'easy' },
+      { day:'Thu', type: isRaceWeek ? 'rest' : 'easy' },
+      { day:'Fri', type:'rest' },
+      { day:'Sat', type:'long', mi: +longRunMi.toFixed(1) },
+      { day:'Sun', type: distMi >= 13.1 ? 'easy' : 'rest' },
+    ];
+    if (isRaceWeek) {
+      // Replace the race-day weekday with RACE DAY — find which weekday the race falls on
+      const raceDate = new Date(saved.date+'T12:00:00');
+      const raceDow = raceDate.getDay(); // 0=Sun..6=Sat
+      const dowMap = {0:'Sun',1:'Mon',2:'Tue',3:'Wed',4:'Thu',5:'Fri',6:'Sat'};
+      const raceDayLabel = dowMap[raceDow];
+      const idx = days.findIndex(d => d.day === raceDayLabel);
+      if (idx >= 0) {
+        days[idx] = { day: raceDayLabel, type:'race', mi: distMi };
+        // make day before it rest
+        const prevIdx = (idx - 1 + 7) % 7;
+        if (days[prevIdx]) days[prevIdx].type = 'rest';
+      }
+    }
+
+    // Distribute remaining weekly mileage across the non-rest, non-long, non-race easy/tempo/speed days
+    const fixedMi = days.filter(d => d.type==='long'||d.type==='race').reduce((s,d)=>s+(d.mi||0),0);
+    const flexDays = days.filter(d => !['rest','long','race'].includes(d.type));
+    const remainingMi = Math.max(0, weekMi - fixedMi);
+    const perFlexMi = flexDays.length ? remainingMi / flexDays.length : 0;
+    flexDays.forEach(d => { d.mi = +Math.max(2, perFlexMi).toFixed(1); });
+
+    const actualWeekMi = +days.reduce((s,d)=>s+(d.mi||0),0).toFixed(1);
+
+    // Readiness-based adjustment note for the FIRST upcoming week only
+    let adjustNote = null;
+    if (w === 0 && recentReadiness != null && recentReadiness < 40) {
+      adjustNote = 'Your readiness has been low — consider shifting Tuesday\'s workout to an easy day if you\'re still fatigued.';
+      days.forEach(d => { if (d.type==='speed'||d.type==='tempo') d.type='easy'; });
+    }
+
+    weeks.push({
+      weekNum: w+1,
+      label: isRaceWeek ? 'Race Week' : isTaperWeek ? 'Taper' : isRecoveryWeek ? 'Recovery' : 'Build',
+      totalMi: actualWeekMi,
+      days,
+      adjustNote,
+    });
+  }
+  return weeks;
+}
+
 function renderRaceGoal(runs, wellness) {
   const container = document.getElementById('race-goal-container');
   if (!container) return;
@@ -2195,22 +2595,9 @@ function _drawRaceGoal() {
   const currentBase = wkKeys.length ? wkKeys.reduce((s,k)=>s+wkMap[k],0)/wkKeys.length : 15;
   const peakMi = Math.min(distMi * (distMi>20?5:distMi>10?5.5:6), Math.max(currentBase*1.5, distMi*3));
 
-  // 6-week plan
-  const planWeeks = Math.min(6, Math.ceil(weeksLeft));
-  const planRows = Array.from({length:planWeeks},(_,i)=>{
-    const wkNum = i+1;
-    const progress = planWeeks > 1 ? i/(planWeeks-1) : 1;
-    let target;
-    if (weeksLeft <= 3) {
-      target = currentBase * (1 - wkNum*0.15);
-    } else {
-      target = currentBase + (peakMi-currentBase)*Math.pow(progress,0.7);
-      if (wkNum % 3 === 0) target *= 0.85;
-    }
-    target = Math.max(10, +target.toFixed(1));
-    return {label:`Wk ${wkNum}`, mi:target};
-  });
-  const maxPlanMi = Math.max(...planRows.map(w=>w.mi),1);
+  // Day-by-day training plan
+  const recentReadiness = _rgWellness[0]?.training_readiness ?? null;
+  const trainingPlan = buildTrainingPlan(saved, currentBase, peakMi, weeksLeft, recentReadiness);
 
   const now = new Date();
   const currentWmi = _rgRuns.filter(r=>(now-new Date(r.startTimeLocal))<7*864e5).reduce((s,r)=>s+mi(r.distance||0),0);
@@ -2247,15 +2634,38 @@ function _drawRaceGoal() {
       </div>
     </div>` : ''}
 
-    ${planRows.length ? `<div class="rg-plan">
-      <h4>Suggested weekly mileage — next ${planRows.length} weeks</h4>
-      ${planRows.map(w=>`<div class="rg-week-row">
-        <div class="rg-week-label">${w.label}</div>
-        <div class="rg-week-bar"><div class="rg-week-bar-fill" style="width:${(w.mi/maxPlanMi*100).toFixed(0)}%;background:${w.mi<currentBase*0.9?'#8b5cf6':'var(--teal)'}"></div></div>
-        <div class="rg-week-mi" style="color:${w.mi<currentBase*0.9?'#8b5cf6':'var(--teal)'}">${w.mi} mi</div>
-      </div>`).join('')}
-      <div style="font-size:.65rem;color:var(--muted);margin-top:10px;line-height:1.6">
-        Purple = recovery/taper week. Based on your current base of ~${currentBase.toFixed(1)} mi/week.
+    ${trainingPlan.length ? `<div class="chart-card" style="margin-bottom:12px">
+      <div class="cc-top" onclick="toggleSection('rg-plan')" style="cursor:pointer">
+        <div class="cc-title">Your Training Plan</div>
+        <span class="cc-badge">${trainingPlan.length} week${trainingPlan.length!==1?'s':''}</span>
+        <span style="color:var(--muted);font-size:.75rem;margin-left:auto" id="rg-plan-chevron">▲ hide</span>
+      </div>
+      <div id="rg-plan-body">
+        ${trainingPlan[0].adjustNote ? `<div style="background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.3);border-radius:8px;padding:10px 12px;font-size:.74rem;color:var(--text);margin:10px 0">⚠️ ${trainingPlan[0].adjustNote}</div>` : ''}
+        ${trainingPlan.map((wk,wi) => `
+          <div style="margin-top:${wi===0?'10px':'18px'}">
+            <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+              <strong style="font-size:.82rem">Week ${wk.weekNum}</strong>
+              <span style="font-size:.68rem;padding:2px 8px;border-radius:10px;background:var(--surface);color:var(--muted)">${wk.label}</span>
+              <span style="font-size:.72rem;color:var(--muted);margin-left:auto">${wk.totalMi} mi</span>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px">
+              ${wk.days.map(d => {
+                const wt = WORKOUT_TYPES[d.type];
+                return `<div style="background:var(--surface);border-radius:8px;padding:8px 4px;text-align:center;border-top:2px solid ${wt.color}">
+                  <div style="font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.04em">${d.day}</div>
+                  <div style="font-size:1rem;margin:3px 0">${wt.icon}</div>
+                  <div style="font-size:.62rem;font-weight:700;color:${wt.color}">${wt.label}</div>
+                  ${d.mi ? `<div style="font-size:.62rem;color:var(--muted);margin-top:2px">${d.mi} mi</div>` : ''}
+                </div>`;
+              }).join('')}
+            </div>
+          </div>
+        `).join('')}
+        <div style="margin-top:14px;font-size:.68rem;color:var(--muted);line-height:1.6">
+          <strong>Legend:</strong>
+          ${Object.entries(WORKOUT_TYPES).map(([k,v])=>`<span style="color:${v.color}">${v.icon} ${v.label}</span>`).join(' · ')}
+        </div>
       </div>
     </div>` : ''}
 
@@ -2350,6 +2760,15 @@ function load(){
   const today=wellness[0]||{};const lr=runs[0];
   const lastDate=allActs[0]?.startTimeLocal?.slice(0,10)||'';
   document.getElementById('last-sync').textContent=sd(lastDate);
+  const lastWellnessDate=wellness[0]?.date||'';
+  const wEl=document.getElementById('last-wellness-sync');
+  if(wEl){
+    const todayStr=new Date().toISOString().slice(0,10);
+    const yestStr=new Date(Date.now()-864e5).toISOString().slice(0,10);
+    const isStale=lastWellnessDate && lastWellnessDate<yestStr;
+    wEl.textContent=lastWellnessDate?sd(lastWellnessDate):'no data';
+    wEl.style.color=isStale?'#f59e0b':'';
+  }
   const _errs=[];
   function _try(name,fn){try{fn();}catch(e){console.error(name,e);_errs.push(name+': '+e.message);}}
   _try('overview',()=>renderOverview(today,wellness,runs));
@@ -2370,6 +2789,8 @@ function load(){
   _try('sleepcorr',()=>renderSleepCorrelation(wellness,runs));
   _try('calendar',()=>renderCalendar(runs));
   _try('racegoal',()=>renderRaceGoal(runs,wellness));
+  _try('routegallery',()=>renderRouteGallery());
+  _try('weathercorr',()=>renderWeatherCorr(runs));
   _try('sectiondrag',()=>initSectionDrag());
   // Init quick toggle icon
   const _qtb=document.getElementById('quick-dark-btn');
@@ -2402,21 +2823,15 @@ function renderOverview(today,wellness,runs){
         ${runs.length?`<span class="chip">🏃 ${runs.length} total runs</span>`:''}
       </div>
     </div>
-    <div class="oh-right">
-      ${tr!=null?`<div class="oh-stat"><div class="oh-stat-val" style="color:${rc(tr)}">${tr}</div><div class="oh-stat-label">Readiness</div></div>`:''}
-      ${lr?.vO2MaxValue?`<div class="oh-stat"><div class="oh-stat-val">${lr.vO2MaxValue}</div><div class="oh-stat-label">VO2 Max</div></div>`:''}
-      <div class="oh-stat"><div class="oh-stat-val">${wmi.toFixed(1)}</div><div class="oh-stat-label">Mi This Week</div></div>
-    </div>`;
+    `;
   const GOAL=15;const goalPct=Math.min(100,wmi/GOAL*100);
   const avgMps=runs.slice(0,5).filter(r=>r.averageSpeed).reduce((s,r)=>s+r.averageSpeed,0)/(runs.slice(0,5).filter(r=>r.averageSpeed).length||1);
   document.getElementById('overview-cards').innerHTML=[
-    {l:'Weekly Miles',ic:'🏃',v:wmi.toFixed(1),u:`of ${GOAL} mi goal`,c:'var(--teal)',bar:goalPct},
-    {l:'Runs This Week',ic:'📊',v:week7.length,u:'runs',c:'var(--purple)',bar:week7.length/4*100},
-    {l:'Active Time',ic:'⏱',v:Math.round(wmins),u:'minutes',c:'var(--orange)',bar:Math.min(100,wmins/200*100)},
-    {l:'Streak',ic:'🔥',v:streak,u:streak===1?'day':'days',c:'var(--yellow)',bar:Math.min(100,streak/14*100)},
-    {l:'Avg Pace (5)',ic:'⚡',v:avgMps?fmtPace(avgMps):'—',u:'min/mile',c:'var(--blue)',bar:0},
-    {l:'All-Time Runs',ic:'🗂',v:runs.length,u:'activities',c:'var(--pink)',bar:Math.min(100,runs.length/100*100)},
-  ].map(c=>`<div class="mini-card" style="border-top:3px solid ${c.c}20;"><div class="mc-label"><span class="mc-icon">${c.ic}</span>${c.l}</div><div class="mc-val" style="color:${c.c}">${c.v}</div><div class="mc-sub">${c.u}</div>${c.bar?`<div style="height:2px;background:var(--surface);border-radius:2px;margin-top:10px;overflow:hidden"><div style="width:${c.bar}%;height:100%;background:${c.c};border-radius:2px"></div></div>`:''}</div>`).join('');
+    `<div class="ov-pill"><span style="color:var(--teal);font-weight:700">${wmi.toFixed(1)}</span> mi this week</div>`,
+    `<div class="ov-pill"><span style="color:var(--purple);font-weight:700">${week7.length}</span> run${week7.length!==1?'s':''}</div>`,
+    `<div class="ov-pill"><span style="color:var(--orange);font-weight:700">${Math.round(wmins)}</span> min active</div>`,
+    streak>1?`<div class="ov-pill"><span style="color:var(--yellow);font-weight:700">🔥 ${streak}</span> day streak</div>`:'',
+  ].filter(Boolean).join('');
 
   timeToggle('chart-weekly',(days)=>{
     const wkB={};
@@ -2443,6 +2858,45 @@ function renderOverview(today,wellness,runs){
     return dr.map(r=>`<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)">${dateEl}<div style="flex:1"><div style="font-size:.8rem;font-weight:600">${r.activityName}</div><div style="font-size:.65rem;color:var(--muted);margin-top:2px">${fmtDur(r.duration)} · ${fmtPace(r.averageSpeed)}/mi${r.averageHR?' · ❤️ '+Math.round(r.averageHR):''}</div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:.9rem;font-weight:800;color:var(--teal)">${fmtMi(r.distance)}</div>${tr2?`<div style="font-size:.6rem;color:${rc(tr2)}">${tr2} rdy</div>`:''}</div></div>`).join('');
   }).join('');
 }
+function toggleSection(key) {
+  const body = document.getElementById(key+'-body');
+  const chev = document.getElementById(key+'-chevron');
+  if (!body) return;
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : '';
+  if (chev) chev.textContent = open ? '▼ show' : '▲ hide';
+  // Resize any Chart.js canvas inside the body after opening
+  if (!open) setTimeout(() => {
+    body.querySelectorAll('canvas').forEach(c => {
+      const ch = Chart.getChart(c);
+      if (ch) ch.resize();
+    });
+  }, 50);
+}
+
+function toggleOvSection(key) {
+  const bodies = { thisweek:'week-log', charts:'ov-charts-body', heatmap:'ov-heatmap-body' };
+  const bodyId = bodies[key];
+  if (!bodyId) return;
+  const body = document.getElementById(bodyId);
+  const chev = document.getElementById(key+'-chevron');
+  if (!body) return;
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : '';
+  if (chev) chev.textContent = open ? '▼ show' : '▲ hide';
+  if (key === 'charts' && !open) {
+    setTimeout(() => {
+      ['chart-weekly','chart-readiness'].forEach(id => {
+        const c = Chart.getChart(id);
+        if (c) c.resize();
+      });
+    }, 50);
+  }
+  if (key === 'heatmap' && !open) {
+    _try('heatmap', () => renderHeatmap(_RUNS_CACHE));
+  }
+}
+
 // ══ DRAG-TO-REORDER OVERVIEW SECTIONS ══════════════════════════════════════
 function initSectionDrag() {
   const container = document.getElementById('overview-sections');
@@ -2512,6 +2966,15 @@ function renderRunning(today,wellness,runs){
 async function renderNextRun(today,wellness,runs){
   // ── Raw signals ─────────────────────────────────────────────────────────────
   const now = new Date();
+  const dateEl = document.getElementById('next-run-date');
+  if (dateEl) {
+    const todayStr = now.toISOString().slice(0,10);
+    const yestStr = new Date(now-864e5).toISOString().slice(0,10);
+    const wDate = today?.date || '';
+    const isStale = wDate && wDate < yestStr;
+    dateEl.innerHTML = `${now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'})}`
+      + (wDate ? ` · sleep/readiness data from <span style="color:${isStale?'#f59e0b':'var(--teal)'}">${sd(wDate)}</span>` : ' · no readiness data yet today');
+  }
   const tr  = today.training_readiness;         // Garmin readiness 0-100
   const ss  = today.sleep_score ?? wellness.find(w=>w.sleep_score)?.sleep_score; // sleep score
   const slpHrs = today.sleep_seconds ? today.sleep_seconds/3600

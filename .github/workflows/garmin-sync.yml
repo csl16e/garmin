@@ -3,6 +3,7 @@ name: Garmin Sync
 on:
   schedule:
     - cron: '0 13 * * *'  # 8am Central time (UTC-5)
+    - cron: '0 18 * * *'  # 1pm Central time (UTC-5)
     - cron: '0 1 * * *'   # 8pm Central time (UTC-5)
   workflow_dispatch:
 
@@ -26,7 +27,7 @@ jobs:
           echo "${{ secrets.GARMIN_TOKEN_B64 }}" | base64 -d > ~/.garmin_tokens
 
       - name: Sync Garmin data
-        run: python sync_garmin.py --days 3 --sink files --out ./garmin
+        run: python sync_garmin.py --days 7 --sink files --out ./garmin
 
       - name: Rebuild dashboard with fresh data
         run: |

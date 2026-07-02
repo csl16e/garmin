@@ -7,19 +7,13 @@
     },
     {
       "date": "2026-06-27",
-      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-06-27",
-      "sleep_seconds": null,
-      "sleep_score": null,
-      "hrv_nightly_avg": null,
-      "training_readiness": 67
+      "stats_error": "Expecting value: line 1 column 1 (char 0)",
+      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
     },
     {
       "date": "2026-06-26",
-      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-06-26",
-      "sleep_seconds": 28380,
-      "sleep_score": 81,
-      "hrv_nightly_avg": null,
-      "training_readiness": 64
+      "stats_error": "Expecting value: line 1 column 1 (char 0)",
+      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
     },
     {
       "date": "2026-06-25",

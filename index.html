@@ -3730,5 +3730,273 @@ document.addEventListener('keydown', e => {
   </div>
 </div>
 
+<!-- ═══ AI COACH CHAT ════════════════════════════════════════════════════════ -->
+<style>
+#ai-fab{position:fixed;bottom:calc(max(72px,env(safe-area-inset-bottom))+16px);right:18px;z-index:400;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#00c4b0,#6366f1);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(0,196,176,.4);display:flex;align-items:center;justify-content:center;font-size:1.4rem;transition:transform .2s,box-shadow .2s}
+#ai-fab:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(0,196,176,.55)}
+@media(min-width:700px){#ai-fab{bottom:24px}}
+#ai-panel{position:fixed;bottom:0;right:0;width:100%;max-width:420px;height:70vh;background:var(--bg2,#161b22);border:1px solid var(--border,rgba(255,255,255,.08));border-radius:20px 20px 0 0;z-index:600;display:flex;flex-direction:column;transform:translateY(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);box-shadow:-4px -4px 40px rgba(0,0,0,.5)}
+#ai-panel.open{transform:translateY(0)}
+@media(min-width:700px){#ai-panel{bottom:24px;right:24px;border-radius:16px;height:72vh}}
+#ai-panel-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--border,rgba(255,255,255,.08));flex-shrink:0}
+#ai-panel-head .ai-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#00c4b0,#6366f1);display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+#ai-panel-head .ai-title{font-size:.88rem;font-weight:700;color:var(--text)}
+#ai-panel-head .ai-sub{font-size:.68rem;color:var(--muted)}
+#ai-panel-head .ai-close{margin-left:auto;background:none;border:none;cursor:pointer;color:var(--muted);font-size:1.1rem;padding:4px;line-height:1}
+#ai-messages{flex:1;overflow-y:auto;padding:14px 14px 8px;display:flex;flex-direction:column;gap:10px}
+.ai-msg{max-width:88%;font-size:.8rem;line-height:1.55;padding:9px 13px;border-radius:14px;word-break:break-word}
+.ai-msg.user{align-self:flex-end;background:linear-gradient(135deg,rgba(0,196,176,.2),rgba(99,102,241,.2));border:1px solid rgba(0,196,176,.25);color:var(--text)}
+.ai-msg.bot{align-self:flex-start;background:var(--surface,rgba(255,255,255,.06));border:1px solid var(--border,rgba(255,255,255,.08));color:var(--text)}
+.ai-msg.bot.thinking{color:var(--muted);font-style:italic}
+.ai-msg.error{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.3);color:#ef4444}
+#ai-suggestions{padding:0 14px 8px;display:flex;gap:6px;flex-wrap:wrap;flex-shrink:0}
+.ai-chip{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:5px 10px;font-size:.7rem;color:var(--teal);cursor:pointer;white-space:nowrap;transition:background .15s}
+.ai-chip:hover{background:rgba(0,196,176,.1)}
+#ai-input-row{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--border,rgba(255,255,255,.08));flex-shrink:0}
+#ai-input{flex:1;background:var(--surface,rgba(255,255,255,.06));border:1px solid var(--border,rgba(255,255,255,.08));border-radius:10px;padding:9px 12px;color:var(--text);font-size:.8rem;outline:none;resize:none;font-family:inherit;line-height:1.4;max-height:80px}
+#ai-input:focus{border-color:rgba(0,196,176,.4)}
+#ai-send{background:linear-gradient(135deg,#00c4b0,#6366f1);border:none;border-radius:10px;width:38px;height:38px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#fff;font-size:1rem;flex-shrink:0;align-self:flex-end;transition:opacity .15s}
+#ai-send:disabled{opacity:.4;cursor:default}
+#ai-key-setup{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;gap:12px}
+#ai-key-setup h3{font-size:.9rem;font-weight:700;margin:0}
+#ai-key-setup p{font-size:.75rem;color:var(--muted);line-height:1.6;margin:0}
+#ai-key-setup input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:.8rem;outline:none;text-align:center}
+#ai-key-setup input:focus{border-color:rgba(0,196,176,.4)}
+#ai-key-setup a{color:var(--teal);font-size:.72rem}
+</style>
+
+<!-- Floating button -->
+<button id="ai-fab" onclick="toggleAIPanel()" title="AI Coach">🤖</button>
+
+<!-- Chat panel -->
+<div id="ai-panel">
+  <div id="ai-panel-head">
+    <div class="ai-avatar">🤖</div>
+    <div>
+      <div class="ai-title">AI Running Coach</div>
+      <div class="ai-sub">Powered by Gemini · knows your Garmin data</div>
+    </div>
+    <button class="ai-close" onclick="toggleAIPanel()">✕</button>
+  </div>
+  <div id="ai-chat-body" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+    <div id="ai-messages"></div>
+    <div id="ai-suggestions"></div>
+    <div id="ai-input-row">
+      <textarea id="ai-input" rows="1" placeholder="Ask about your training…" onkeydown="aiKeydown(event)" oninput="aiAutosize(this)"></textarea>
+      <button id="ai-send" onclick="aiSend()">➤</button>
+    </div>
+  </div>
+  <div id="ai-key-setup" style="display:none">
+    <div style="font-size:2rem">🔑</div>
+    <h3>Connect Gemini (free)</h3>
+    <p>Get a free API key at <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com</a> — no credit card needed. It's stored only in your browser.</p>
+    <input id="ai-key-input" type="password" placeholder="Paste your Gemini API key…" />
+    <button class="rg-save" style="width:100%;margin-top:4px" onclick="aiSaveKey()">Save & Start Chatting</button>
+  </div>
+</div>
+
+<script>
+// ── AI Coach ─────────────────────────────────────────────────────────────────
+let _aiOpen = false;
+let _aiHistory = [];
+let _aiKey = localStorage.getItem('gemini_key') || '';
+
+function toggleAIPanel() {
+  _aiOpen = !_aiOpen;
+  document.getElementById('ai-panel').classList.toggle('open', _aiOpen);
+  if (_aiOpen) {
+    if (!_aiKey) {
+      document.getElementById('ai-key-setup').style.display = 'flex';
+      document.getElementById('ai-chat-body').style.display = 'none';
+    } else {
+      showChatUI();
+      if (!_aiHistory.length) aiGreet();
+    }
+  }
+}
+
+function showChatUI() {
+  document.getElementById('ai-key-setup').style.display = 'none';
+  document.getElementById('ai-chat-body').style.display = 'flex';
+  setTimeout(() => document.getElementById('ai-input')?.focus(), 200);
+}
+
+function aiSaveKey() {
+  const k = document.getElementById('ai-key-input').value.trim();
+  if (!k) return;
+  _aiKey = k;
+  localStorage.setItem('gemini_key', k);
+  showChatUI();
+  aiGreet();
+}
+
+function aiGreet() {
+  const data = GARMIN_DATA;
+  const runs = (data.activities||[]).filter(a=>a.activityType?.typeKey?.includes('running')).sort((a,b)=>b.startTimeLocal.localeCompare(a.startTimeLocal));
+  const wellness = (data.wellness||[]).sort((a,b)=>b.date.localeCompare(a.date));
+  const tr = wellness[0]?.training_readiness;
+  const lr = runs[0];
+  const now = new Date();
+  const wmi = runs.filter(r=>(now-new Date(r.startTimeLocal))<7*864e5).reduce((s,r)=>s+(r.distance||0)/1609.34,0);
+
+  let greet = `Hey Chris! `;
+  if (tr != null) greet += `Your readiness is ${tr}/100 today. `;
+  if (lr) {
+    const daysAgo = Math.floor((now-new Date(lr.startTimeLocal))/864e5);
+    greet += `Last run was ${daysAgo===0?'today':daysAgo===1?'yesterday':`${daysAgo} days ago`} — ${(lr.distance/1609.34).toFixed(1)} miles. `;
+  }
+  greet += `You've run ${wmi.toFixed(1)} miles this week. What can I help you with?`;
+
+  aiAddMsg('bot', greet);
+  renderSuggestions(['Should I run today?', 'What pace for my long run?', 'Am I overtraining?', 'How\'s my fitness trending?']);
+}
+
+function renderSuggestions(chips) {
+  const el = document.getElementById('ai-suggestions');
+  if (!el) return;
+  el.innerHTML = chips.map(c=>`<button class="ai-chip" onclick="aiAsk(${JSON.stringify(c)})">${c}</button>`).join('');
+}
+
+function aiAddMsg(role, text) {
+  const el = document.getElementById('ai-messages');
+  if (!el) return;
+  const div = document.createElement('div');
+  div.className = `ai-msg ${role}`;
+  div.textContent = text;
+  el.appendChild(div);
+  el.scrollTop = el.scrollHeight;
+  return div;
+}
+
+function buildSystemPrompt() {
+  const data = GARMIN_DATA;
+  const runs = (data.activities||[]).filter(a=>a.activityType?.typeKey?.includes('running')).sort((a,b)=>b.startTimeLocal.localeCompare(a.startTimeLocal));
+  const wellness = (data.wellness||[]).sort((a,b)=>b.date.localeCompare(a.date));
+  const now = new Date();
+
+  // Recent runs summary
+  const recentRuns = runs.slice(0,10).map(r=>{
+    const d = new Date(r.startTimeLocal);
+    const daysAgo = Math.floor((now-d)/864e5);
+    const mi = (r.distance/1609.34).toFixed(2);
+    const pace = r.averageSpeed ? ((26.8224/r.averageSpeed)).toFixed(2) : null;
+    return `  - ${daysAgo===0?'Today':daysAgo===1?'Yesterday':`${daysAgo}d ago`}: ${mi} mi${pace?` @ ${Math.floor(pace)}:${String(Math.round((pace%1)*60)).padStart(2,'0')}/mi`:''}${r.averageHR?` HR ${Math.round(r.averageHR)}`:''}${r.activityTrainingLoad?` load ${Math.round(r.activityTrainingLoad)}`:''}`;
+  }).join('\n');
+
+  // Weekly mileage last 8 weeks
+  const wkMap = {};
+  runs.forEach(r=>{const d=new Date(r.startTimeLocal);const wk=`${d.getFullYear()}-W${String(Math.ceil((d-new Date(d.getFullYear(),0,1))/6048e5)).padStart(2,'0')}`;wkMap[wk]=(wkMap[wk]||0)+(r.distance||0)/1609.34;});
+  const wkKeys = Object.keys(wkMap).sort().slice(-8);
+  const weeklyMi = wkKeys.map(k=>`${k}: ${wkMap[k].toFixed(1)} mi`).join(', ');
+
+  // Wellness
+  const tw = wellness[0]||{};
+  const recentWellness = wellness.slice(0,7).map(w=>`  - ${w.date}: readiness ${w.training_readiness??'—'}, sleep ${w.sleep_score??'—'}, sleep hrs ${w.sleep_seconds?(w.sleep_seconds/3600).toFixed(1):'—'}`).join('\n');
+
+  // Acute/chronic load
+  const acute = runs.filter(r=>(now-new Date(r.startTimeLocal))<7*864e5).reduce((s,r)=>s+(r.activityTrainingLoad||0),0);
+  const chronic = runs.filter(r=>(now-new Date(r.startTimeLocal))<28*864e5).reduce((s,r)=>s+(r.activityTrainingLoad||0),0)/4;
+  const acr = chronic>0 ? (acute/chronic).toFixed(2) : 'n/a';
+  const vo2 = runs.find(r=>r.vO2MaxValue)?.vO2MaxValue;
+
+  return `You are Chris's personal AI running coach. You have full access to his Garmin data and should give specific, data-driven advice. Be conversational, encouraging, and concise (2-4 sentences unless detail is needed). Use his actual numbers. Don't be generic.
+
+TODAY: ${now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+
+ATHLETE PROFILE:
+- Total runs logged: ${runs.length}
+- VO2 Max: ${vo2??'unknown'}
+- Acute/Chronic Load Ratio (injury risk): ${acr} (healthy = 0.8–1.3)
+- Acute 7-day training load: ${Math.round(acute)}
+- Chronic 28-day avg load: ${Math.round(chronic)}
+
+TODAY'S WELLNESS:
+- Training readiness: ${tw.training_readiness??'no data'}/100
+- Sleep score: ${tw.sleep_score??'no data'}
+- Sleep last night: ${tw.sleep_seconds?(tw.sleep_seconds/3600).toFixed(1)+' hrs':'no data'}
+
+RECENT 7-DAY WELLNESS:
+${recentWellness}
+
+LAST 10 RUNS:
+${recentRuns}
+
+WEEKLY MILEAGE (last 8 weeks):
+${weeklyMi}
+
+Use this data to answer Chris's questions. If asked whether to run today, factor in readiness, sleep, days since last run, and load ratio. If asked about pace, use his recent run paces as reference. Always give a specific, actionable answer.`;
+}
+
+async function aiAsk(question) {
+  document.getElementById('ai-suggestions').innerHTML = '';
+  aiAddMsg('user', question);
+  _aiHistory.push({ role:'user', parts:[{text: question}] });
+
+  const thinkDiv = aiAddMsg('bot', 'Thinking…');
+  thinkDiv.classList.add('thinking');
+  document.getElementById('ai-send').disabled = true;
+
+  try {
+    const sysPrompt = buildSystemPrompt();
+    const body = {
+      system_instruction: { parts: [{ text: sysPrompt }] },
+      contents: _aiHistory,
+      generationConfig: { temperature: 0.7, maxOutputTokens: 512 }
+    };
+
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${_aiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+
+    const json = await res.json();
+    if (!res.ok) throw new Error(json.error?.message || `HTTP ${res.status}`);
+
+    const reply = json.candidates?.[0]?.content?.parts?.[0]?.text || 'No response.';
+    thinkDiv.textContent = reply;
+    thinkDiv.classList.remove('thinking');
+    _aiHistory.push({ role:'model', parts:[{text: reply}] });
+
+    // Follow-up suggestions based on context
+    renderSuggestions(['What about tomorrow?', 'Give me a workout', 'How\'s my weekly mileage?', 'Any injury risk?']);
+  } catch(e) {
+    thinkDiv.textContent = `Error: ${e.message}. Check your API key in settings.`;
+    thinkDiv.classList.remove('thinking');
+    thinkDiv.classList.add('error');
+    console.error('AI error:', e);
+  } finally {
+    document.getElementById('ai-send').disabled = false;
+  }
+}
+
+function aiSend() {
+  const input = document.getElementById('ai-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+  aiAutosize(input);
+  aiAsk(text);
+}
+
+function aiKeydown(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); aiSend(); }
+}
+
+function aiAutosize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 80) + 'px';
+}
+
+// Clear key option (add to settings someday)
+function aiClearKey() {
+  _aiKey = '';
+  localStorage.removeItem('gemini_key');
+  _aiHistory = [];
+  document.getElementById('ai-key-setup').style.display = 'flex';
+  document.getElementById('ai-chat-body').style.display = 'none';
+}
+</script>
+
 </body>
 </html><!-- rebuild 2026-06-29T16:00:52Z -->

@@ -7676,38 +7676,59 @@
     },
     {
       "date": "2026-11-08",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-08",
+      "sleep_seconds": 28711,
+      "sleep_score": 91,
+      "hrv_nightly_avg": null,
+      "training_readiness": 67
     },
     {
       "date": "2026-11-09",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-09",
+      "sleep_seconds": 33840,
+      "sleep_score": 81,
+      "hrv_nightly_avg": null,
+      "training_readiness": 63
     },
     {
       "date": "2026-11-10",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-10",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null,
+      "training_readiness": 39
     },
     {
       "date": "2026-11-11",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-11",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null,
+      "training_readiness": 50
     },
     {
       "date": "2026-11-12",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-12",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null,
+      "training_readiness": 66
     },
     {
       "date": "2026-11-13",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-13",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null,
+      "training_readiness": 63
     },
     {
       "date": "2026-11-14",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-14",
+      "sleep_seconds": 28740,
+      "sleep_score": 92,
+      "hrv_nightly_avg": null,
+      "training_readiness": 25
     }
   ],
   "activities": [
@@ -227449,6 +227470,4164 @@
         [
           30.00909324735403,
           -90.12533166445792
+        ]
+      ]
+    },
+    {
+      "activityId": 25080603550,
+      "activityName": "Lafayette Running",
+      "startTimeLocal": "2026-11-14 14:51:16",
+      "startTimeGMT": "2026-11-14 20:51:16",
+      "activityType": {
+        "typeId": 1,
+        "typeKey": "running",
+        "parentTypeId": 17,
+        "isHidden": false,
+        "restricted": false,
+        "trimmable": true
+      },
+      "eventType": {
+        "typeId": 9,
+        "typeKey": "uncategorized",
+        "sortOrder": 10
+      },
+      "isFavorite": false,
+      "isPR": false,
+      "isAutoCalcCalories": false,
+      "isParent": false,
+      "distance": 5023.990234375,
+      "duration": 1641.281005859375,
+      "elapsedDuration": 2101.362060546875,
+      "movingDuration": 1632.0,
+      "elevationGain": 22.0,
+      "elevationLoss": 15.0,
+      "averageSpeed": 3.061000108718872,
+      "maxSpeed": 3.7939999103546143,
+      "startLatitude": 30.19218477420509,
+      "startLongitude": -92.00884630903602,
+      "hasPolyline": true,
+      "hasImages": false,
+      "ownerId": 94834778,
+      "ownerDisplayName": "36870b91-503a-44c0-81ce-5cf4d193441d",
+      "ownerFullName": "Christopher Lindeman",
+      "ownerProfileImageUrlSmall": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prth.png",
+      "ownerProfileImageUrlMedium": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prfr.png",
+      "ownerProfileImageUrlLarge": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prof.png",
+      "calories": 411.0,
+      "bmrCalories": 42.0,
+      "averageHR": 172.0,
+      "maxHR": 200.0,
+      "averageRunningCadenceInStepsPerMinute": 165.640625,
+      "maxRunningCadenceInStepsPerMinute": 182.0,
+      "steps": 4600,
+      "userRoles": [
+        "SCOPE_ATP_READ",
+        "SCOPE_COMMUNITY_COURSE_ADMIN_READ",
+        "SCOPE_GCX_KID_WRITE",
+        "SCOPE_CIQ_APPSTORE_SERVICES_CREATE",
+        "SCOPE_DT_ACTIVE_INTELLIGENCE_READ",
+        "SCOPE_COMMUNITY_COURSE_WRITE",
+        "SCOPE_GCX_KID_ADMIN_READ",
+        "SCOPE_CONNECT_WEB_TEMPLATE_RENDER",
+        "SCOPE_ACTIVITY_DETECTION_READ",
+        "SCOPE_OMT_SUBSCRIPTION_ADMIN_READ",
+        "SCOPE_DI_OAUTH_2_MANAGED_STATUS_ADMIN_WRITE",
+        "SCOPE_CONNECT_READ",
+        "SCOPE_GCX_PET_READ",
+        "SCOPE_GOLF_API_READ",
+        "SCOPE_DI_OAUTH_2_DEVICE_REVOCATION_WRITE",
+        "SCOPE_GCX_PET_WRITE",
+        "SCOPE_DI_OAUTH_2_CREATE_DI_USER",
+        "SCOPE_DIVE_API_WRITE",
+        "SCOPE_DIVE_API_READ",
+        "SCOPE_DI_OAUTH_2_CLIENT_READ",
+        "SCOPE_CONNECT_WRITE",
+        "SCOPE_CONNECT_MCT_DAILY_LOG_READ",
+        "SCOPE_CONNECT_API_CREATE_UPDATE_USER",
+        "SCOPE_MESSAGE_GENERATION_READ",
+        "SCOPE_DI_OAUTH_2_CLIENT_REVOCATION_ADMIN",
+        "SCOPE_GCS_RACEINSIGHTS_ADMIN_READ",
+        "SCOPE_GCX_PET_ADMIN_READ",
+        "SCOPE_CONNECT_NON_SOCIAL_SHARED_READ",
+        "SCOPE_DI_OAUTH_2_PRERELEASE_PERMISSIONS_ADMIN_WRITE",
+        "SCOPE_DI_OAUTH_2_TOKEN_ADMIN",
+        "SCOPE_ATP_WRITE",
+        "SCOPE_GCX_KID_READ",
+        "ROLE_CONNECTUSER",
+        "ROLE_FITNESS_USER",
+        "ROLE_WELLNESS_USER",
+        "ROLE_OUTDOOR_USER",
+        "ROLE_GARMIN_USER"
+      ],
+      "privacy": {
+        "typeId": 2,
+        "typeKey": "private"
+      },
+      "userPro": false,
+      "hasVideo": false,
+      "isPurposeful": false,
+      "timeZoneId": 152,
+      "beginTimestamp": 1794689476000,
+      "sportTypeId": 1,
+      "avgPower": 375.0,
+      "maxPower": 524.0,
+      "aerobicTrainingEffect": 4.099999904632568,
+      "anaerobicTrainingEffect": 2.700000047683716,
+      "normPower": 376.0,
+      "avgVerticalOscillation": 9.030000305175781,
+      "avgGroundContactTime": 257.1000061035156,
+      "avgStrideLength": 109.05999755859375,
+      "vO2MaxValue": 47.0,
+      "avgVerticalRatio": 8.289999961853027,
+      "deviceId": 3488870736,
+      "minElevation": 4.199999809265137,
+      "maxElevation": 13.600000381469727,
+      "avgElevation": 10.019622172763041,
+      "maxDoubleCadence": 182.0,
+      "isElevationCorrected": false,
+      "isDecoDive": false,
+      "summarizedDiveInfo": {
+        "summarizedDiveGases": []
+      },
+      "maxVerticalSpeed": 0.4000005722045899,
+      "manufacturer": "GARMIN",
+      "locationName": "Lafayette",
+      "lapCount": 4,
+      "endLatitude": 30.191456889733672,
+      "endLongitude": -92.00803485698998,
+      "isAtpActivity": false,
+      "waterEstimated": 455.0,
+      "trainingEffectLabel": "LACTATE_THRESHOLD",
+      "activityTrainingLoad": 169.53265380859375,
+      "minActivityLapDuration": 59.33100128173828,
+      "aerobicTrainingEffectMessage": "HIGHLY_IMPROVING_LACTATE_THRESHOLD_13",
+      "anaerobicTrainingEffectMessage": "MAINTAINING_ANAEROBIC_BASE_1",
+      "splitSummaries": [
+        {
+          "noOfSplits": 4,
+          "totalAscent": 0.0,
+          "duration": 4.951000213623047,
+          "splitType": "RWD_STAND",
+          "maxElevationGain": 0.0,
+          "averageElevationGain": 0.0,
+          "maxDistance": 7,
+          "maxDistanceWithPrecision": 7.380000114440918,
+          "distance": 9.270000457763672,
+          "averageSpeed": 1.871999979019165,
+          "maxSpeed": 0.0,
+          "elevationLoss": 0.0,
+          "avgStepFrequency": 0.0
+        },
+        {
+          "noOfSplits": 1,
+          "totalAscent": 22.0,
+          "duration": 1641.281005859375,
+          "splitType": "INTERVAL_ACTIVE",
+          "maxElevationGain": 22.0,
+          "averageElevationGain": 22.0,
+          "maxDistance": 5023,
+          "maxDistanceWithPrecision": 5023.81982421875,
+          "distance": 5023.9501953125,
+          "averageSpeed": 3.061000108718872,
+          "maxSpeed": 3.7939999103546143,
+          "elevationLoss": 15.0,
+          "avgStepFrequency": 165.640625,
+          "avgStepLength": 1.0905999755859375,
+          "verticalRatio": 8.289999961853027,
+          "verticalOscillation": 9.030000305175781,
+          "avgGroundContactTime": 257.1000061035156
+        },
+        {
+          "noOfSplits": 6,
+          "totalAscent": 22.0,
+          "duration": 1623.282958984375,
+          "splitType": "RWD_RUN",
+          "maxElevationGain": 17.0,
+          "averageElevationGain": 4.0,
+          "maxDistance": 2898,
+          "maxDistanceWithPrecision": 2898.360107421875,
+          "distance": 4983.25,
+          "averageSpeed": 3.069999933242798,
+          "maxSpeed": 3.7939999103546143,
+          "elevationLoss": 15.0,
+          "avgStepFrequency": 167.390625,
+          "avgStepLength": 1.0905999755859375,
+          "verticalRatio": 8.289999961853027,
+          "verticalOscillation": 9.030000305175781,
+          "avgGroundContactTime": 257.1000061035156
+        },
+        {
+          "noOfSplits": 8,
+          "totalAscent": 0.0,
+          "duration": 13.024999618530273,
+          "splitType": "RWD_WALK",
+          "maxElevationGain": 0.0,
+          "averageElevationGain": 0.0,
+          "maxDistance": 14,
+          "maxDistanceWithPrecision": 14.670000076293945,
+          "distance": 31.479999542236328,
+          "averageSpeed": 2.4170000553131104,
+          "maxSpeed": 1.9220000505447388,
+          "elevationLoss": 0.0,
+          "avgStepFrequency": 64.421875,
+          "verticalOscillation": 5.65
+        }
+      ],
+      "hasSplits": true,
+      "hasIntensityIntervals": false,
+      "isManualActivity": false,
+      "avgGradeAdjustedSpeed": 3.0490000247955322,
+      "differenceBodyBattery": -9,
+      "hasHeatMap": false,
+      "fastestSplit_1000": 311.04901123046875,
+      "fastestSplit_1609": 508.7640075683594,
+      "fastestSplit_5000": 2092.242919921875,
+      "hrTimeInZone_1": 10.998,
+      "hrTimeInZone_2": 55.227,
+      "hrTimeInZone_3": 189.976,
+      "hrTimeInZone_4": 958.994,
+      "hrTimeInZone_5": 420.22,
+      "powerTimeInZone_1": 0.0,
+      "powerTimeInZone_2": 184.007,
+      "powerTimeInZone_3": 840.894,
+      "powerTimeInZone_4": 545.32,
+      "powerTimeInZone_5": 32.995,
+      "endTimeGMT": "2026-11-14 21:26:17",
+      "qualifyingDive": false,
+      "activityUUID": "e27700ae-1ea8-4493-a3b8-116d4aefe7c4",
+      "decoDive": false,
+      "elevationCorrected": false,
+      "atpActivity": false,
+      "purposeful": false,
+      "manualActivity": false,
+      "pr": false,
+      "autoCalcCalories": false,
+      "favorite": false,
+      "parent": false,
+      "gps_points": [
+        [
+          30.19218477420509,
+          -92.00884630903602
+        ],
+        [
+          30.19200447946787,
+          -92.00864137150347
+        ],
+        [
+          30.19209240563214,
+          -92.00828405097127
+        ],
+        [
+          30.19198503345251,
+          -92.00803896412253
+        ],
+        [
+          30.19180180504918,
+          -92.00778231024742
+        ],
+        [
+          30.191591000184417,
+          -92.00754719786346
+        ],
+        [
+          30.191387068480253,
+          -92.00728853233159
+        ],
+        [
+          30.19117827527225,
+          -92.0070615503937
+        ],
+        [
+          30.190993286669254,
+          -92.00682367198169
+        ],
+        [
+          30.19082355313003,
+          -92.00659937225282
+        ],
+        [
+          30.19064174965024,
+          -92.00634632259607
+        ],
+        [
+          30.190420635044575,
+          -92.00618949718773
+        ],
+        [
+          30.190189629793167,
+          -92.00643240474164
+        ],
+        [
+          30.189971532672644,
+          -92.00664916075766
+        ],
+        [
+          30.18977095372975,
+          -92.00686985626817
+        ],
+        [
+          30.189564172178507,
+          -92.00711234472692
+        ],
+        [
+          30.189346745610237,
+          -92.00731929391623
+        ],
+        [
+          30.189128816127777,
+          -92.00754719786346
+        ],
+        [
+          30.189132587984204,
+          -92.0078575797379
+        ],
+        [
+          30.189354456961155,
+          -92.00807441957295
+        ],
+        [
+          30.189552940428257,
+          -92.00830995105207
+        ],
+        [
+          30.189760141074657,
+          -92.00854229740798
+        ],
+        [
+          30.189960803836584,
+          -92.0087799243629
+        ],
+        [
+          30.19015308469534,
+          -92.00901595875621
+        ],
+        [
+          30.190362380817533,
+          -92.00927881523967
+        ],
+        [
+          30.190560361370444,
+          -92.00952993705869
+        ],
+        [
+          30.19076395779848,
+          -92.00978734530509
+        ],
+        [
+          30.190955316647887,
+          -92.01001977548003
+        ],
+        [
+          30.191141813993454,
+          -92.01028405688703
+        ],
+        [
+          30.19135949201882,
+          -92.01053115539253
+        ],
+        [
+          30.191579768434167,
+          -92.01077205128968
+        ],
+        [
+          30.19178470596671,
+          -92.0110284537077
+        ],
+        [
+          30.192001797258854,
+          -92.01127328909934
+        ],
+        [
+          30.192176643759012,
+          -92.01149406842887
+        ],
+        [
+          30.192383425310254,
+          -92.01177167706192
+        ],
+        [
+          30.19258266314864,
+          -92.01202221214771
+        ],
+        [
+          30.19277460873127,
+          -92.01228397898376
+        ],
+        [
+          30.192984491586685,
+          -92.01252956874669
+        ],
+        [
+          30.193121703341603,
+          -92.01280742883682
+        ],
+        [
+          30.19285323098302,
+          -92.0126083586365
+        ],
+        [
+          30.192656004801393,
+          -92.01235656626523
+        ],
+        [
+          30.192448468878865,
+          -92.01210712082684
+        ],
+        [
+          30.1922307908535,
+          -92.01186119578779
+        ],
+        [
+          30.192016968503594,
+          -92.01163832098246
+        ],
+        [
+          30.191804487258196,
+          -92.01132274232805
+        ],
+        [
+          30.191610362380743,
+          -92.0110490731895
+        ],
+        [
+          30.191414142027497,
+          -92.01078328303993
+        ],
+        [
+          30.191183472052217,
+          -92.01050139963627
+        ],
+        [
+          30.190976858139038,
+          -92.01023418456316
+        ],
+        [
+          30.190755827352405,
+          -92.00995531864464
+        ],
+        [
+          30.190530521795154,
+          -92.00969262979925
+        ],
+        [
+          30.190315693616867,
+          -92.00940772891045
+        ],
+        [
+          30.19009734503925,
+          -92.00914110057056
+        ],
+        [
+          30.18988528288901,
+          -92.0088782440871
+        ],
+        [
+          30.189655954018235,
+          -92.00859267264605
+        ],
+        [
+          30.189454033970833,
+          -92.008320344612
+        ],
+        [
+          30.18923006951809,
+          -92.00804365798831
+        ],
+        [
+          30.189001243561506,
+          -92.00775188393891
+        ],
+        [
+          30.189149770885706,
+          -92.00741987675428
+        ],
+        [
+          30.18941287882626,
+          -92.0071788970381
+        ],
+        [
+          30.189628964290023,
+          -92.00692961923778
+        ],
+        [
+          30.189879834651947,
+          -92.00668713077903
+        ],
+        [
+          30.190108828246593,
+          -92.00644187629223
+        ],
+        [
+          30.190328434109688,
+          -92.00620450079441
+        ],
+        [
+          30.190412756055593,
+          -92.00592085719109
+        ],
+        [
+          30.19027965143323,
+          -92.00559262186289
+        ],
+        [
+          30.19020010717213,
+          -92.00525533407927
+        ],
+        [
+          30.19012869335711,
+          -92.00491259805858
+        ],
+        [
+          30.190067337825894,
+          -92.00457187369466
+        ],
+        [
+          30.190015118569136,
+          -92.00423676520586
+        ],
+        [
+          30.18997136503458,
+          -92.00397172942758
+        ],
+        [
+          30.190078653395176,
+          -92.00430021621287
+        ],
+        [
+          30.190143529325724,
+          -92.00466876849532
+        ],
+        [
+          30.19019264727831,
+          -92.00502868741751
+        ],
+        [
+          30.19025777466595,
+          -92.00537871569395
+        ],
+        [
+          30.190343102440238,
+          -92.00571910478175
+        ],
+        [
+          30.190461538732052,
+          -92.00600174255669
+        ],
+        [
+          30.19064912572503,
+          -92.00627993792295
+        ],
+        [
+          30.190836377441883,
+          -92.0065316464752
+        ],
+        [
+          30.19104827195406,
+          -92.00682702474296
+        ],
+        [
+          30.191262681037188,
+          -92.00709868222475
+        ],
+        [
+          30.191473234444857,
+          -92.00736698694527
+        ],
+        [
+          30.19166400656104,
+          -92.00764392502606
+        ],
+        [
+          30.191542888060212,
+          -92.00793611817062
+        ],
+        [
+          30.191311463713646,
+          -92.00814130716026
+        ],
+        [
+          30.191094037145376,
+          -92.00840089470148
+        ],
+        [
+          30.190888596698642,
+          -92.00857347808778
+        ],
+        [
+          30.19064753316343,
+          -92.00883826240897
+        ],
+        [
+          30.190389035269618,
+          -92.00907982885838
+        ],
+        [
+          30.19043362699449,
+          -92.00937830843031
+        ],
+        [
+          30.19066907465458,
+          -92.00967603363097
+        ],
+        [
+          30.190878035500646,
+          -92.00993612408638
+        ],
+        [
+          30.191073333844543,
+          -92.01020820066333
+        ],
+        [
+          30.19130098633468,
+          -92.01048413291574
+        ],
+        [
+          30.191529393196106,
+          -92.01071798801422
+        ],
+        [
+          30.191746819764376,
+          -92.01097154058516
+        ],
+        [
+          30.19197807647288,
+          -92.01124395243824
+        ],
+        [
+          30.191835667937994,
+          -92.01131117530167
+        ],
+        [
+          30.191648919135332,
+          -92.01107455417514
+        ],
+        [
+          30.191435683518648,
+          -92.01080717146397
+        ],
+        [
+          30.191230913624167,
+          -92.0105397887528
+        ],
+        [
+          30.19102974794805,
+          -92.01029621064663
+        ],
+        [
+          30.19083771854639,
+          -92.0100474357605
+        ],
+        [
+          30.190635630860925,
+          -92.00980595313013
+        ],
+        [
+          30.190429938957095,
+          -92.00954393483698
+        ],
+        [
+          30.190230952575803,
+          -92.0093016140163
+        ],
+        [
+          30.190007742494345,
+          -92.00940077193081
+        ],
+        [
+          30.189801212400198,
+          -92.00961182825267
+        ],
+        [
+          30.189560735598207,
+          -92.00982917100191
+        ],
+        [
+          30.18971529789269,
+          -92.0100868307054
+        ],
+        [
+          30.189919732511044,
+          -92.01033351011574
+        ],
+        [
+          30.190113438293338,
+          -92.01057448983192
+        ],
+        [
+          30.190328182652593,
+          -92.01081370934844
+        ],
+        [
+          30.190532533451915,
+          -92.01106860302389
+        ],
+        [
+          30.19072623923421,
+          -92.01133078895509
+        ],
+        [
+          30.190917430445552,
+          -92.01157914474607
+        ],
+        [
+          30.191129995509982,
+          -92.01182314194739
+        ],
+        [
+          30.190956825390458,
+          -92.01177662238479
+        ],
+        [
+          30.19074627198279,
+          -92.01152508147061
+        ],
+        [
+          30.19054653123021,
+          -92.01127303764224
+        ],
+        [
+          30.190347209572792,
+          -92.0110197365284
+        ],
+        [
+          30.19014922901988,
+          -92.01077112928033
+        ],
+        [
+          30.189950997009873,
+          -92.01053660362959
+        ],
+        [
+          30.189759386703372,
+          -92.01050232164562
+        ],
+        [
+          30.189534667879343,
+          -92.01068337075412
+        ],
+        [
+          30.189679339528084,
+          -92.01089065521955
+        ],
+        [
+          30.189890982583165,
+          -92.01115418225527
+        ],
+        [
+          30.190112181007862,
+          -92.01137806288898
+        ],
+        [
+          30.19011310301721,
+          -92.01164284721017
+        ],
+        [
+          30.189811186864972,
+          -92.01172306202352
+        ],
+        [
+          30.189522095024586,
+          -92.01176421716809
+        ],
+        [
+          30.189234847202897,
+          -92.01180746778846
+        ],
+        [
+          30.18894139677286,
+          -92.01180134899914
+        ],
+        [
+          30.188693460077047,
+          -92.01170336455107
+        ],
+        [
+          30.188664877787232,
+          -92.01137504540384
+        ],
+        [
+          30.188873251900077,
+          -92.0111510809511
+        ],
+        [
+          30.189153123646975,
+          -92.01108251698315
+        ],
+        [
+          30.18939913250506,
+          -92.01099995523691
+        ],
+        [
+          30.18950080499053,
+          -92.01072100549936
+        ],
+        [
+          30.189703311771154,
+          -92.01048522256315
+        ],
+        [
+          30.189855778589845,
+          -92.0104031637311
+        ],
+        [
+          30.189629970118403,
+          -92.01013829559088
+        ],
+        [
+          30.189457135275006,
+          -92.0098225492984
+        ],
+        [
+          30.189710184931755,
+          -92.0095894485712
+        ],
+        [
+          30.189977064728737,
+          -92.0093478821218
+        ],
+        [
+          30.190287781879306,
+          -92.00918896123767
+        ],
+        [
+          30.19050353206694,
+          -92.00892736203969
+        ],
+        [
+          30.190754821524024,
+          -92.00869107618928
+        ],
+        [
+          30.191008960828185,
+          -92.00844003818929
+        ],
+        [
+          30.191269889473915,
+          -92.00820911675692
+        ]
+      ]
+    },
+    {
+      "activityId": 25059240637,
+      "activityName": "Lafayette Running",
+      "startTimeLocal": "2026-11-12 15:08:19",
+      "startTimeGMT": "2026-11-12 21:08:19",
+      "activityType": {
+        "typeId": 1,
+        "typeKey": "running",
+        "parentTypeId": 17,
+        "isHidden": false,
+        "restricted": false,
+        "trimmable": true
+      },
+      "eventType": {
+        "typeId": 9,
+        "typeKey": "uncategorized",
+        "sortOrder": 10
+      },
+      "isFavorite": false,
+      "isPR": false,
+      "isAutoCalcCalories": false,
+      "isParent": false,
+      "distance": 5017.47021484375,
+      "duration": 1665.7220458984375,
+      "elapsedDuration": 1937.0439453125,
+      "movingDuration": 1663.0,
+      "elevationGain": 17.0,
+      "elevationLoss": 17.0,
+      "averageSpeed": 3.01200008392334,
+      "maxSpeed": 3.6019999980926514,
+      "startLatitude": 30.19215895794332,
+      "startLongitude": -92.00869501568377,
+      "hasPolyline": true,
+      "hasImages": false,
+      "ownerId": 94834778,
+      "ownerDisplayName": "36870b91-503a-44c0-81ce-5cf4d193441d",
+      "ownerFullName": "Christopher Lindeman",
+      "ownerProfileImageUrlSmall": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prth.png",
+      "ownerProfileImageUrlMedium": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prfr.png",
+      "ownerProfileImageUrlLarge": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prof.png",
+      "calories": 342.0,
+      "bmrCalories": 42.0,
+      "averageHR": 95.0,
+      "maxHR": 174.0,
+      "averageRunningCadenceInStepsPerMinute": 169.6875,
+      "maxRunningCadenceInStepsPerMinute": 175.0,
+      "steps": 4728,
+      "userRoles": [
+        "SCOPE_ATP_READ",
+        "SCOPE_COMMUNITY_COURSE_ADMIN_READ",
+        "SCOPE_GCX_KID_WRITE",
+        "SCOPE_CIQ_APPSTORE_SERVICES_CREATE",
+        "SCOPE_DT_ACTIVE_INTELLIGENCE_READ",
+        "SCOPE_COMMUNITY_COURSE_WRITE",
+        "SCOPE_GCX_KID_ADMIN_READ",
+        "SCOPE_CONNECT_WEB_TEMPLATE_RENDER",
+        "SCOPE_ACTIVITY_DETECTION_READ",
+        "SCOPE_OMT_SUBSCRIPTION_ADMIN_READ",
+        "SCOPE_DI_OAUTH_2_MANAGED_STATUS_ADMIN_WRITE",
+        "SCOPE_CONNECT_READ",
+        "SCOPE_GCX_PET_READ",
+        "SCOPE_GOLF_API_READ",
+        "SCOPE_DI_OAUTH_2_DEVICE_REVOCATION_WRITE",
+        "SCOPE_GCX_PET_WRITE",
+        "SCOPE_DI_OAUTH_2_CREATE_DI_USER",
+        "SCOPE_DIVE_API_WRITE",
+        "SCOPE_DIVE_API_READ",
+        "SCOPE_DI_OAUTH_2_CLIENT_READ",
+        "SCOPE_CONNECT_WRITE",
+        "SCOPE_CONNECT_MCT_DAILY_LOG_READ",
+        "SCOPE_CONNECT_API_CREATE_UPDATE_USER",
+        "SCOPE_MESSAGE_GENERATION_READ",
+        "SCOPE_DI_OAUTH_2_CLIENT_REVOCATION_ADMIN",
+        "SCOPE_GCS_RACEINSIGHTS_ADMIN_READ",
+        "SCOPE_GCX_PET_ADMIN_READ",
+        "SCOPE_CONNECT_NON_SOCIAL_SHARED_READ",
+        "SCOPE_DI_OAUTH_2_PRERELEASE_PERMISSIONS_ADMIN_WRITE",
+        "SCOPE_DI_OAUTH_2_TOKEN_ADMIN",
+        "SCOPE_ATP_WRITE",
+        "SCOPE_GCX_KID_READ",
+        "ROLE_CONNECTUSER",
+        "ROLE_FITNESS_USER",
+        "ROLE_WELLNESS_USER",
+        "ROLE_OUTDOOR_USER",
+        "ROLE_GARMIN_USER"
+      ],
+      "privacy": {
+        "typeId": 2,
+        "typeKey": "private"
+      },
+      "userPro": false,
+      "hasVideo": false,
+      "isPurposeful": false,
+      "timeZoneId": 152,
+      "beginTimestamp": 1794517699000,
+      "sportTypeId": 1,
+      "avgPower": 368.0,
+      "maxPower": 470.0,
+      "aerobicTrainingEffect": 2.299999952316284,
+      "anaerobicTrainingEffect": 0.0,
+      "normPower": 369.0,
+      "avgVerticalOscillation": 8.84000015258789,
+      "avgGroundContactTime": 255.89999389648438,
+      "avgStrideLength": 106.46999511718751,
+      "avgVerticalRatio": 8.3100004196167,
+      "deviceId": 3488870736,
+      "minElevation": 4.599999904632568,
+      "maxElevation": 11.600000381469727,
+      "avgElevation": 7.827507500748735,
+      "maxDoubleCadence": 175.0,
+      "isElevationCorrected": false,
+      "isDecoDive": false,
+      "summarizedDiveInfo": {
+        "summarizedDiveGases": []
+      },
+      "maxVerticalSpeed": 0.6000003814697266,
+      "manufacturer": "GARMIN",
+      "locationName": "Lafayette",
+      "lapCount": 4,
+      "endLatitude": 30.19058173522353,
+      "endLongitude": -92.00626845471561,
+      "isAtpActivity": false,
+      "waterEstimated": 462.0,
+      "trainingEffectLabel": "TEMPO",
+      "activityTrainingLoad": 33.446563720703125,
+      "minActivityLapDuration": 60.09600067138672,
+      "aerobicTrainingEffectMessage": "MAINTAINING_TEMPO_21",
+      "anaerobicTrainingEffectMessage": "NO_ANAEROBIC_BENEFIT_0",
+      "splitSummaries": [
+        {
+          "noOfSplits": 2,
+          "totalAscent": 0.0,
+          "duration": 9.517000198364258,
+          "splitType": "RWD_WALK",
+          "maxElevationGain": 0.0,
+          "averageElevationGain": 0.0,
+          "maxDistance": 10,
+          "maxDistanceWithPrecision": 10.4399995803833,
+          "distance": 18.5,
+          "averageSpeed": 1.944000005722046,
+          "maxSpeed": 2.1559998989105225,
+          "elevationLoss": 0.0,
+          "avgStepFrequency": 82.25,
+          "avgStepLength": 0.674,
+          "verticalRatio": 8.520000457763672,
+          "verticalOscillation": 5.640000152587891
+        },
+        {
+          "noOfSplits": 1,
+          "totalAscent": 17.0,
+          "duration": 1665.7220458984375,
+          "splitType": "INTERVAL_ACTIVE",
+          "maxElevationGain": 17.0,
+          "averageElevationGain": 17.0,
+          "maxDistance": 5017,
+          "maxDistanceWithPrecision": 5017.33984375,
+          "distance": 5017.4599609375,
+          "averageSpeed": 3.01200008392334,
+          "maxSpeed": 3.6019999980926514,
+          "elevationLoss": 17.0,
+          "avgStepFrequency": 169.6875,
+          "avgStepLength": 1.064699951171875,
+          "verticalRatio": 8.3100004196167,
+          "verticalOscillation": 8.84000015258789,
+          "avgGroundContactTime": 255.89999389648438
+        },
+        {
+          "noOfSplits": 3,
+          "totalAscent": 17.0,
+          "duration": 1656.1829833984375,
+          "splitType": "RWD_RUN",
+          "maxElevationGain": 9.0,
+          "averageElevationGain": 6.0,
+          "maxDistance": 2820,
+          "maxDistanceWithPrecision": 2820.35009765625,
+          "distance": 4998.9599609375,
+          "averageSpeed": 3.0179998874664307,
+          "maxSpeed": 3.6019999980926514,
+          "elevationLoss": 17.0,
+          "avgStepFrequency": 170.40625,
+          "avgStepLength": 1.0649000244140625,
+          "verticalRatio": 8.3100004196167,
+          "verticalOscillation": 8.85,
+          "avgGroundContactTime": 255.89999389648438
+        }
+      ],
+      "hasSplits": true,
+      "hasIntensityIntervals": false,
+      "isManualActivity": false,
+      "moderateIntensityMinutes": 17,
+      "vigorousIntensityMinutes": 14,
+      "avgGradeAdjustedSpeed": 3.0329999923706055,
+      "differenceBodyBattery": -5,
+      "hasHeatMap": false,
+      "fastestSplit_1000": 326.1340026855469,
+      "fastestSplit_1609": 528.8809814453125,
+      "fastestSplit_5000": 1931.302001953125,
+      "hrTimeInZone_1": 154.006,
+      "hrTimeInZone_2": 196.952,
+      "hrTimeInZone_3": 19.999,
+      "hrTimeInZone_4": 31.0,
+      "hrTimeInZone_5": 0.0,
+      "powerTimeInZone_1": 6.999,
+      "powerTimeInZone_2": 203.003,
+      "powerTimeInZone_3": 1223.554,
+      "powerTimeInZone_4": 195.954,
+      "powerTimeInZone_5": 20.996,
+      "endTimeGMT": "2026-11-12 21:40:36",
+      "qualifyingDive": false,
+      "activityUUID": "10fde89f-81b2-4eba-b5fb-e9e89a313cf2",
+      "favorite": false,
+      "purposeful": false,
+      "pr": false,
+      "parent": false,
+      "decoDive": false,
+      "manualActivity": false,
+      "autoCalcCalories": false,
+      "elevationCorrected": false,
+      "atpActivity": false,
+      "gps_points": [
+        [
+          30.19215895794332,
+          -92.00869501568377
+        ],
+        [
+          30.19206994213164,
+          -92.00837943702936
+        ],
+        [
+          30.192004395648837,
+          -92.0080457534641
+        ],
+        [
+          30.19177104346454,
+          -92.00777057558298
+        ],
+        [
+          30.191516065970063,
+          -92.00795439071953
+        ],
+        [
+          30.191284473985434,
+          -92.00815765187144
+        ],
+        [
+          30.19107266329229,
+          -92.00843090191483
+        ],
+        [
+          30.190847776830196,
+          -92.00864078477025
+        ],
+        [
+          30.19059967249632,
+          -92.00887254439294
+        ],
+        [
+          30.190364476293325,
+          -92.00906448997557
+        ],
+        [
+          30.190391214564443,
+          -92.00929063372314
+        ],
+        [
+          30.190607300028205,
+          -92.00956388376653
+        ],
+        [
+          30.190809220075607,
+          -92.00981332920492
+        ],
+        [
+          30.19101658836007,
+          -92.01006026007235
+        ],
+        [
+          30.19121297635138,
+          -92.01032244600356
+        ],
+        [
+          30.191442724317312,
+          -92.01059091836214
+        ],
+        [
+          30.191640872508287,
+          -92.01082929968834
+        ],
+        [
+          30.191847989335656,
+          -92.01108067296445
+        ],
+        [
+          30.191982686519623,
+          -92.01135652139783
+        ],
+        [
+          30.191716393455863,
+          -92.01120874844491
+        ],
+        [
+          30.191523525863886,
+          -92.01096651144326
+        ],
+        [
+          30.191335771232843,
+          -92.01068270020187
+        ],
+        [
+          30.191147765144706,
+          -92.01041271910071
+        ],
+        [
+          30.190926399081945,
+          -92.01015212573111
+        ],
+        [
+          30.190715175122023,
+          -92.0098917838186
+        ],
+        [
+          30.1905073877424,
+          -92.00962347909808
+        ],
+        [
+          30.19030856899917,
+          -92.00935735367239
+        ],
+        [
+          30.19006960093975,
+          -92.00935006141663
+        ],
+        [
+          30.18985309638083,
+          -92.0095658954233
+        ],
+        [
+          30.189593005925417,
+          -92.00978382490575
+        ],
+        [
+          30.18970741890371,
+          -92.01009353622794
+        ],
+        [
+          30.18991612829268,
+          -92.01035672798753
+        ],
+        [
+          30.19011695869267,
+          -92.01059703715146
+        ],
+        [
+          30.1903467066586,
+          -92.01086190529168
+        ],
+        [
+          30.190556840971112,
+          -92.01103943400085
+        ],
+        [
+          30.190793126821518,
+          -92.01118259690702
+        ],
+        [
+          30.19093888811767,
+          -92.01149079948664
+        ],
+        [
+          30.19116746261716,
+          -92.01171451248229
+        ],
+        [
+          30.19111616536975,
+          -92.01192900538445
+        ],
+        [
+          30.19092078320682,
+          -92.01167654246092
+        ],
+        [
+          30.19072037190199,
+          -92.01142525300384
+        ],
+        [
+          30.190519206225872,
+          -92.0111677609384
+        ],
+        [
+          30.190315023064613,
+          -92.01092183589935
+        ],
+        [
+          30.190122490748763,
+          -92.01065763831139
+        ],
+        [
+          30.189928952604532,
+          -92.01039897277951
+        ],
+        [
+          30.189660228788853,
+          -92.01058823615313
+        ],
+        [
+          30.18956576474011,
+          -92.01076911762357
+        ],
+        [
+          30.189777743071318,
+          -92.01101428829134
+        ],
+        [
+          30.18998217768967,
+          -92.01124864630401
+        ],
+        [
+          30.190214356407523,
+          -92.01148711144924
+        ],
+        [
+          30.189995085820556,
+          -92.01166271232069
+        ],
+        [
+          30.189681854099035,
+          -92.01171509921551
+        ],
+        [
+          30.189377926290035,
+          -92.01177134178579
+        ],
+        [
+          30.189050948247313,
+          -92.01177544891834
+        ],
+        [
+          30.1887771114707,
+          -92.01183781027794
+        ],
+        [
+          30.188484666869044,
+          -92.01193981803954
+        ],
+        [
+          30.188203286379576,
+          -92.0119571685791
+        ],
+        [
+          30.18790296278894,
+          -92.01202154159546
+        ],
+        [
+          30.187650248408318,
+          -92.01220669783652
+        ],
+        [
+          30.18736165948212,
+          -92.01218993403018
+        ],
+        [
+          30.187388565391302,
+          -92.0118918735534
+        ],
+        [
+          30.187610685825348,
+          -92.0116968266666
+        ],
+        [
+          30.187884103506804,
+          -92.01159448362887
+        ],
+        [
+          30.18811946734786,
+          -92.01139465905726
+        ],
+        [
+          30.188373774290085,
+          -92.01117932796478
+        ],
+        [
+          30.188360111787915,
+          -92.01089275069535
+        ],
+        [
+          30.188148384913802,
+          -92.01061078347266
+        ],
+        [
+          30.18793623894453,
+          -92.01069376431406
+        ],
+        [
+          30.18769919872284,
+          -92.01099006459117
+        ],
+        [
+          30.187458051368594,
+          -92.01124512590468
+        ],
+        [
+          30.187171306461096,
+          -92.0112163759768
+        ],
+        [
+          30.186948347836733,
+          -92.0109629072249
+        ],
+        [
+          30.186687083914876,
+          -92.01093709096313
+        ],
+        [
+          30.186677696183324,
+          -92.01082242652774
+        ],
+        [
+          30.18693703226745,
+          -92.0109573751688
+        ],
+        [
+          30.187148926779628,
+          -92.01123096048832
+        ],
+        [
+          30.187411531805992,
+          -92.01114965602756
+        ],
+        [
+          30.187649410218,
+          -92.01091479510069
+        ],
+        [
+          30.1878653280437,
+          -92.01070315204561
+        ],
+        [
+          30.188101278617978,
+          -92.01050089672208
+        ],
+        [
+          30.188289284706116,
+          -92.01074942015111
+        ],
+        [
+          30.18845122307539,
+          -92.01104320585728
+        ],
+        [
+          30.188673678785563,
+          -92.0111936610192
+        ],
+        [
+          30.18900484777987,
+          -92.0111246779561
+        ],
+        [
+          30.18927650526166,
+          -92.01105980202556
+        ],
+        [
+          30.189442299306393,
+          -92.01093298383057
+        ],
+        [
+          30.189417069777846,
+          -92.01059678569436
+        ],
+        [
+          30.18938102759421,
+          -92.01023812405765
+        ],
+        [
+          30.189114399254322,
+          -92.01021825894713
+        ],
+        [
+          30.188811058178544,
+          -92.01026083901525
+        ],
+        [
+          30.188480392098427,
+          -92.01031599193811
+        ],
+        [
+          30.188587680459023,
+          -92.01020920649171
+        ],
+        [
+          30.18891390413046,
+          -92.0101354457438
+        ],
+        [
+          30.189243061468005,
+          -92.01008196920156
+        ],
+        [
+          30.18940642476082,
+          -92.01033292338252
+        ],
+        [
+          30.189521675929427,
+          -92.01062813401222
+        ],
+        [
+          30.18977883271873,
+          -92.0104097854346
+        ],
+        [
+          30.18969819881022,
+          -92.01014181599021
+        ],
+        [
+          30.189476078376174,
+          -92.00988080352545
+        ],
+        [
+          30.18965025432408,
+          -92.00962054543197
+        ],
+        [
+          30.189900789409876,
+          -92.00940043665469
+        ],
+        [
+          30.190116288140416,
+          -92.0091509912163
+        ],
+        [
+          30.18991956487298,
+          -92.0088695269078
+        ],
+        [
+          30.189701300114393,
+          -92.00860851444304
+        ],
+        [
+          30.189487310126424,
+          -92.00834607705474
+        ],
+        [
+          30.1892501860857,
+          -92.00805203989148
+        ],
+        [
+          30.189029406756163,
+          -92.00778440572321
+        ],
+        [
+          30.18910249695182,
+          -92.00747544877231
+        ],
+        [
+          30.189329395070672,
+          -92.007239414379
+        ],
+        [
+          30.189560651779175,
+          -92.00699809938669
+        ],
+        [
+          30.18976751714945,
+          -92.0067441277206
+        ],
+        [
+          30.1899859495461,
+          -92.0065266173333
+        ],
+        [
+          30.190199352800846,
+          -92.00627842918038
+        ],
+        [
+          30.190385347232223,
+          -92.00619293376803
+        ],
+        [
+          30.190173452720046,
+          -92.00640843249857
+        ],
+        [
+          30.189953511580825,
+          -92.00665536336601
+        ],
+        [
+          30.189729295670986,
+          -92.00690137222409
+        ],
+        [
+          30.18951538950205,
+          -92.00714210048318
+        ],
+        [
+          30.189301231876016,
+          -92.0073710102588
+        ],
+        [
+          30.189078357070684,
+          -92.00759178958833
+        ],
+        [
+          30.18924281001091,
+          -92.00791549868882
+        ],
+        [
+          30.18942209891975,
+          -92.00816427357495
+        ],
+        [
+          30.189624186605215,
+          -92.00839653611183
+        ],
+        [
+          30.189801547676325,
+          -92.00862913392484
+        ],
+        [
+          30.190028278157115,
+          -92.0089107658714
+        ],
+        [
+          30.19025618210435,
+          -92.00905367732048
+        ],
+        [
+          30.19047704525292,
+          -92.00884245336056
+        ],
+        [
+          30.190692460164428,
+          -92.00858320109546
+        ],
+        [
+          30.19093536771834,
+          -92.00834004208446
+        ],
+        [
+          30.19117483869195,
+          -92.0081131439656
+        ],
+        [
+          30.191417075693607,
+          -92.00788649730384
+        ],
+        [
+          30.1916332449764,
+          -92.0076694060117
+        ],
+        [
+          30.191488657146692,
+          -92.00739590451121
+        ],
+        [
+          30.19127701409161,
+          -92.00714025646448
+        ],
+        [
+          30.19108012318611,
+          -92.00690690428019
+        ],
+        [
+          30.190839897841215,
+          -92.006620997563
+        ],
+        [
+          30.190640492364764,
+          -92.00637775473297
+        ],
+        [
+          30.19046195782721,
+          -92.00608748942614
+        ],
+        [
+          30.190323069691658,
+          -92.00577585026622
+        ],
+        [
+          30.19022298976779,
+          -92.00545834377408
+        ],
+        [
+          30.190176386386156,
+          -92.00512097217143
+        ],
+        [
+          30.190115282312036,
+          -92.00478611513972
+        ],
+        [
+          30.190067421644926,
+          -92.00446039438248
+        ],
+        [
+          30.190011095255613,
+          -92.00410081073642
+        ],
+        [
+          30.190044371411204,
+          -92.0042828656733
+        ],
+        [
+          30.190110336989164,
+          -92.00464957393706
+        ],
+        [
+          30.190166998654604,
+          -92.00502273626626
+        ],
+        [
+          30.190201615914702,
+          -92.00538458302617
+        ],
+        [
+          30.19031041301787,
+          -92.00571927241981
+        ],
+        [
+          30.19042239524424,
+          -92.00601733289659
+        ]
+      ]
+    },
+    {
+      "activityId": 25042170410,
+      "activityName": "Jefferson Parish Running",
+      "startTimeLocal": "2026-11-11 05:29:01",
+      "startTimeGMT": "2026-11-11 11:29:01",
+      "activityType": {
+        "typeId": 1,
+        "typeKey": "running",
+        "parentTypeId": 17,
+        "isHidden": false,
+        "restricted": false,
+        "trimmable": true
+      },
+      "eventType": {
+        "typeId": 9,
+        "typeKey": "uncategorized",
+        "sortOrder": 10
+      },
+      "isFavorite": false,
+      "isPR": false,
+      "isAutoCalcCalories": false,
+      "isParent": false,
+      "distance": 5020.43994140625,
+      "duration": 1964.64501953125,
+      "elapsedDuration": 2395.073974609375,
+      "movingDuration": 1955.4600219726562,
+      "elevationGain": 8.0,
+      "elevationLoss": 8.0,
+      "averageSpeed": 2.5550000667572017,
+      "maxSpeed": 3.062999963760376,
+      "startLatitude": 30.00952508300543,
+      "startLongitude": -90.12394580058753,
+      "hasPolyline": true,
+      "hasImages": false,
+      "ownerId": 94834778,
+      "ownerDisplayName": "36870b91-503a-44c0-81ce-5cf4d193441d",
+      "ownerFullName": "Christopher Lindeman",
+      "ownerProfileImageUrlSmall": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prth.png",
+      "ownerProfileImageUrlMedium": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prfr.png",
+      "ownerProfileImageUrlLarge": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prof.png",
+      "calories": 399.0,
+      "bmrCalories": 50.0,
+      "averageHR": 126.0,
+      "maxHR": 158.0,
+      "averageRunningCadenceInStepsPerMinute": 167.484375,
+      "maxRunningCadenceInStepsPerMinute": 175.0,
+      "steps": 5506,
+      "userRoles": [
+        "SCOPE_ATP_READ",
+        "SCOPE_COMMUNITY_COURSE_ADMIN_READ",
+        "SCOPE_GCX_KID_WRITE",
+        "SCOPE_CIQ_APPSTORE_SERVICES_CREATE",
+        "SCOPE_DT_ACTIVE_INTELLIGENCE_READ",
+        "SCOPE_COMMUNITY_COURSE_WRITE",
+        "SCOPE_GCX_KID_ADMIN_READ",
+        "SCOPE_CONNECT_WEB_TEMPLATE_RENDER",
+        "SCOPE_ACTIVITY_DETECTION_READ",
+        "SCOPE_OMT_SUBSCRIPTION_ADMIN_READ",
+        "SCOPE_DI_OAUTH_2_MANAGED_STATUS_ADMIN_WRITE",
+        "SCOPE_CONNECT_READ",
+        "SCOPE_GCX_PET_READ",
+        "SCOPE_GOLF_API_READ",
+        "SCOPE_DI_OAUTH_2_DEVICE_REVOCATION_WRITE",
+        "SCOPE_GCX_PET_WRITE",
+        "SCOPE_DI_OAUTH_2_CREATE_DI_USER",
+        "SCOPE_DIVE_API_WRITE",
+        "SCOPE_DIVE_API_READ",
+        "SCOPE_DI_OAUTH_2_CLIENT_READ",
+        "SCOPE_CONNECT_WRITE",
+        "SCOPE_CONNECT_MCT_DAILY_LOG_READ",
+        "SCOPE_CONNECT_API_CREATE_UPDATE_USER",
+        "SCOPE_MESSAGE_GENERATION_READ",
+        "SCOPE_DI_OAUTH_2_CLIENT_REVOCATION_ADMIN",
+        "SCOPE_GCS_RACEINSIGHTS_ADMIN_READ",
+        "SCOPE_GCX_PET_ADMIN_READ",
+        "SCOPE_CONNECT_NON_SOCIAL_SHARED_READ",
+        "SCOPE_DI_OAUTH_2_PRERELEASE_PERMISSIONS_ADMIN_WRITE",
+        "SCOPE_DI_OAUTH_2_TOKEN_ADMIN",
+        "SCOPE_ATP_WRITE",
+        "SCOPE_GCX_KID_READ",
+        "ROLE_CONNECTUSER",
+        "ROLE_FITNESS_USER",
+        "ROLE_WELLNESS_USER",
+        "ROLE_OUTDOOR_USER",
+        "ROLE_GARMIN_USER"
+      ],
+      "privacy": {
+        "typeId": 2,
+        "typeKey": "private"
+      },
+      "userPro": false,
+      "hasVideo": false,
+      "isPurposeful": false,
+      "timeZoneId": 152,
+      "beginTimestamp": 1794396541000,
+      "sportTypeId": 1,
+      "avgPower": 315.0,
+      "maxPower": 388.0,
+      "aerobicTrainingEffect": 3.0,
+      "anaerobicTrainingEffect": 0.0,
+      "normPower": 317.0,
+      "avgVerticalOscillation": 8.330000305175782,
+      "avgGroundContactTime": 270.20001220703125,
+      "avgStrideLength": 91.34000244140626,
+      "vO2MaxValue": 47.0,
+      "avgVerticalRatio": 9.149999618530273,
+      "deviceId": 3488870736,
+      "minElevation": -6.400000095367432,
+      "maxElevation": 3.0,
+      "avgElevation": -1.3664122137404577,
+      "maxDoubleCadence": 175.0,
+      "isElevationCorrected": false,
+      "isDecoDive": false,
+      "summarizedDiveInfo": {
+        "summarizedDiveGases": []
+      },
+      "maxVerticalSpeed": 0.40000009536743164,
+      "manufacturer": "GARMIN",
+      "locationName": "Jefferson Parish",
+      "lapCount": 4,
+      "endLatitude": 30.009100707247853,
+      "endLongitude": -90.12501675635576,
+      "isAtpActivity": false,
+      "waterEstimated": 545.0,
+      "trainingEffectLabel": "AEROBIC_BASE",
+      "activityTrainingLoad": 55.60809326171875,
+      "minActivityLapDuration": 66.69200134277344,
+      "aerobicTrainingEffectMessage": "IMPROVING_AEROBIC_BASE_8",
+      "anaerobicTrainingEffectMessage": "NO_ANAEROBIC_BENEFIT_0",
+      "splitSummaries": [
+        {
+          "noOfSplits": 5,
+          "totalAscent": 0.0,
+          "duration": 8.085000038146973,
+          "splitType": "RWD_STAND",
+          "maxElevationGain": 0.0,
+          "averageElevationGain": 0.0,
+          "maxDistance": 6,
+          "maxDistanceWithPrecision": 6.449999809265137,
+          "distance": 7.880000114440918,
+          "averageSpeed": 0.9750000238418579,
+          "maxSpeed": 0.0,
+          "elevationLoss": 0.0,
+          "avgStepFrequency": 0.0
+        },
+        {
+          "noOfSplits": 1,
+          "totalAscent": 8.0,
+          "duration": 1964.64501953125,
+          "splitType": "INTERVAL_ACTIVE",
+          "maxElevationGain": 8.0,
+          "averageElevationGain": 8.0,
+          "maxDistance": 5020,
+          "maxDistanceWithPrecision": 5020.41015625,
+          "distance": 5020.43017578125,
+          "averageSpeed": 2.555000066757202,
+          "maxSpeed": 3.062999963760376,
+          "elevationLoss": 8.0,
+          "avgStepFrequency": 167.46875,
+          "avgStepLength": 0.9134000244140625,
+          "verticalRatio": 9.149999618530273,
+          "verticalOscillation": 8.330000305175782,
+          "avgGroundContactTime": 270.20001220703125
+        },
+        {
+          "noOfSplits": 4,
+          "totalAscent": 8.0,
+          "duration": 1953.5360107421875,
+          "splitType": "RWD_RUN",
+          "maxElevationGain": 4.0,
+          "averageElevationGain": 3.0,
+          "maxDistance": 2349,
+          "maxDistanceWithPrecision": 2349.580078125,
+          "distance": 5005.7099609375,
+          "averageSpeed": 2.562000036239624,
+          "maxSpeed": 3.062999963760376,
+          "elevationLoss": 8.0,
+          "avgStepFrequency": 168.453125,
+          "avgStepLength": 0.9134000244140625,
+          "verticalRatio": 9.149999618530273,
+          "verticalOscillation": 8.330000305175782,
+          "avgGroundContactTime": 270.20001220703125
+        },
+        {
+          "noOfSplits": 5,
+          "totalAscent": 0.0,
+          "duration": 3.0,
+          "splitType": "RWD_WALK",
+          "maxElevationGain": 0.0,
+          "averageElevationGain": 0.0,
+          "maxDistance": 4,
+          "maxDistanceWithPrecision": 4.739999771118164,
+          "distance": 6.849999904632568,
+          "averageSpeed": 2.2829999923706055,
+          "maxSpeed": 1.8569999933242798,
+          "elevationLoss": 0.0,
+          "avgStepFrequency": 89.0
+        }
+      ],
+      "hasSplits": true,
+      "hasIntensityIntervals": false,
+      "isManualActivity": false,
+      "moderateIntensityMinutes": 8,
+      "vigorousIntensityMinutes": 27,
+      "avgGradeAdjustedSpeed": 2.5460000038146973,
+      "differenceBodyBattery": -10,
+      "hasHeatMap": false,
+      "fastestSplit_1000": 369.4880065917969,
+      "fastestSplit_1609": 598.5789794921875,
+      "fastestSplit_5000": 2387.177001953125,
+      "hrTimeInZone_1": 430.086,
+      "hrTimeInZone_2": 68.999,
+      "hrTimeInZone_3": 853.187,
+      "hrTimeInZone_4": 0.0,
+      "hrTimeInZone_5": 0.0,
+      "powerTimeInZone_1": 725.975,
+      "powerTimeInZone_2": 1108.946,
+      "powerTimeInZone_3": 101.01,
+      "powerTimeInZone_4": 0.0,
+      "powerTimeInZone_5": 0.0,
+      "endTimeGMT": "2026-11-11 12:08:56",
+      "qualifyingDive": false,
+      "activityUUID": "5692ce73-5a5d-45f0-b3d1-f275b4f349db",
+      "decoDive": false,
+      "elevationCorrected": false,
+      "atpActivity": false,
+      "autoCalcCalories": false,
+      "favorite": false,
+      "manualActivity": false,
+      "purposeful": false,
+      "pr": false,
+      "parent": false,
+      "gps_points": [
+        [
+          30.00952508300543,
+          -90.12394580058753
+        ],
+        [
+          30.009789196774364,
+          -90.123933814466
+        ],
+        [
+          30.010029254481196,
+          -90.12401646003127
+        ],
+        [
+          30.010054484009743,
+          -90.12432516552508
+        ],
+        [
+          30.01009052619338,
+          -90.12465172447264
+        ],
+        [
+          30.01004308462143,
+          -90.1247906126082
+        ],
+        [
+          30.010019028559327,
+          -90.12448886409402
+        ],
+        [
+          30.00999824143946,
+          -90.12420069426298
+        ],
+        [
+          30.00997418537736,
+          -90.12393607757986
+        ],
+        [
+          30.009698336943984,
+          -90.12396088801324
+        ],
+        [
+          30.009428607299924,
+          -90.12396893464029
+        ],
+        [
+          30.00918561592698,
+          -90.12399190105498
+        ],
+        [
+          30.009071873500943,
+          -90.12416523881257
+        ],
+        [
+          30.00909668393433,
+          -90.12446505948901
+        ],
+        [
+          30.009118225425482,
+          -90.12478390708566
+        ],
+        [
+          30.009041028097272,
+          -90.1248953025788
+        ],
+        [
+          30.009027114138007,
+          -90.12458282522857
+        ],
+        [
+          30.009003980085254,
+          -90.1242707669735
+        ],
+        [
+          30.008865259587765,
+          -90.12400053441525
+        ],
+        [
+          30.00856996513903,
+          -90.1240392588079
+        ],
+        [
+          30.008299313485622,
+          -90.12405853718519
+        ],
+        [
+          30.00801776535809,
+          -90.12410405091941
+        ],
+        [
+          30.008035032078624,
+          -90.12443136423826
+        ],
+        [
+          30.008053556084633,
+          -90.12475750409067
+        ],
+        [
+          30.008045341819525,
+          -90.12497501447797
+        ],
+        [
+          30.008022291585803,
+          -90.12469983659685
+        ],
+        [
+          30.0079982355237,
+          -90.12437880970538
+        ],
+        [
+          30.00787259079516,
+          -90.12410346418619
+        ],
+        [
+          30.007587522268295,
+          -90.12410773895681
+        ],
+        [
+          30.00732583925128,
+          -90.12412073090672
+        ],
+        [
+          30.00705267302692,
+          -90.12419532984495
+        ],
+        [
+          30.00703657977283,
+          -90.12453060597181
+        ],
+        [
+          30.007076393812895,
+          -90.12487426400185
+        ],
+        [
+          30.00718468800187,
+          -90.1251043472439
+        ],
+        [
+          30.007486017420888,
+          -90.12509236112237
+        ],
+        [
+          30.007776031270623,
+          -90.1250752620399
+        ],
+        [
+          30.00802606344223,
+          -90.12496747076511
+        ],
+        [
+          30.008013658225536,
+          -90.12464074417949
+        ],
+        [
+          30.007984656840563,
+          -90.12431267648935
+        ],
+        [
+          30.008025476709008,
+          -90.12419004924595
+        ],
+        [
+          30.008041067048907,
+          -90.1245260797441
+        ],
+        [
+          30.0080553162843,
+          -90.12485347688198
+        ],
+        [
+          30.008214488625526,
+          -90.12502421624959
+        ],
+        [
+          30.008508190512657,
+          -90.12499052099884
+        ],
+        [
+          30.008784290403128,
+          -90.12498507276177
+        ],
+        [
+          30.009035160765052,
+          -90.12485054321587
+        ],
+        [
+          30.009014206007123,
+          -90.12452733702958
+        ],
+        [
+          30.008986461907625,
+          -90.12419323436916
+        ],
+        [
+          30.009037675336003,
+          -90.12412617914379
+        ],
+        [
+          30.00905904918909,
+          -90.12447352521122
+        ],
+        [
+          30.009103640913963,
+          -90.12480477802455
+        ],
+        [
+          30.009273625910282,
+          -90.1249402295798
+        ],
+        [
+          30.009539499878883,
+          -90.12490343302488
+        ],
+        [
+          30.009865472093225,
+          -90.12488943524659
+        ],
+        [
+          30.010031014680862,
+          -90.12470008805394
+        ],
+        [
+          30.01001483760774,
+          -90.1243622135371
+        ],
+        [
+          30.009974436834455,
+          -90.12401796877384
+        ],
+        [
+          30.00971090979874,
+          -90.12397077865899
+        ],
+        [
+          30.009379656985402,
+          -90.12396030128002
+        ],
+        [
+          30.0095696747303,
+          -90.12394580058753
+        ],
+        [
+          30.009246384724975,
+          -90.12397463433444
+        ],
+        [
+          30.009083691984415,
+          -90.12418627738953
+        ],
+        [
+          30.009121913462877,
+          -90.12460662983358
+        ],
+        [
+          30.00910355709493,
+          -90.12497082352638
+        ],
+        [
+          30.00903499312699,
+          -90.12465465813875
+        ],
+        [
+          30.00899752601981,
+          -90.12429247610271
+        ],
+        [
+          30.00886794179678,
+          -90.12399701401591
+        ],
+        [
+          30.008545573800802,
+          -90.123994583264
+        ],
+        [
+          30.008224798366427,
+          -90.12405174784362
+        ],
+        [
+          30.0080241356045,
+          -90.12422441504896
+        ],
+        [
+          30.008049616590142,
+          -90.12460771948099
+        ],
+        [
+          30.00807979144156,
+          -90.12501717545092
+        ],
+        [
+          30.008015083149076,
+          -90.1247554924339
+        ],
+        [
+          30.007995134219527,
+          -90.12437302619219
+        ],
+        [
+          30.007882649078965,
+          -90.12408561073244
+        ],
+        [
+          30.00756422057748,
+          -90.12410757131875
+        ],
+        [
+          30.00725844874978,
+          -90.1241270173341
+        ],
+        [
+          30.007023671641946,
+          -90.12428317219019
+        ],
+        [
+          30.007027694955468,
+          -90.12465700507164
+        ],
+        [
+          30.007063318043947,
+          -90.12503083795309
+        ],
+        [
+          30.00733271241188,
+          -90.12509688735008
+        ],
+        [
+          30.007635466754436,
+          -90.1250686403364
+        ],
+        [
+          30.007963199168444,
+          -90.12506729923189
+        ],
+        [
+          30.008020531386137,
+          -90.12475239112973
+        ],
+        [
+          30.008000247180462,
+          -90.12439020909369
+        ],
+        [
+          30.008029667660594,
+          -90.12414461933076
+        ],
+        [
+          30.008039977401495,
+          -90.12448593042791
+        ],
+        [
+          30.00805296935141,
+          -90.12484048493207
+        ],
+        [
+          30.008234437555075,
+          -90.12502832338214
+        ],
+        [
+          30.008566780015826,
+          -90.12499907054007
+        ],
+        [
+          30.008844137191772,
+          -90.1249822229147
+        ],
+        [
+          30.009045135229826,
+          -90.12479782104492
+        ],
+        [
+          30.009032227098942,
+          -90.12442583218217
+        ],
+        [
+          30.008971206843853,
+          -90.12406658381224
+        ],
+        [
+          30.009024096652865,
+          -90.1242306176573
+        ],
+        [
+          30.00908059068024,
+          -90.12457000091672
+        ],
+        [
+          30.009120739996433,
+          -90.12494266033173
+        ],
+        [
+          30.0094264280051,
+          -90.12492732144892
+        ],
+        [
+          30.00978995114565,
+          -90.12490410357714
+        ],
+        [
+          30.010033529251814,
+          -90.12480586767197
+        ],
+        [
+          30.009988266974688,
+          -90.12444050051272
+        ],
+        [
+          30.009960774332285,
+          -90.12408980168402
+        ],
+        [
+          30.010045347735286,
+          -90.12409273535013
+        ],
+        [
+          30.01006755977869,
+          -90.12446153908968
+        ],
+        [
+          30.010078959167004,
+          -90.12483201920986
+        ],
+        [
+          30.01039587892592,
+          -90.12484962120652
+        ],
+        [
+          30.010741045698524,
+          -90.12482254765928
+        ],
+        [
+          30.011041285470128,
+          -90.12475331313908
+        ],
+        [
+          30.01104044727981,
+          -90.12439213693142
+        ],
+        [
+          30.010977750644088,
+          -90.1240321341902
+        ],
+        [
+          30.01106048002839,
+          -90.12394563294947
+        ],
+        [
+          30.011081350967288,
+          -90.12431485578418
+        ],
+        [
+          30.011134408414364,
+          -90.12466823682189
+        ],
+        [
+          30.011357618495822,
+          -90.1247818954289
+        ],
+        [
+          30.011676466092467,
+          -90.1247488707304
+        ],
+        [
+          30.012025237083435,
+          -90.12472213245928
+        ],
+        [
+          30.012038396671414,
+          -90.12437696568668
+        ],
+        [
+          30.01200394704938,
+          -90.12400355190039
+        ],
+        [
+          30.012061782181263,
+          -90.12380079366267
+        ],
+        [
+          30.01209287904203,
+          -90.12414612807333
+        ],
+        [
+          30.01211877912283,
+          -90.12451350688934
+        ],
+        [
+          30.012268479913473,
+          -90.12476957403123
+        ],
+        [
+          30.012591099366546,
+          -90.12476345524192
+        ],
+        [
+          30.012883879244328,
+          -90.12477217242122
+        ],
+        [
+          30.012965351343155,
+          -90.12507735751569
+        ],
+        [
+          30.012980941683054,
+          -90.12541296891868
+        ],
+        [
+          30.012989910319448,
+          -90.1256971154362
+        ],
+        [
+          30.012689335271716,
+          -90.12572150677443
+        ],
+        [
+          30.0123811326921,
+          -90.12573391199112
+        ],
+        [
+          30.012066727504134,
+          -90.1257557887584
+        ],
+        [
+          30.011751232668757,
+          -90.12577716261148
+        ],
+        [
+          30.011422242969275,
+          -90.12580775655806
+        ],
+        [
+          30.011173468083143,
+          -90.12572561390698
+        ],
+        [
+          30.011154105886817,
+          -90.12533334083855
+        ],
+        [
+          30.01111026853323,
+          -90.12496814131737
+        ],
+        [
+          30.011094342917204,
+          -90.12524189427495
+        ],
+        [
+          30.01111915335059,
+          -90.12563341297209
+        ],
+        [
+          30.011141365393996,
+          -90.12600087560713
+        ],
+        [
+          30.01115955412388,
+          -90.1263742055744
+        ],
+        [
+          30.01121001318097,
+          -90.12671149335802
+        ],
+        [
+          30.011203223839402,
+          -90.1263723615557
+        ],
+        [
+          30.01117237843573,
+          -90.12600850313902
+        ],
+        [
+          30.01083961687982,
+          -90.12599383480847
+        ],
+        [
+          30.01051456667483,
+          -90.12600984424353
+        ],
+        [
+          30.010175853967667,
+          -90.12603281065822
+        ],
+        [
+          30.009865639731288,
+          -90.12606021948159
+        ],
+        [
+          30.009537655860186,
+          -90.12607404962182
+        ],
+        [
+          30.009206403046846,
+          -90.12610883451998
+        ],
+        [
+          30.009139012545347,
+          -90.12576660141349
+        ],
+        [
+          30.00910833477974,
+          -90.12538648210466
+        ]
+      ]
+    },
+    {
+      "activityId": 25037676502,
+      "activityName": "Jefferson Parish Running",
+      "startTimeLocal": "2026-11-10 18:27:47",
+      "startTimeGMT": "2026-11-11 00:27:47",
+      "activityType": {
+        "typeId": 1,
+        "typeKey": "running",
+        "parentTypeId": 17,
+        "isHidden": false,
+        "trimmable": true,
+        "restricted": false
+      },
+      "eventType": {
+        "typeId": 9,
+        "typeKey": "uncategorized",
+        "sortOrder": 10
+      },
+      "isFavorite": false,
+      "isPR": false,
+      "isAutoCalcCalories": false,
+      "isParent": false,
+      "distance": 1905.8599853515625,
+      "duration": 600.416015625,
+      "elapsedDuration": 600.416015625,
+      "movingDuration": 600.1119995117188,
+      "elevationGain": 3.0,
+      "elevationLoss": 0.0,
+      "averageSpeed": 3.1740000247955322,
+      "maxSpeed": 3.3399999141693115,
+      "startLatitude": 30.00961259007454,
+      "startLongitude": -90.12393708340824,
+      "hasPolyline": true,
+      "hasImages": false,
+      "ownerId": 94834778,
+      "ownerDisplayName": "36870b91-503a-44c0-81ce-5cf4d193441d",
+      "ownerFullName": "Christopher Lindeman",
+      "ownerProfileImageUrlSmall": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prth.png",
+      "ownerProfileImageUrlMedium": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prfr.png",
+      "ownerProfileImageUrlLarge": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prof.png",
+      "calories": 155.0,
+      "bmrCalories": 15.0,
+      "averageHR": 175.0,
+      "maxHR": 189.0,
+      "averageRunningCadenceInStepsPerMinute": 168.0625,
+      "maxRunningCadenceInStepsPerMinute": 174.0,
+      "steps": 1688,
+      "userRoles": [
+        "SCOPE_ATP_READ",
+        "SCOPE_COMMUNITY_COURSE_ADMIN_READ",
+        "SCOPE_GCX_KID_WRITE",
+        "SCOPE_CIQ_APPSTORE_SERVICES_CREATE",
+        "SCOPE_DT_ACTIVE_INTELLIGENCE_READ",
+        "SCOPE_COMMUNITY_COURSE_WRITE",
+        "SCOPE_GCX_KID_ADMIN_READ",
+        "SCOPE_CONNECT_WEB_TEMPLATE_RENDER",
+        "SCOPE_ACTIVITY_DETECTION_READ",
+        "SCOPE_OMT_SUBSCRIPTION_ADMIN_READ",
+        "SCOPE_DI_OAUTH_2_MANAGED_STATUS_ADMIN_WRITE",
+        "SCOPE_CONNECT_READ",
+        "SCOPE_GCX_PET_READ",
+        "SCOPE_GOLF_API_READ",
+        "SCOPE_DI_OAUTH_2_DEVICE_REVOCATION_WRITE",
+        "SCOPE_GCX_PET_WRITE",
+        "SCOPE_DI_OAUTH_2_CREATE_DI_USER",
+        "SCOPE_DIVE_API_WRITE",
+        "SCOPE_DIVE_API_READ",
+        "SCOPE_DI_OAUTH_2_CLIENT_READ",
+        "SCOPE_CONNECT_WRITE",
+        "SCOPE_CONNECT_MCT_DAILY_LOG_READ",
+        "SCOPE_CONNECT_API_CREATE_UPDATE_USER",
+        "SCOPE_MESSAGE_GENERATION_READ",
+        "SCOPE_DI_OAUTH_2_CLIENT_REVOCATION_ADMIN",
+        "SCOPE_GCS_RACEINSIGHTS_ADMIN_READ",
+        "SCOPE_GCX_PET_ADMIN_READ",
+        "SCOPE_CONNECT_NON_SOCIAL_SHARED_READ",
+        "SCOPE_DI_OAUTH_2_PRERELEASE_PERMISSIONS_ADMIN_WRITE",
+        "SCOPE_DI_OAUTH_2_TOKEN_ADMIN",
+        "SCOPE_ATP_WRITE",
+        "SCOPE_GCX_KID_READ",
+        "ROLE_CONNECTUSER",
+        "ROLE_FITNESS_USER",
+        "ROLE_WELLNESS_USER",
+        "ROLE_OUTDOOR_USER",
+        "ROLE_GARMIN_USER"
+      ],
+      "privacy": {
+        "typeId": 2,
+        "typeKey": "private"
+      },
+      "userPro": false,
+      "hasVideo": false,
+      "isPurposeful": false,
+      "timeZoneId": 152,
+      "beginTimestamp": 1794356867000,
+      "sportTypeId": 1,
+      "avgPower": 389.0,
+      "maxPower": 429.0,
+      "aerobicTrainingEffect": 3.0999999046325684,
+      "anaerobicTrainingEffect": 0.0,
+      "normPower": 394.0,
+      "avgVerticalOscillation": 9.169999694824218,
+      "avgGroundContactTime": 253.6999969482422,
+      "avgStrideLength": 112.89000244140625,
+      "vO2MaxValue": 47.0,
+      "avgVerticalRatio": 8.119999885559082,
+      "deviceId": 3488870736,
+      "minElevation": -1.600000023841858,
+      "maxElevation": 3.200000047683716,
+      "avgElevation": 1.5490848627840221,
+      "maxDoubleCadence": 174.0,
+      "isElevationCorrected": false,
+      "isDecoDive": false,
+      "summarizedDiveInfo": {
+        "summarizedDiveGases": []
+      },
+      "maxVerticalSpeed": 0.40000009536743164,
+      "manufacturer": "GARMIN",
+      "locationName": "Jefferson Parish",
+      "lapCount": 2,
+      "endLatitude": 30.010403841733932,
+      "endLongitude": -90.1248181052506,
+      "isAtpActivity": false,
+      "waterEstimated": 166.0,
+      "trainingEffectLabel": "TEMPO",
+      "activityTrainingLoad": 62.52864074707031,
+      "minActivityLapDuration": 90.30400085449219,
+      "aerobicTrainingEffectMessage": "IMPACTING_TEMPO_22",
+      "anaerobicTrainingEffectMessage": "NO_ANAEROBIC_BENEFIT_0",
+      "splitSummaries": [
+        {
+          "noOfSplits": 1,
+          "totalAscent": 3.0,
+          "duration": 600.416015625,
+          "splitType": "INTERVAL_ACTIVE",
+          "maxElevationGain": 3.0,
+          "averageElevationGain": 3.0,
+          "maxDistance": 1905,
+          "maxDistanceWithPrecision": 1905.8599853515625,
+          "distance": 1905.8599853515625,
+          "averageSpeed": 3.1740000247955322,
+          "maxSpeed": 3.3399999141693115,
+          "elevationLoss": 0.0,
+          "avgStepFrequency": 168.046875,
+          "avgStepLength": 1.1289000244140626,
+          "verticalRatio": 8.119999885559082,
+          "verticalOscillation": 9.169999694824218,
+          "avgGroundContactTime": 253.6999969482422
+        },
+        {
+          "noOfSplits": 1,
+          "totalAscent": 3.0,
+          "duration": 600.39599609375,
+          "splitType": "RWD_RUN",
+          "maxElevationGain": 3.0,
+          "averageElevationGain": 3.0,
+          "maxDistance": 1905,
+          "maxDistanceWithPrecision": 1905.8599853515625,
+          "distance": 1905.8599853515625,
+          "averageSpeed": 3.1740000247955322,
+          "maxSpeed": 3.3399999141693115,
+          "elevationLoss": 0.0,
+          "avgStepFrequency": 168.046875,
+          "avgStepLength": 1.1289000244140626,
+          "verticalRatio": 8.119999885559082,
+          "verticalOscillation": 9.169999694824218,
+          "avgGroundContactTime": 253.6999969482422
+        }
+      ],
+      "hasSplits": true,
+      "hasIntensityIntervals": false,
+      "isManualActivity": false,
+      "moderateIntensityMinutes": 0,
+      "vigorousIntensityMinutes": 9,
+      "avgGradeAdjustedSpeed": 3.1800000667572026,
+      "differenceBodyBattery": -2,
+      "hasHeatMap": false,
+      "fastestSplit_1000": 310.4150085449219,
+      "fastestSplit_1609": 500.75,
+      "hrTimeInZone_1": 31.141,
+      "hrTimeInZone_2": 27.001,
+      "hrTimeInZone_3": 44.001,
+      "hrTimeInZone_4": 101.998,
+      "hrTimeInZone_5": 396.264,
+      "powerTimeInZone_1": 1.0,
+      "powerTimeInZone_2": 12.0,
+      "powerTimeInZone_3": 239.988,
+      "powerTimeInZone_4": 342.275,
+      "powerTimeInZone_5": 0.0,
+      "endTimeGMT": "2026-11-11 00:37:47",
+      "qualifyingDive": false,
+      "activityUUID": "5ffe49a5-ad86-4027-b161-e40f142fc704",
+      "parent": false,
+      "decoDive": false,
+      "pr": false,
+      "autoCalcCalories": false,
+      "elevationCorrected": false,
+      "atpActivity": false,
+      "favorite": false,
+      "purposeful": false,
+      "manualActivity": false,
+      "gps_points": [
+        [
+          30.00961259007454,
+          -90.12393708340824
+        ],
+        [
+          30.009662797674537,
+          -90.12392434291542
+        ],
+        [
+          30.009760027751327,
+          -90.12390338815749
+        ],
+        [
+          30.009875698015094,
+          -90.12388478033245
+        ],
+        [
+          30.009987177327275,
+          -90.12388620525599
+        ],
+        [
+          30.01003579236567,
+          -90.12400011532009
+        ],
+        [
+          30.010053729638457,
+          -90.12411176227033
+        ],
+        [
+          30.010072086006403,
+          -90.12424226850271
+        ],
+        [
+          30.010077198967338,
+          -90.12434595264494
+        ],
+        [
+          30.010076528415084,
+          -90.12446405366063
+        ],
+        [
+          30.010091364383698,
+          -90.12459296733141
+        ],
+        [
+          30.01010905019939,
+          -90.12471718713641
+        ],
+        [
+          30.01007837243378,
+          -90.12484995648265
+        ],
+        [
+          30.010037468746305,
+          -90.12473889626563
+        ],
+        [
+          30.0100377202034,
+          -90.12459279969335
+        ],
+        [
+          30.010019950568676,
+          -90.12444913387299
+        ],
+        [
+          30.00999765470624,
+          -90.12433027848601
+        ],
+        [
+          30.00998843461275,
+          -90.12419331818819
+        ],
+        [
+          30.00997468829155,
+          -90.12407454662025
+        ],
+        [
+          30.009953984990716,
+          -90.12394487857819
+        ],
+        [
+          30.00987645238638,
+          -90.12391210533679
+        ],
+        [
+          30.009769666939974,
+          -90.12393641285598
+        ],
+        [
+          30.009659696370363,
+          -90.12394747696817
+        ],
+        [
+          30.009555090218782,
+          -90.12396139092743
+        ],
+        [
+          30.00943522900343,
+          -90.12397480197251
+        ],
+        [
+          30.009322995319963,
+          -90.1239718683064
+        ],
+        [
+          30.009207325056195,
+          -90.12397857382894
+        ],
+        [
+          30.00908050686121,
+          -90.12397999875247
+        ],
+        [
+          30.009075980633497,
+          -90.12409030459821
+        ],
+        [
+          30.00910154543817,
+          -90.12422164902091
+        ],
+        [
+          30.009113447740674,
+          -90.12435684911907
+        ],
+        [
+          30.00912501476705,
+          -90.1245001796633
+        ],
+        [
+          30.009130463004112,
+          -90.12462758459151
+        ],
+        [
+          30.009138425812125,
+          -90.12476320378482
+        ],
+        [
+          30.009151501581073,
+          -90.12488625012338
+        ],
+        [
+          30.009088050574064,
+          -90.12496512383223
+        ],
+        [
+          30.009048236534,
+          -90.12484593316913
+        ],
+        [
+          30.00903021544218,
+          -90.12470813468099
+        ],
+        [
+          30.009019821882248,
+          -90.12452842667699
+        ],
+        [
+          30.009017726406455,
+          -90.12439372949302
+        ],
+        [
+          30.009005572646856,
+          -90.12426280416548
+        ],
+        [
+          30.00900339335203,
+          -90.12413456104696
+        ],
+        [
+          30.008953688666224,
+          -90.12402257882059
+        ],
+        [
+          30.008837431669235,
+          -90.12397882528603
+        ],
+        [
+          30.008730394765735,
+          -90.1239961758256
+        ],
+        [
+          30.008617490530014,
+          -90.12399215251207
+        ],
+        [
+          30.008501317352057,
+          -90.12402224354446
+        ],
+        [
+          30.008391849696636,
+          -90.12404344975948
+        ],
+        [
+          30.008281879127026,
+          -90.12405468150973
+        ],
+        [
+          30.00816243700683,
+          -90.1240635663271
+        ],
+        [
+          30.008037462830544,
+          -90.12406666763127
+        ],
+        [
+          30.008008629083633,
+          -90.12417730875313
+        ],
+        [
+          30.008039558306336,
+          -90.12431058101356
+        ],
+        [
+          30.008053053170443,
+          -90.12445307336748
+        ],
+        [
+          30.00808909535408,
+          -90.12456463649869
+        ],
+        [
+          30.008125388994813,
+          -90.12470168061554
+        ],
+        [
+          30.008132932707667,
+          -90.12483612634242
+        ],
+        [
+          30.008156150579453,
+          -90.12498423457146
+        ],
+        [
+          30.008060010150075,
+          -90.12504181824625
+        ],
+        [
+          30.008022543042898,
+          -90.1249074563384
+        ],
+        [
+          30.00801181420684,
+          -90.12476731091738
+        ],
+        [
+          30.00800745561719,
+          -90.12464577332139
+        ],
+        [
+          30.008000498637557,
+          -90.12451359070837
+        ],
+        [
+          30.00799035653472,
+          -90.12437704950571
+        ],
+        [
+          30.00797619111836,
+          -90.12423723936081
+        ],
+        [
+          30.007954817265272,
+          -90.12411201372743
+        ],
+        [
+          30.007860101759434,
+          -90.12406784109771
+        ],
+        [
+          30.007747281342745,
+          -90.12406876310706
+        ],
+        [
+          30.007632952183485,
+          -90.12409994378686
+        ],
+        [
+          30.007516192272305,
+          -90.12411628849804
+        ],
+        [
+          30.00740990974009,
+          -90.12412995100021
+        ],
+        [
+          30.00730337575078,
+          -90.12413615360856
+        ],
+        [
+          30.007188376039267,
+          -90.12414646334946
+        ],
+        [
+          30.00707999803126,
+          -90.12413933873177
+        ],
+        [
+          30.007030880078673,
+          -90.12423707172275
+        ],
+        [
+          30.007046135142446,
+          -90.12440579943359
+        ],
+        [
+          30.007047727704048,
+          -90.12454619631171
+        ],
+        [
+          30.007048565894365,
+          -90.12469422072172
+        ],
+        [
+          30.00706641934812,
+          -90.12481718324125
+        ],
+        [
+          30.007101288065314,
+          -90.12493872083724
+        ],
+        [
+          30.007111681625247,
+          -90.12507090345025
+        ],
+        [
+          30.007202541455626,
+          -90.12510032393038
+        ],
+        [
+          30.00730630941689,
+          -90.12508523650467
+        ],
+        [
+          30.007435642182827,
+          -90.12507978826761
+        ],
+        [
+          30.00753982923925,
+          -90.1250789500773
+        ],
+        [
+          30.007649967446923,
+          -90.12506436556578
+        ],
+        [
+          30.00776505097747,
+          -90.1250768546015
+        ],
+        [
+          30.0078687351197,
+          -90.12506411410868
+        ],
+        [
+          30.007990188896656,
+          -90.12505187653005
+        ],
+        [
+          30.008021956309676,
+          -90.1249288301915
+        ],
+        [
+          30.008013490587473,
+          -90.12480234727263
+        ],
+        [
+          30.008001420646906,
+          -90.12465013191104
+        ],
+        [
+          30.007990105077624,
+          -90.12450990267098
+        ],
+        [
+          30.007979795336723,
+          -90.12438828125596
+        ],
+        [
+          30.007949955761433,
+          -90.12424746528268
+        ],
+        [
+          30.007937466725707,
+          -90.12411545030773
+        ],
+        [
+          30.008016088977456,
+          -90.12410807423294
+        ],
+        [
+          30.008039893582463,
+          -90.12425056658685
+        ],
+        [
+          30.00805389136076,
+          -90.12439959682524
+        ],
+        [
+          30.008059004321694,
+          -90.12453446164727
+        ],
+        [
+          30.008076690137386,
+          -90.12467267923057
+        ],
+        [
+          30.008075768128037,
+          -90.12480469420552
+        ],
+        [
+          30.008073672652245,
+          -90.12492639943957
+        ],
+        [
+          30.008123042061925,
+          -90.12502798810601
+        ],
+        [
+          30.00824013724923,
+          -90.12501231394708
+        ],
+        [
+          30.008351700380445,
+          -90.12499990873039
+        ],
+        [
+          30.00847759656608,
+          -90.12498314492404
+        ],
+        [
+          30.00859963707626,
+          -90.12496931478381
+        ],
+        [
+          30.008718827739358,
+          -90.1249579153955
+        ],
+        [
+          30.00883282162249,
+          -90.12495682574809
+        ],
+        [
+          30.008944803848863,
+          -90.12495389208198
+        ],
+        [
+          30.009029796347022,
+          -90.12487946078181
+        ],
+        [
+          30.009032981470227,
+          -90.12474250048399
+        ],
+        [
+          30.00902485102415,
+          -90.12458374723792
+        ],
+        [
+          30.009009931236506,
+          -90.1244378183037
+        ],
+        [
+          30.008999202400446,
+          -90.12431393377483
+        ],
+        [
+          30.00898713245988,
+          -90.1241753809154
+        ],
+        [
+          30.00896760262549,
+          -90.12404127046466
+        ],
+        [
+          30.009034741669893,
+          -90.12401084415615
+        ],
+        [
+          30.00905552878976,
+          -90.12415040284395
+        ],
+        [
+          30.00907262787223,
+          -90.12429532594979
+        ],
+        [
+          30.009092073887587,
+          -90.12444326654077
+        ],
+        [
+          30.009105233475566,
+          -90.12458416633308
+        ],
+        [
+          30.009129540994763,
+          -90.12471894733608
+        ],
+        [
+          30.009130463004112,
+          -90.12484861537814
+        ],
+        [
+          30.009166337549686,
+          -90.12494752183557
+        ],
+        [
+          30.00927153043449,
+          -90.12493310496211
+        ],
+        [
+          30.009389715269208,
+          -90.12491466477513
+        ],
+        [
+          30.009499015286565,
+          -90.12491541914642
+        ],
+        [
+          30.00962097197771,
+          -90.12488985434175
+        ],
+        [
+          30.009747790172696,
+          -90.12488088570535
+        ],
+        [
+          30.009864633902907,
+          -90.12487879022956
+        ],
+        [
+          30.009995391592383,
+          -90.12487133033574
+        ],
+        [
+          30.010063955560327,
+          -90.12479295954108
+        ],
+        [
+          30.010047359392047,
+          -90.12465842999518
+        ],
+        [
+          30.010032271966338,
+          -90.12451912276447
+        ],
+        [
+          30.010015927255154,
+          -90.12437973171473
+        ],
+        [
+          30.010010143741965,
+          -90.12425266206264
+        ],
+        [
+          30.009971000254154,
+          -90.12411343865097
+        ],
+        [
+          30.009940322488546,
+          -90.12397513724864
+        ],
+        [
+          30.010007210075855,
+          -90.12389240786433
+        ],
+        [
+          30.010040067136288,
+          -90.124023668468
+        ],
+        [
+          30.01005381345749,
+          -90.12417580001056
+        ],
+        [
+          30.010077115148306,
+          -90.12431720271707
+        ],
+        [
+          30.01009144820273,
+          -90.12446003034711
+        ],
+        [
+          30.01008801162243,
+          -90.12459179386497
+        ],
+        [
+          30.010087843984365,
+          -90.1247295923531
+        ],
+        [
+          30.01011684536934,
+          -90.12485624291003
+        ],
+        [
+          30.01022153533995,
+          -90.12483855709434
+        ],
+        [
+          30.010338127613068,
+          -90.12482799589634
+        ]
+      ]
+    },
+    {
+      "activityId": 25026112564,
+      "activityName": "Jefferson Parish - Tempo",
+      "startTimeLocal": "2026-11-09 18:56:32",
+      "startTimeGMT": "2026-11-10 00:56:32",
+      "activityType": {
+        "typeId": 1,
+        "typeKey": "running",
+        "parentTypeId": 17,
+        "isHidden": false,
+        "restricted": false,
+        "trimmable": true
+      },
+      "eventType": {
+        "typeId": 9,
+        "typeKey": "uncategorized",
+        "sortOrder": 10
+      },
+      "isFavorite": false,
+      "isPR": false,
+      "isAutoCalcCalories": false,
+      "isParent": false,
+      "distance": 5085.0498046875,
+      "duration": 1863.2020263671875,
+      "elapsedDuration": 1863.2020263671875,
+      "movingDuration": 1861.202003479004,
+      "elevationGain": 5.0,
+      "elevationLoss": 14.0,
+      "averageSpeed": 2.7290000915527344,
+      "maxSpeed": 3.25600004196167,
+      "startLatitude": 30.00961409881711,
+      "startLongitude": -90.12392702512443,
+      "hasPolyline": true,
+      "hasImages": false,
+      "ownerId": 94834778,
+      "ownerDisplayName": "36870b91-503a-44c0-81ce-5cf4d193441d",
+      "ownerFullName": "Christopher Lindeman",
+      "ownerProfileImageUrlSmall": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prth.png",
+      "ownerProfileImageUrlMedium": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prfr.png",
+      "ownerProfileImageUrlLarge": "https://s3.amazonaws.com/garmin-connect-prod/profile_images/69d505e4-2361-4ea4-8f38-5d331b8973c6-prof.png",
+      "calories": 398.0,
+      "bmrCalories": 47.0,
+      "averageHR": 146.0,
+      "maxHR": 169.0,
+      "averageRunningCadenceInStepsPerMinute": 164.71875,
+      "maxRunningCadenceInStepsPerMinute": 176.0,
+      "steps": 5136,
+      "userRoles": [
+        "SCOPE_ATP_READ",
+        "SCOPE_COMMUNITY_COURSE_ADMIN_READ",
+        "SCOPE_GCX_KID_WRITE",
+        "SCOPE_CIQ_APPSTORE_SERVICES_CREATE",
+        "SCOPE_DT_ACTIVE_INTELLIGENCE_READ",
+        "SCOPE_COMMUNITY_COURSE_WRITE",
+        "SCOPE_GCX_KID_ADMIN_READ",
+        "SCOPE_CONNECT_WEB_TEMPLATE_RENDER",
+        "SCOPE_ACTIVITY_DETECTION_READ",
+        "SCOPE_OMT_SUBSCRIPTION_ADMIN_READ",
+        "SCOPE_DI_OAUTH_2_MANAGED_STATUS_ADMIN_WRITE",
+        "SCOPE_CONNECT_READ",
+        "SCOPE_GCX_PET_READ",
+        "SCOPE_GOLF_API_READ",
+        "SCOPE_DI_OAUTH_2_DEVICE_REVOCATION_WRITE",
+        "SCOPE_GCX_PET_WRITE",
+        "SCOPE_DI_OAUTH_2_CREATE_DI_USER",
+        "SCOPE_DIVE_API_WRITE",
+        "SCOPE_DIVE_API_READ",
+        "SCOPE_DI_OAUTH_2_CLIENT_READ",
+        "SCOPE_CONNECT_WRITE",
+        "SCOPE_CONNECT_MCT_DAILY_LOG_READ",
+        "SCOPE_CONNECT_API_CREATE_UPDATE_USER",
+        "SCOPE_MESSAGE_GENERATION_READ",
+        "SCOPE_DI_OAUTH_2_CLIENT_REVOCATION_ADMIN",
+        "SCOPE_GCS_RACEINSIGHTS_ADMIN_READ",
+        "SCOPE_GCX_PET_ADMIN_READ",
+        "SCOPE_CONNECT_NON_SOCIAL_SHARED_READ",
+        "SCOPE_DI_OAUTH_2_PRERELEASE_PERMISSIONS_ADMIN_WRITE",
+        "SCOPE_DI_OAUTH_2_TOKEN_ADMIN",
+        "SCOPE_ATP_WRITE",
+        "SCOPE_GCX_KID_READ",
+        "ROLE_CONNECTUSER",
+        "ROLE_FITNESS_USER",
+        "ROLE_WELLNESS_USER",
+        "ROLE_OUTDOOR_USER",
+        "ROLE_GARMIN_USER"
+      ],
+      "privacy": {
+        "typeId": 2,
+        "typeKey": "private"
+      },
+      "userPro": false,
+      "hasVideo": false,
+      "isPurposeful": false,
+      "timeZoneId": 152,
+      "beginTimestamp": 1794272192000,
+      "sportTypeId": 1,
+      "avgPower": 332.0,
+      "maxPower": 415.0,
+      "aerobicTrainingEffect": 3.4000000953674316,
+      "anaerobicTrainingEffect": 0.0,
+      "normPower": 344.0,
+      "avgVerticalOscillation": 8.640000152587891,
+      "avgGroundContactTime": 270.20001220703125,
+      "avgStrideLength": 98.82000122070313,
+      "vO2MaxValue": 47.0,
+      "avgVerticalRatio": 8.84000015258789,
+      "workoutId": 3488870736,
+      "deviceId": 3488870736,
+      "minElevation": -2.799999952316284,
+      "maxElevation": 3.799999952316284,
+      "avgElevation": 2.0108427273062564,
+      "maxDoubleCadence": 176.0,
+      "isElevationCorrected": false,
+      "isDecoDive": false,
+      "summarizedDiveInfo": {
+        "summarizedDiveGases": []
+      },
+      "maxVerticalSpeed": 0.40000009536743164,
+      "manufacturer": "GARMIN",
+      "locationName": "Jefferson Parish",
+      "lapCount": 5,
+      "endLatitude": 30.016011921688914,
+      "endLongitude": -90.13554895296693,
+      "isAtpActivity": false,
+      "waterEstimated": 506.0,
+      "trainingEffectLabel": "TEMPO",
+      "activityTrainingLoad": 78.45585632324219,
+      "minActivityLapDuration": 123.2020034790039,
+      "aerobicTrainingEffectMessage": "IMPROVING_AEROBIC_FITNESS_2",
+      "anaerobicTrainingEffectMessage": "NO_ANAEROBIC_BENEFIT_0",
+      "splitSummaries": [
+        {
+          "noOfSplits": 2,
+          "totalAscent": 0.0,
+          "duration": 303.19000244140625,
+          "splitType": "INTERVAL_RECOVERY",
+          "maxElevationGain": 0.0,
+          "averageElevationGain": 0.0,
+          "maxDistance": 374,
+          "maxDistanceWithPrecision": 374.6499938964844,
+          "distance": 592.27001953125,
+          "averageSpeed": 1.9529999494552612,
+          "maxSpeed": 3.0510001182556152,
+          "elevationLoss": 2.0,
+          "avgStepFrequency": 152.78125,
+          "avgStepLength": 0.7477999877929687,
+          "verticalRatio": 10.09000015258789,
+          "verticalOscillation": 7.45999984741211,
+          "avgGroundContactTime": 306.79998779296875
+        },
+        {
+          "noOfSplits": 2,
+          "totalAscent": 0.0,
+          "duration": 63.0,
+          "splitType": "RWD_WALK",
+          "maxElevationGain": 0.0,
+          "averageElevationGain": 0.0,
+          "maxDistance": 83,
+          "maxDistanceWithPrecision": 83.93000030517578,
+          "distance": 101.20999908447266,
+          "averageSpeed": 1.6059999465942383,
+          "maxSpeed": 1.7920000553131104,
+          "elevationLoss": 10.0,
+          "avgStepFrequency": 108.453125,
+          "avgStepLength": 0.7052999877929688,
+          "verticalRatio": 8.449999809265137,
+          "verticalOscillation": 5.890000152587891,
+          "avgGroundContactTime": 439.29998779296875
+        },
+        {
+          "noOfSplits": 2,
+          "totalAscent": 0.0,
+          "duration": 960.0,
+          "splitType": "INTERVAL_ACTIVE",
+          "maxElevationGain": 0.0,
+          "averageElevationGain": 0.0,
+          "maxDistance": 1464,
+          "maxDistanceWithPrecision": 1464.1600341796875,
+          "distance": 2917.93994140625,
+          "averageSpeed": 3.0399999618530273,
+          "maxSpeed": 3.25600004196167,
+          "elevationLoss": 0.0,
+          "avgStepFrequency": 169.0,
+          "avgStepLength": 1.078,
+          "verticalRatio": 8.329999923706055,
+          "verticalOscillation": 8.969999694824219,
+          "avgGroundContactTime": 257.3999938964844
+        },
+        {
+          "noOfSplits": 1,
+          "totalAscent": 5.0,
+          "duration": 600.0,
+          "splitType": "INTERVAL_WARMUP",
+          "maxElevationGain": 5.0,
+          "averageElevationGain": 5.0,
+          "maxDistance": 1574,
+          "maxDistanceWithPrecision": 1574.77001953125,
+          "distance": 1574.8499755859375,
+          "averageSpeed": 2.625,
+          "maxSpeed": 2.865000009536743,
+          "elevationLoss": 12.0,
+          "avgStepFrequency": 163.890625,
+          "avgStepLength": 0.9597999877929688,
+          "verticalRatio": 9.069999694824219,
+          "verticalOscillation": 8.69000015258789,
+          "avgGroundContactTime": 274.1000061035156
+        },
+        {
+          "noOfSplits": 2,
+          "totalAscent": 5.0,
+          "duration": 1800.1810302734375,
+          "splitType": "RWD_RUN",
+          "maxElevationGain": 5.0,
+          "averageElevationGain": 2.0,
+          "maxDistance": 4866,
+          "maxDistanceWithPrecision": 4866.43994140625,
+          "distance": 4986.4599609375,
+          "averageSpeed": 2.7699999809265137,
+          "maxSpeed": 3.25600004196167,
+          "elevationLoss": 3.0,
+          "avgStepFrequency": 166.640625,
+          "avgStepLength": 0.9947999877929687,
+          "verticalRatio": 8.850000381469727,
+          "verticalOscillation": 8.719999694824219,
+          "avgGroundContactTime": 267.6000061035156
+        }
+      ],
+      "hasSplits": true,
+      "hasIntensityIntervals": true,
+      "isManualActivity": false,
+      "moderateIntensityMinutes": 1,
+      "vigorousIntensityMinutes": 29,
+      "avgGradeAdjustedSpeed": 2.7239999771118164,
+      "differenceBodyBattery": -7,
+      "hasHeatMap": false,
+      "fastestSplit_1000": 324.4219970703125,
+      "fastestSplit_1609": 535.7340087890625,
+      "fastestSplit_5000": 1822.427001953125,
+      "hrTimeInZone_1": 30.999,
+      "hrTimeInZone_2": 760.101,
+      "hrTimeInZone_3": 960.24,
+      "hrTimeInZone_4": 83.999,
+      "hrTimeInZone_5": 0.0,
+      "powerTimeInZone_1": 200.189,
+      "powerTimeInZone_2": 592.047,
+      "powerTimeInZone_3": 765.111,
+      "powerTimeInZone_4": 166.992,
+      "powerTimeInZone_5": 0.0,
+      "endTimeGMT": "2026-11-10 01:27:35",
+      "qualifyingDive": false,
+      "activityUUID": "a89d4fb3-3320-4746-ac4d-e4a2787431a2",
+      "decoDive": false,
+      "parent": false,
+      "pr": false,
+      "purposeful": false,
+      "manualActivity": false,
+      "autoCalcCalories": false,
+      "elevationCorrected": false,
+      "atpActivity": false,
+      "favorite": false,
+      "gps_points": [
+        [
+          30.00961409881711,
+          -90.12392702512443
+        ],
+        [
+          30.00985885038972,
+          -90.12389710173011
+        ],
+        [
+          30.010062782093883,
+          -90.12405350804329
+        ],
+        [
+          30.010080887004733,
+          -90.12441971339285
+        ],
+        [
+          30.01010033302009,
+          -90.12474107556045
+        ],
+        [
+          30.010046856477857,
+          -90.1246674824506
+        ],
+        [
+          30.01000695861876,
+          -90.12433279305696
+        ],
+        [
+          30.009994469583035,
+          -90.12398511171341
+        ],
+        [
+          30.00975432805717,
+          -90.12394370511174
+        ],
+        [
+          30.009484933689237,
+          -90.12396013364196
+        ],
+        [
+          30.00917287543416,
+          -90.12398452498019
+        ],
+        [
+          30.0091069098562,
+          -90.12422265484929
+        ],
+        [
+          30.00912945717573,
+          -90.12458047829568
+        ],
+        [
+          30.009141359478235,
+          -90.12489857152104
+        ],
+        [
+          30.009022671729326,
+          -90.12474467977881
+        ],
+        [
+          30.009000627323985,
+          -90.12440387159586
+        ],
+        [
+          30.00895192846656,
+          -90.12404319830239
+        ],
+        [
+          30.008670464158058,
+          -90.12400740757585
+        ],
+        [
+          30.008386904373765,
+          -90.12405451387167
+        ],
+        [
+          30.00808364711702,
+          -90.12405912391841
+        ],
+        [
+          30.00804509036243,
+          -90.12435676530004
+        ],
+        [
+          30.008115079253912,
+          -90.12470930814743
+        ],
+        [
+          30.00810820609331,
+          -90.12506235390902
+        ],
+        [
+          30.008009802550077,
+          -90.12475289404392
+        ],
+        [
+          30.007991110906005,
+          -90.12440839782357
+        ],
+        [
+          30.007889438420534,
+          -90.12408175505698
+        ],
+        [
+          30.007607555016875,
+          -90.12411243282259
+        ],
+        [
+          30.00735023058951,
+          -90.12414118275046
+        ],
+        [
+          30.007063820958138,
+          -90.12415023520589
+        ],
+        [
+          30.007038759067655,
+          -90.12450839392841
+        ],
+        [
+          30.00707572326064,
+          -90.12486202642322
+        ],
+        [
+          30.00715778209269,
+          -90.12511901557446
+        ],
+        [
+          30.007451651617885,
+          -90.12511189095676
+        ],
+        [
+          30.007711239159107,
+          -90.12507777661085
+        ],
+        [
+          30.007998570799828,
+          -90.12506159953773
+        ],
+        [
+          30.008005276322365,
+          -90.12473277747631
+        ],
+        [
+          30.007980968803167,
+          -90.12441895902157
+        ],
+        [
+          30.00800753943622,
+          -90.12407999485731
+        ],
+        [
+          30.008057160302997,
+          -90.1244000159204
+        ],
+        [
+          30.008106529712677,
+          -90.12475373223424
+        ],
+        [
+          30.008178781718016,
+          -90.12502882629633
+        ],
+        [
+          30.00847608782351,
+          -90.12501189485192
+        ],
+        [
+          30.00871555879712,
+          -90.12499219737947
+        ],
+        [
+          30.00899358652532,
+          -90.1249494496733
+        ],
+        [
+          30.009004482999444,
+          -90.12461048550904
+        ],
+        [
+          30.00898528844118,
+          -90.12427956797183
+        ],
+        [
+          30.009018816053867,
+          -90.12402987107635
+        ],
+        [
+          30.009061563760042,
+          -90.12436347082257
+        ],
+        [
+          30.009120488539338,
+          -90.12469799257815
+        ],
+        [
+          30.0091898906976,
+          -90.12495028786361
+        ],
+        [
+          30.00956330448389,
+          -90.12491441331804
+        ],
+        [
+          30.00989899970591,
+          -90.12487392872572
+        ],
+        [
+          30.010030679404736,
+          -90.12467318214476
+        ],
+        [
+          30.009983824566007,
+          -90.12423967011273
+        ],
+        [
+          30.00999522395432,
+          -90.12390087358654
+        ],
+        [
+          30.010051717981696,
+          -90.12432969175279
+        ],
+        [
+          30.010095974430442,
+          -90.12472791597247
+        ],
+        [
+          30.010321447625756,
+          -90.12485532090068
+        ],
+        [
+          30.010636188089848,
+          -90.1248196978122
+        ],
+        [
+          30.010974565520883,
+          -90.12481433339417
+        ],
+        [
+          30.011031813919544,
+          -90.12449087575078
+        ],
+        [
+          30.01097146421671,
+          -90.12411553412676
+        ],
+        [
+          30.011057714000344,
+          -90.12389475479722
+        ],
+        [
+          30.011091493070126,
+          -90.12427655048668
+        ],
+        [
+          30.011105742305517,
+          -90.12470151297748
+        ],
+        [
+          30.01136239618063,
+          -90.1247731782496
+        ],
+        [
+          30.011747796088457,
+          -90.12472808361053
+        ],
+        [
+          30.01204250380397,
+          -90.12464518658817
+        ],
+        [
+          30.012039821594954,
+          -90.1242530811578
+        ],
+        [
+          30.011970503255725,
+          -90.12385376729071
+        ],
+        [
+          30.01208650879562,
+          -90.12392518110573
+        ],
+        [
+          30.01214283518493,
+          -90.124356681481
+        ],
+        [
+          30.012160018086433,
+          -90.12473059818149
+        ],
+        [
+          30.01249210909009,
+          -90.12469246052206
+        ],
+        [
+          30.01283031888306,
+          -90.12465809471905
+        ],
+        [
+          30.013144304975867,
+          -90.12460143305361
+        ],
+        [
+          30.013298699632287,
+          -90.12481768615544
+        ],
+        [
+          30.01333801075816,
+          -90.12517995201051
+        ],
+        [
+          30.01340934075415,
+          -90.12558035552502
+        ],
+        [
+          30.01341219060123,
+          -90.1259194035083
+        ],
+        [
+          30.01344253309071,
+          -90.12630606070161
+        ],
+        [
+          30.013456866145134,
+          -90.12669749557972
+        ],
+        [
+          30.013464661315084,
+          -90.12711851857603
+        ],
+        [
+          30.013469690456986,
+          -90.12748757377267
+        ],
+        [
+          30.01349869184196,
+          -90.12788521125913
+        ],
+        [
+          30.013505313545465,
+          -90.12831017374992
+        ],
+        [
+          30.013535739853978,
+          -90.12869054451585
+        ],
+        [
+          30.013532638549805,
+          -90.12905071489513
+        ],
+        [
+          30.013541942462325,
+          -90.12924768961966
+        ],
+        [
+          30.013543367385864,
+          -90.12950417585671
+        ],
+        [
+          30.013557700440288,
+          -90.12974238954484
+        ],
+        [
+          30.013594161719084,
+          -90.13004715554416
+        ],
+        [
+          30.013592233881354,
+          -90.13028821907938
+        ],
+        [
+          30.01360086724162,
+          -90.13055426068604
+        ],
+        [
+          30.013613859191537,
+          -90.13083765283227
+        ],
+        [
+          30.013622995465994,
+          -90.13109506107867
+        ],
+        [
+          30.013629281893373,
+          -90.13138608075678
+        ],
+        [
+          30.013637663796544,
+          -90.13164985924959
+        ],
+        [
+          30.01365015283227,
+          -90.13193534687161
+        ],
+        [
+          30.013655936345458,
+          -90.13219418004155
+        ],
+        [
+          30.013675382360816,
+          -90.13248972594738
+        ],
+        [
+          30.013699689880013,
+          -90.13275878503919
+        ],
+        [
+          30.013734474778175,
+          -90.13309582136571
+        ],
+        [
+          30.013787867501378,
+          -90.13352229259908
+        ],
+        [
+          30.013811588287354,
+          -90.13391305692494
+        ],
+        [
+          30.013835141435266,
+          -90.13433969579637
+        ],
+        [
+          30.013846205547452,
+          -90.13474655337632
+        ],
+        [
+          30.01384126022458,
+          -90.13515785336494
+        ],
+        [
+          30.013857688754797,
+          -90.13551282696426
+        ],
+        [
+          30.01389004290104,
+          -90.13593561016023
+        ],
+        [
+          30.013893144205213,
+          -90.13632285408676
+        ],
+        [
+          30.013897754251957,
+          -90.13668369501829
+        ],
+        [
+          30.013922648504376,
+          -90.13710480183363
+        ],
+        [
+          30.013934802263975,
+          -90.13744837604463
+        ],
+        [
+          30.01395449973643,
+          -90.13785271905363
+        ],
+        [
+          30.013967910781503,
+          -90.1382239535451
+        ],
+        [
+          30.01400386914611,
+          -90.13868873007596
+        ],
+        [
+          30.014003617689013,
+          -90.13909156434238
+        ],
+        [
+          30.014022141695023,
+          -90.13946648687124
+        ],
+        [
+          30.014031026512384,
+          -90.1398863364011
+        ],
+        [
+          30.014048293232918,
+          -90.14026360586286
+        ],
+        [
+          30.01406547613442,
+          -90.14068990945816
+        ],
+        [
+          30.014057932421565,
+          -90.14106944203377
+        ],
+        [
+          30.014071678742766,
+          -90.1414548419416
+        ],
+        [
+          30.014047287404537,
+          -90.14178014360368
+        ],
+        [
+          30.014369571581483,
+          -90.1418272498995
+        ],
+        [
+          30.0146709010005,
+          -90.14182163402438
+        ],
+        [
+          30.015007434412837,
+          -90.1417807303369
+        ],
+        [
+          30.0153754837811,
+          -90.14176899567246
+        ],
+        [
+          30.01569500193,
+          -90.14176715165377
+        ],
+        [
+          30.015785107389092,
+          -90.14147244393826
+        ],
+        [
+          30.015761386603117,
+          -90.14108603820205
+        ],
+        [
+          30.015755854547024,
+          -90.14067021198571
+        ],
+        [
+          30.01576147042215,
+          -90.14031750150025
+        ],
+        [
+          30.01583280041814,
+          -90.13993914239109
+        ],
+        [
+          30.015878062695265,
+          -90.13953228481114
+        ],
+        [
+          30.01588124781847,
+          -90.13914755545557
+        ],
+        [
+          30.015983255580068,
+          -90.13876358047128
+        ],
+        [
+          30.015966910868883,
+          -90.13838681392372
+        ],
+        [
+          30.01594629138708,
+          -90.13797224499285
+        ],
+        [
+          30.015942519530654,
+          -90.13772179372609
+        ],
+        [
+          30.01593698747456,
+          -90.13755767606199
+        ],
+        [
+          30.01592726446688,
+          -90.1373772136867
+        ],
+        [
+          30.015988871455193,
+          -90.13722131028771
+        ],
+        [
+          30.01598685979843,
+          -90.13700187206268
+        ],
+        [
+          30.015994738787413,
+          -90.13681939803064
+        ],
+        [
+          30.016017286106944,
+          -90.13657573610544
+        ],
+        [
+          30.015997337177396,
+          -90.1363224349916
+        ],
+        [
+          30.01599758863449,
+          -90.13604398816824
+        ],
+        [
+          30.015996331349015,
+          -90.13576420024037
         ]
       ]
     }

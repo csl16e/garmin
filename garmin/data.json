@@ -7689,38 +7689,59 @@
     },
     {
       "date": "2026-11-10",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-10",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null,
+      "training_readiness": 39
     },
     {
       "date": "2026-11-11",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-11",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null,
+      "training_readiness": 50
     },
     {
       "date": "2026-11-12",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-12",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null,
+      "training_readiness": 66
     },
     {
       "date": "2026-11-13",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-13",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null,
+      "training_readiness": 63
     },
     {
       "date": "2026-11-14",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-14",
+      "sleep_seconds": 28740,
+      "sleep_score": 92,
+      "hrv_nightly_avg": null,
+      "training_readiness": 25
     },
     {
       "date": "2026-11-15",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-15",
+      "sleep_seconds": 21000,
+      "sleep_score": 69,
+      "hrv_nightly_avg": null,
+      "training_readiness": 57
     },
     {
       "date": "2026-11-16",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-16",
+      "sleep_seconds": 23460,
+      "sleep_score": 76,
+      "hrv_nightly_avg": null,
+      "training_readiness": 63
     }
   ],
   "activities": [
@@ -228311,8 +228332,8 @@
         "typeKey": "running",
         "parentTypeId": 17,
         "isHidden": false,
-        "trimmable": true,
-        "restricted": false
+        "restricted": false,
+        "trimmable": true
       },
       "eventType": {
         "typeId": 9,
@@ -228511,15 +228532,15 @@
       "endTimeGMT": "2026-11-12 21:40:36",
       "qualifyingDive": false,
       "activityUUID": "10fde89f-81b2-4eba-b5fb-e9e89a313cf2",
+      "pr": false,
+      "favorite": false,
+      "purposeful": false,
       "parent": false,
       "decoDive": false,
-      "pr": false,
+      "manualActivity": false,
       "autoCalcCalories": false,
       "elevationCorrected": false,
       "atpActivity": false,
-      "favorite": false,
-      "purposeful": false,
-      "manualActivity": false,
       "gps_points": [
         [
           30.19215895794332,
@@ -229346,15 +229367,15 @@
       "endTimeGMT": "2026-11-11 12:08:56",
       "qualifyingDive": false,
       "activityUUID": "5692ce73-5a5d-45f0-b3d1-f275b4f349db",
-      "pr": false,
-      "favorite": false,
-      "purposeful": false,
-      "parent": false,
       "decoDive": false,
-      "manualActivity": false,
-      "autoCalcCalories": false,
       "elevationCorrected": false,
       "atpActivity": false,
+      "autoCalcCalories": false,
+      "favorite": false,
+      "parent": false,
+      "pr": false,
+      "purposeful": false,
+      "manualActivity": false,
       "gps_points": [
         [
           30.00952508300543,
@@ -230150,13 +230171,13 @@
       "endTimeGMT": "2026-11-11 00:37:47",
       "qualifyingDive": false,
       "activityUUID": "5ffe49a5-ad86-4027-b161-e40f142fc704",
-      "purposeful": false,
-      "manualActivity": false,
-      "autoCalcCalories": false,
+      "decoDive": false,
       "elevationCorrected": false,
       "atpActivity": false,
+      "autoCalcCalories": false,
       "favorite": false,
-      "decoDive": false,
+      "manualActivity": false,
+      "purposeful": false,
       "pr": false,
       "parent": false,
       "gps_points": [

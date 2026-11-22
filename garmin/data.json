@@ -7722,38 +7722,54 @@
     },
     {
       "date": "2026-11-16",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-16",
+      "sleep_seconds": 23460,
+      "sleep_score": 76,
+      "hrv_nightly_avg": null,
+      "training_readiness": 63
     },
     {
       "date": "2026-11-17",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-17",
+      "sleep_seconds": 26700,
+      "sleep_score": 78,
+      "hrv_nightly_avg": null,
+      "training_readiness": 62
     },
     {
       "date": "2026-11-18",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-18",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null
     },
     {
       "date": "2026-11-19",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-19",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null
     },
     {
       "date": "2026-11-20",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-20",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null
     },
     {
       "date": "2026-11-21",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-21",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null
     },
     {
       "date": "2026-11-22",
-      "stats_error": "Expecting value: line 1 column 1 (char 0)",
-      "sleep_error": "Expecting value: line 1 column 1 (char 0)"
+      "stats_error": "Error in request: 403 Client Error: Forbidden for url: https://connectapi.garmin.com/usersummary-service/usersummary/daily/None?calendarDate=2026-11-22",
+      "sleep_seconds": null,
+      "sleep_score": null,
+      "hrv_nightly_avg": null
     }
   ],
   "activities": [
